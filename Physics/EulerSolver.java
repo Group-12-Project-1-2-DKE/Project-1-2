@@ -1,5 +1,24 @@
 public class EulerSolver implements PhysicsEngine{
-    
+    private double step_size = 0.01;
+
+    public EulerSolver(){
+
+    }
+
+    public void calculateShot(Vector2D initial_v, Ball ball){
+
+    }
+
+    public void set_step_size(double h){
+        step_size = h;
+    }
+
+    public Vector2D gravitational_force(Ball ball){
+
+    }
+
+    public 
+
 }
 /*
 We describe the position of a ball by its coordinates 𝑝 = (𝑝𝑥, 𝑝𝑦) = (𝑥, 𝑦), with velocity 𝑣 = 𝑝̇ = (𝑣𝑥,𝑣𝑦) = (𝑥̇,𝑦̇) and acceleration 𝑎 = 𝑣̇ = 𝑝̈ = (𝑎𝑥,𝑎𝑦) = (𝑥̈,𝑦̈).

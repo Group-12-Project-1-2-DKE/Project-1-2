@@ -20,6 +20,4 @@ public class Vector2D{
         Vector2D result = new Vector2D(this.getX() + vector.getX(), this.getY()+ vector.getY());
         return result; 
     }
-
-    
 }

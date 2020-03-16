@@ -4,7 +4,7 @@ public class PuttingCourse implements Function2D{
    
     private Vector2D start; 
     private Vector2D flag; 
-    private Vector2D height; //couldnt decide if it should be function or a vector
+    private Function2D height; //couldnt decide if it should be function or a vector
     private Ball ball; 
     private double friction; //friction coefficient 
     private double tolerance; //hole tolerance 
@@ -20,7 +20,7 @@ public class PuttingCourse implements Function2D{
       * @param maxVelocity
       * @param tolerance
       */
-    public PuttingCourse(Vector2D height, Vector2D start, Vector2D flag, Ball ball, double friction, double maxVelocity, double tolerance){
+    public PuttingCourse(Function2D height, Vector2D start, Vector2D flag, Ball ball, double friction, double maxVelocity, double tolerance){
         this.height = height; 
         this.start = start; 
         this.flag = flag; 
