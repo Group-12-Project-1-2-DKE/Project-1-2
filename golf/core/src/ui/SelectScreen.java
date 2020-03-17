@@ -13,7 +13,7 @@ import javax.swing.*;
 
 
 public class SelectScreen extends JFrame {
-
+    static SelectScreen frame = new SelectScreen("GridLayoutDemo");
     GridLayout experimentLayout = new GridLayout(0,2);
 
     public SelectScreen(String name) {
@@ -41,7 +41,8 @@ public class SelectScreen extends JFrame {
         Mode1Button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
-
+                 Mode1.createAndShowGUI();
+                 frame.setVisible(false);
             }
         });
     }
@@ -53,7 +54,7 @@ public class SelectScreen extends JFrame {
      */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        SelectScreen frame = new SelectScreen("GridLayoutDemo");
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         frame.addComponentsToPane(frame.getContentPane());
