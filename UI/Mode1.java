@@ -28,30 +28,30 @@ public class Mode1 extends JFrame {
 
         //Add buttons to experiment with Grid Layout
         TextField gC = new TextField("9.81");
-        compsToExperiment.add(new JLabel("Gravitational constant here"));
+        compsToExperiment.add(new JLabel("Gravitational constant: "));
         compsToExperiment.add(gC);
 
         TextField massOfBall = new TextField("45.93");
-        compsToExperiment.add(new JLabel("Fill in the mass of the ball here"));
+        compsToExperiment.add(new JLabel("The mass of the ball: "));
         compsToExperiment.add(massOfBall);
 
         TextField frictionCoeficcient = new TextField("0.131");
-        compsToExperiment.add(new JLabel("Fill in the friction coefficent here"));
+        compsToExperiment.add(new JLabel("The friction coefficent: "));
         compsToExperiment.add(frictionCoeficcient);
 
         TextField maxSpeed = new TextField("3");
-        compsToExperiment.add(new JLabel("Fill in the maximum speed here"));
+        compsToExperiment.add(new JLabel("Maximum speed: "));
         compsToExperiment.add(maxSpeed);
 
         TextField startCoordinates = new TextField("0.0, 0.0");
-        compsToExperiment.add(new JLabel("Fill in the start coordinates in here"));
+        compsToExperiment.add(new JLabel("Start coordinates: "));
         compsToExperiment.add(startCoordinates);
 
         TextField goalCoordinates = new TextField("0.0, 10.0");
-        compsToExperiment.add(new JLabel("Fill in the goal coordinates here"));
+        compsToExperiment.add(new JLabel("Goal coordinates: "));
         compsToExperiment.add(goalCoordinates);
 
-        compsToExperiment.add(new JLabel("fill in the x and y here"));
+        compsToExperiment.add(new JLabel("The x and y:"));
         compsToExperiment.add(new TextField("x, y"));
          
         JButton playButton = new JButton("Play!");
