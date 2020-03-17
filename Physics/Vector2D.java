@@ -3,9 +3,10 @@ import java.util.Vector;
 public class Vector2D{
     double x; 
     double y; 
+  
     public Vector2D(double x, double y){
      this.x = x;
-     this.y= y; 
+     this.y = y; 
     }
 
     public double getX(){
@@ -19,5 +20,14 @@ public class Vector2D{
     public Vector2D add(Vector2D vector){
         Vector2D result = new Vector2D(this.getX() + vector.getX(), this.getY()+ vector.getY());
         return result; 
+    }
+
+    public String toString(){
+        return "(" + x + ", " + y + ")";
+    }
+
+    public double length () {
+        double length = sqrt(this.x)^2 + (this.y)^2);
+        return length;
     }
 }
