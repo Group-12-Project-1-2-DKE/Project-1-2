@@ -1,11 +1,16 @@
 public class EulerSolver implements PhysicsEngine{
-    private double step_size = 0.01;
+    private double step_size = 0.001;
 
     public EulerSolver(){
 
     }
 
-    public void calculateShot(Vector2D initial_v, Ball ball){
+    public void calculateShot(Vector2D initial_v, Ball ball, Function2D height){
+        if (initial_v.getX() == 0 && initial_v.getY() == 0){
+            return;
+        }
+        Vector2D grav_force = gravitational_force(ball, height);
+        Vector2D fric_force = friction_force();
 
     }
 
@@ -13,11 +18,16 @@ public class EulerSolver implements PhysicsEngine{
         step_size = h;
     }
 
-    public Vector2D gravitational_force(Ball ball){
-
+    public Vector2D gravitational_force(Ball ball, Function2D height){
+        Vector2D gradient = height.gradient(ball.getLocation());
+        double x = -1 * ball.getMass() * gradient.getX();
+        double y = -1 * ball.getMass() * gradient.getY();
+        return new Vector2D(x, y);
     }
 
-    public 
+    public Vector2D friction_force(){
+
+    }
 
 }
 /*
