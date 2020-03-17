@@ -28,7 +28,7 @@ public class Mode1 extends JFrame {
 
         //Add buttons to experiment with Grid Layout
         TextField gC = new TextField("9.81");
-        compsToExperiment.add(new JLabel("Fill in Gravitational constant here"));
+        compsToExperiment.add(new JLabel("Gravitational constant here"));
         compsToExperiment.add(gC);
 
         TextField massOfBall = new TextField("45.93");
