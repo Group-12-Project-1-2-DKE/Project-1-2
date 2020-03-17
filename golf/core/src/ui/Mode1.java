@@ -15,7 +15,7 @@ import javax.swing.*;
 
 public class Mode1 extends JFrame {
 
-    GridLayout experimentLayout = new GridLayout(8,2);
+    GridLayout experimentLayout = new GridLayout(11,2);
 
     public Mode1(String name) {
         super(name);
@@ -27,6 +27,12 @@ public class Mode1 extends JFrame {
         final JPanel compsToExperiment = new JPanel();
         compsToExperiment.setLayout(experimentLayout);
 
+        compsToExperiment.add(new JLabel("Please specify your preferences:"));
+
+        //for empty space between lines
+        compsToExperiment.add(new JLabel(""));
+        compsToExperiment.add(new JLabel(""));
+        compsToExperiment.add(new JLabel(""));
 
         //Add buttons to experiment with Grid Layout
         TextField gC = new TextField("9.81");
@@ -55,6 +61,10 @@ public class Mode1 extends JFrame {
 
         compsToExperiment.add(new JLabel("fill in the x and y here"));
         compsToExperiment.add(new TextField("x, y"));
+
+        //for empty space between lines and button
+        compsToExperiment.add(new JLabel(""));
+        compsToExperiment.add(new JLabel(""));
 
         JButton playButton = new JButton("Play!");
         compsToExperiment.add(playButton);
