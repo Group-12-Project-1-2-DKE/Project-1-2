@@ -17,7 +17,7 @@ public class Ball{
       * @param mass is the mass of the given ball
       * @param diameter is the diameter of the given ball
      */
-    public Ball(Vector2D location, double mass,double diameter){
+    public Ball(Vector2D location, double mass, double diameter){
         this.location = location; 
         this.mass = mass; 
         this.diameter = diameter;

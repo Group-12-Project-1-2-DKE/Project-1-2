@@ -10,7 +10,14 @@ public class PuttingSimulator{
     }
 
     public void setBallPosition(Vector2D vector){
-        th
+        course.getBall().setLocation(vector);
     }
 
+    public Vector2D get_ball_position(){
+        return course.getBall().getLocation();
+    }
+
+    public void take_shot(Vector2d initial_ball_velocity){
+        engine.calculateShot(initial_ball_velocity, course.getBall(), course);
+    }
 }
