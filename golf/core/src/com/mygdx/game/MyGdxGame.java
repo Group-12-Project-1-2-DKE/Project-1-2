@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import Objects.Obstacle;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,9 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import states.PlayState;
 import states.State;
 import states.StateManager;
+
+
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -21,6 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Animation ball;
 	private Vector2 ballPosition;
 	private float time = 0;
+	private Array<Obstacle> obstacles = new Array<>();
 
 	private Texture ballFrame1, ballFrame2, ballFrame3;
 	private static final float startX = 400;
@@ -58,6 +63,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void resetWorld() {
 		ballPosition.set(startX,startY);
 		camera.position.x = 750;
+
+		obstacles.clear();
+		for(int i = 0; i < obstacles.size(); i++){
+			obstacles.add(new Obstacle())
+		}
 	}
 
 	@Override
