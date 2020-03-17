@@ -1,11 +1,12 @@
 package Objects;
 
 import Physics.Vector2D;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * class Ball is used to describe a ball in the putting simulator
  */
-public class Ball{
+public class Ball implements GameObject{
 
     private Vector2D location;
     private double mass;
@@ -118,7 +119,13 @@ public class Ball{
     }
 
 
+    @Override
+    public void render(SpriteBatch batch) {
 
+    }
 
+    @Override
+    public void update(float delta) {
 
+    }
 }
