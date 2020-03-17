@@ -26,8 +26,17 @@ public class Mode1 extends JFrame {
 
         final JPanel compsToExperiment = new JPanel();
         compsToExperiment.setLayout(experimentLayout);
+        compsToExperiment.setBackground(Color.LIGHT_GRAY);
 
-        compsToExperiment.add(new JLabel("Please specify your preferences:"));
+        Font font = new Font("Courier", Font.BOLD,13);
+ 
+        //set font for JTextField
+        compsToExperiment.setFont(font);
+
+        JLabel label = new JLabel("Please specify your preferences:");
+        label.setFont(new Font("Tahoma", Font.BOLD, 12));
+
+        compsToExperiment.add(label);
 
         //for empty space between lines
         compsToExperiment.add(new JLabel(""));
@@ -36,30 +45,30 @@ public class Mode1 extends JFrame {
 
         //Add buttons to experiment with Grid Layout
         TextField gC = new TextField("9.81");
-        compsToExperiment.add(new JLabel("Fill in Gravitational constant here"));
+        compsToExperiment.add(new JLabel("Gravitational constant: "));
         compsToExperiment.add(gC);
 
         TextField massOfBall = new TextField("45.93");
-        compsToExperiment.add(new JLabel("Fill in the mass of the ball here"));
+        compsToExperiment.add(new JLabel("Mass of the ball: "));
         compsToExperiment.add(massOfBall);
 
         TextField frictionCoeficcient = new TextField("0.131");
-        compsToExperiment.add(new JLabel("Fill in the friction coefficent here"));
+        compsToExperiment.add(new JLabel("Friction coefficient: "));
         compsToExperiment.add(frictionCoeficcient);
 
         TextField maxSpeed = new TextField("3");
-        compsToExperiment.add(new JLabel("Fill in the maximum speed here"));
+        compsToExperiment.add(new JLabel("Maximum speed:  "));
         compsToExperiment.add(maxSpeed);
 
         TextField startCoordinates = new TextField("0.0, 0.0");
-        compsToExperiment.add(new JLabel("Fill in the start coordinates in here"));
+        compsToExperiment.add(new JLabel("Start coordinates:"));
         compsToExperiment.add(startCoordinates);
 
         TextField goalCoordinates = new TextField("0.0, 10.0");
-        compsToExperiment.add(new JLabel("Fill in the goal coordinates here"));
+        compsToExperiment.add(new JLabel("Goal coordinates: "));
         compsToExperiment.add(goalCoordinates);
 
-        compsToExperiment.add(new JLabel("fill in the x and y here"));
+        compsToExperiment.add(new JLabel("The x and y: "));
         compsToExperiment.add(new TextField("x, y"));
 
         //for empty space between lines and button
