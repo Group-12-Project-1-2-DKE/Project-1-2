@@ -1,7 +1,6 @@
 package ui;
 
 
-
 /*
  * GridLayoutDemo.java
  *
@@ -17,13 +16,17 @@ public class Mode1 extends JFrame {
 
 
     FileReaders reader = new FileReaders();
-    GridLayout experimentLayout = new GridLayout(11,2);
+    GridLayout experimentLayout = new GridLayout(7,2);
     TextField gC = new TextField("9.81");
     TextField massOfBall = new TextField("45.93");
     TextField frictionCoeficcient = new TextField("0.131");
     TextField maxSpeed = new TextField("3");
-    TextField startCoordinates = new TextField("0.0, 0.0");
-    TextField goalCoordinates = new TextField("0.0, 10.0");
+    TextField startCoordinatesX = new TextField("0.0");
+    TextField startCoordinatesY = new TextField("0.0");
+    TextField goalCoordinatesX = new TextField("0.0");
+    TextField goalCoordinatesY = new TextField("10.0");
+    TextField coX = new TextField("X");
+    TextField coY = new TextField("Y");
 
     public Mode1(String name) {
         super(name);
@@ -36,11 +39,6 @@ public class Mode1 extends JFrame {
         compsToExperiment.setLayout(experimentLayout);
         compsToExperiment.setBackground(Color.LIGHT_GRAY);
 
-        Font font = new Font("Courier", Font.BOLD,13);
- 
-        //set font for JTextField
-        compsToExperiment.setFont(font);
-
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,2));
 
@@ -48,8 +46,6 @@ public class Mode1 extends JFrame {
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
 
         comboPanel2.add(label);
-
-        
 
         //Add buttons to experiment with Grid Layout
         
@@ -70,21 +66,35 @@ public class Mode1 extends JFrame {
 
         
         compsToExperiment.add(new JLabel("Start coordinates:"));
-        compsToExperiment.add(startCoordinates);
+        JPanel start = new JPanel();
+        start.setLayout(new GridLayout(1,2));
+        start.add(startCoordinatesX);
+        start.add(startCoordinatesY);
+
+        compsToExperiment.add(start);
 
         
         compsToExperiment.add(new JLabel("Goal coordinates: "));
-        compsToExperiment.add(goalCoordinates);
+        JPanel end = new JPanel();
+        end.setLayout(new GridLayout(1,2));
+        end.add(goalCoordinatesX);
+        end.add(goalCoordinatesY);
+
+        compsToExperiment.add(end);
 
         compsToExperiment.add(new JLabel("The x and y: "));
-        compsToExperiment.add(new TextField("x, y"));
+        JPanel XY = new JPanel();
+        XY.setLayout(new GridLayout(1,2));
+        XY.add(coX);
+        XY.add(coY);
+
+        compsToExperiment.add(XY);
 
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
-
         JButton playButton = new JButton("Play!");
         comboPanel.add(playButton);
 
@@ -128,8 +138,6 @@ public class Mode1 extends JFrame {
 
     public static void main(String[] args) {
         /* Use an appropriate Look and Feel */
-
-        
 
         try {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
