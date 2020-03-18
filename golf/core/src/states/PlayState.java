@@ -1,9 +1,11 @@
 package states;
 
+import Objects.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import input.PlayStateInput;
+
 
 public class PlayState extends State {
     private GameWorld gameWorld;
@@ -34,7 +36,7 @@ public class PlayState extends State {
     }
 
     public void updateCamera(){
-        if()
+        //if(gameWorld.)
     }
 
     @Override
