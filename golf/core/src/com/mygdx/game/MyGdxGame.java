@@ -31,11 +31,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	private static final float startX = 400;
 	private  static final float startY = 250;
 
-
+   private TextureRegion ballreg;
 	private static final float fluctuation = -30;
 	//private static final float velocity = output of the velocity vector maybe?
 	//privater static final accelaration = a(x)
 	//private static height = h(x)
+
 
 	private PlayState playstate;
 
@@ -64,10 +65,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		ballPosition.set(startX,startY);
 		camera.position.x = 750;
 
-		obstacles.clear();
+		/*obstacles.clear();
 		for(int i = 0; i < obstacles.size(); i++){
-			obstacles.add(new Obstacle())
-		}
+			obstacles.add(new Obstacle())*/
+		//}
 	}
 
 	@Override
