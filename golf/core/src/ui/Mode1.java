@@ -16,7 +16,7 @@ public class Mode1 extends JFrame {
 
 
     FileReaders reader = new FileReaders();
-    GridLayout experimentLayout = new GridLayout(7,2);
+    GridLayout experimentLayout = new GridLayout(9,2);
     TextField gC = new TextField("9.81");
     TextField massOfBall = new TextField("45.93");
     TextField frictionCoeficcient = new TextField("0.131");
@@ -27,6 +27,9 @@ public class Mode1 extends JFrame {
     TextField goalCoordinatesY = new TextField("10.0");
     TextField coX = new TextField("X");
     TextField coY = new TextField("Y");
+    TextField acceleration = new TextField("0");
+    TextField height = new TextField("0");
+
 
     public Mode1(String name) {
         super(name);
@@ -52,19 +55,21 @@ public class Mode1 extends JFrame {
         compsToExperiment.add(new JLabel("Gravitational constant: "));
         compsToExperiment.add(gC);
 
-        
         compsToExperiment.add(new JLabel("Mass of the ball: "));
         compsToExperiment.add(massOfBall);
 
-        
         compsToExperiment.add(new JLabel("Friction coefficient: "));
         compsToExperiment.add(frictionCoeficcient);
-
         
-        compsToExperiment.add(new JLabel("Maximum speed:  "));
+        compsToExperiment.add(new JLabel("Max speed:  "));
         compsToExperiment.add(maxSpeed);
 
-        
+        compsToExperiment.add(new JLabel("Acceleration:  "));
+        compsToExperiment.add(acceleration);
+
+        compsToExperiment.add(new JLabel("Heigth:  "));
+        compsToExperiment.add(height);
+
         compsToExperiment.add(new JLabel("Start coordinates:"));
         JPanel start = new JPanel();
         start.setLayout(new GridLayout(1,2));
