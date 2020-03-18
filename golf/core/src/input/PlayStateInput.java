@@ -1,8 +1,14 @@
 package input;
 
 import com.badlogic.gdx.InputProcessor;
+import states.PlayState;
 
 public class PlayStateInput implements InputProcessor {
+    private  PlayState state;
+    public PlayStateInput(PlayState playState) {
+        this.state  = playState;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         return false;
