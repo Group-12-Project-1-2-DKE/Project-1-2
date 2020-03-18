@@ -15,7 +15,7 @@ import javax.swing.*;
 
 public class Mode1 extends JFrame {
 
-    GridLayout experimentLayout = new GridLayout(11,2);
+    GridLayout experimentLayout = new GridLayout(7,2);
 
     public Mode1(String name) {
         super(name);
@@ -33,15 +33,15 @@ public class Mode1 extends JFrame {
         //set font for JTextField
         compsToExperiment.setFont(font);
 
+        JPanel comboPanel2 = new JPanel();
+        comboPanel2.setLayout(new GridLayout(2,2));
+
         JLabel label = new JLabel("Please specify your preferences:");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-        compsToExperiment.add(label);
+        comboPanel2.add(label);
 
-        //for empty space between lines
-        compsToExperiment.add(new JLabel(""));
-        compsToExperiment.add(new JLabel(""));
-        compsToExperiment.add(new JLabel(""));
+        
 
         //Add buttons to experiment with Grid Layout
         TextField gC = new TextField("9.81");
@@ -71,14 +71,21 @@ public class Mode1 extends JFrame {
         compsToExperiment.add(new JLabel("The x and y: "));
         compsToExperiment.add(new TextField("x, y"));
 
-        //for empty space between lines and button
-        compsToExperiment.add(new JLabel(""));
-        compsToExperiment.add(new JLabel(""));
+        JPanel comboPanel = new JPanel();
+        comboPanel.setLayout(new GridLayout(2,2));
+        comboPanel.add(new JLabel(""));
+        comboPanel.add(new JLabel(""));
+        comboPanel.add(new JLabel(""));
 
         JButton playButton = new JButton("Play!");
-        compsToExperiment.add(playButton);
+        comboPanel.add(playButton);
 
-        pane.add(compsToExperiment, BorderLayout.NORTH);
+       // JButton playButton = new JButton("Play!");
+        //compsToExperiment.add(playButton);
+
+        pane.add(comboPanel2, BorderLayout.NORTH);
+        pane.add(compsToExperiment, BorderLayout.CENTER);
+        pane.add(comboPanel, BorderLayout.SOUTH);
 
 
         playButton.addActionListener(new ActionListener(){
@@ -95,7 +102,7 @@ public class Mode1 extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        Mode1 frame = new Mode1("Mode 1");
+        Mode1 frame = new Mode1("Golf - Mode 1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         frame.addComponentsToPane(frame.getContentPane());

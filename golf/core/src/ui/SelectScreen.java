@@ -9,12 +9,19 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 
 
 public class SelectScreen extends JFrame {
-    static SelectScreen frame = new SelectScreen("GridLayoutDemo");
-    GridLayout experimentLayout = new GridLayout(0,2);
+    static SelectScreen frame = new SelectScreen("Golf - Menu");
+    GridLayout experimentLayout = new GridLayout(2,3);
 
     public SelectScreen(String name) {
         super(name);
@@ -25,12 +32,22 @@ public class SelectScreen extends JFrame {
 
         final JPanel compsToExperiment = new JPanel();
         compsToExperiment.setLayout(experimentLayout);
+        compsToExperiment.setBackground(Color.LIGHT_GRAY);
+
+        //adds a picture to the frame
+        ImageIcon icon = new ImageIcon("golf.jpg");
+        JLabel label2 = new JLabel(icon);
+
+        compsToExperiment.add(new JLabel(""));
+        compsToExperiment.add(label2);
+        compsToExperiment.add(new JLabel(""));
 
 
         //Add buttons to experiment with Grid Layout
         JButton Mode1Button = new JButton("Mode 1");
         compsToExperiment.add(Mode1Button);
 
+        compsToExperiment.add(new JLabel(""));
 
         JButton Mode2Button = new JButton("Mode 2");
         compsToExperiment.add(Mode2Button);
