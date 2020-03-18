@@ -7,6 +7,24 @@ public class PuttingSimulator{
     PuttingCourse course; 
     PhysicsEngine engine; 
     
+    //Main method for testing
+    public static void main(String[] args) {
+        PuttingCourse course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(4, 0), new Vector2D(0, 0),
+        new Ball(new Vector2D(4, 0), 0.9, 1), 0.1, 5, 4);
+        EulerSolver e = new EulerSolver();
+        e.set_step_size(0.01);
+        e.set_fric_coefficient(course.getFrictionCoefficient());
+        PhysicsEngine engine = e;
+        PuttingSimulator p = new PuttingSimulator(course, engine);
+        try{
+            long start = System.currentTimeMillis();
+            p.take_shot(new Vector2D(2, 0));
+            System.out.println(System.currentTimeMillis() - start);
+        } catch (StackOverflowError s){
+            System.out.println(s);
+        }
+    }
+    
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){
         this.course = course; 
         this.engine = engine; 
@@ -21,6 +39,11 @@ public class PuttingSimulator{
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
-        engine.calculateShot(initial_ball_velocity, course.getBall(), course);
+        Vector2D next_velocity = initial_ball_velocity;
+        course.getBall().hit();
+        while (course.getBall().isHit()){
+            next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+        }
+        //System.out.println("Done!")
     }
 }

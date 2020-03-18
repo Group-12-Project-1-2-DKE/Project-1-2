@@ -218,10 +218,4 @@ public class PuttingCourse implements Function2D{
     public double getTolerance(){
         return tolerance;
     }
-
-
-
-
-
-
 }
