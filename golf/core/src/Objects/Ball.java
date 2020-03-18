@@ -2,6 +2,16 @@ package Objects;
 
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+
+
 
 /**
  * class Ball is used to describe a ball in the putting simulator
@@ -15,6 +25,9 @@ public class Ball implements GameObject{
 
     private boolean atRest = true;
     private boolean isHit = false;
+
+    private Texture ballTexture = new Texture("ball.jpeg");
+    private ModelInstance model;
     /**
      * constructor for a ball
      * @param location is the position vector of the ball
@@ -25,6 +38,9 @@ public class Ball implements GameObject{
         this.location = location;
         this.mass = mass;
         this.diameter = diameter;
+    }
+
+    public Ball(Physics.Vector2D vector2D, int mass, int diameter) {
     }
 
     /**
@@ -118,7 +134,19 @@ public class Ball implements GameObject{
 
     }
 
+    public ModelInstance getModel() {
+        return model;
+    }
 
+    public void createModel(){
+        ModelBuilder builder = new ModelBuilder();
+        Model sphere;
+        sphere = builder.createSphere(diameter,diameter,diameter,50,50,
+                new Material(TextureAttribute.createDiffuse(ballTexture)),
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAtrributes.Usage.TextureCoordinates);
+
+        model = new ModelInstance(sphere,location.x, location.y + (diameter / 2));
+    }
     @Override
     public void render(SpriteBatch batch) {
 
