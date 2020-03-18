@@ -64,8 +64,8 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public Vector2D calculate_acc(Vector2D Fres, Ball ball) {
-        double x_acc = Fres.getX() / Math.pow(ball.getMass(), 2);
-        double y_acc = Fres.getY() / Math.pow(ball.getMass(), 2);
+        double x_acc = Fres.getX() / Math.pow(1/ball.getMass(), 2);
+        double y_acc = Fres.getY() / Math.pow(1/ball.getMass(), 2);
         Vector2D acc = new Vector2D(x_acc, y_acc);
         return acc;
     }

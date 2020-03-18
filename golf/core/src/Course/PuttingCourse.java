@@ -62,7 +62,7 @@ public class PuttingCourse implements Function2D{
                 components[i][j] = power_c;
             }
         }
-        System.out.println(Arrays.deepToString(components));
+        //System.out.println(Arrays.deepToString(components));
     }
      
     /*@Override
@@ -143,7 +143,7 @@ public class PuttingCourse implements Function2D{
             } else if ("y".equals(s)){
                 return p.getY();
             } else{
-                System.out.println("nani?");
+                System.out.println("Part of the equation cannot be recognized.");
             }
         }
         return 0;
