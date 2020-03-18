@@ -18,19 +18,19 @@ public class EulerSolver implements PhysicsEngine{
         Vector2D acc = calculate_acc(Fres, ball);
 
         Vector2D final_v = new Vector2D(0, 0);                                  //!<
-        if (gForce.length() == 0 && (fForce.length()/Math.pow(ball.getMass(), 2)) >= initial_v.length()){
-            final_v.setX(0);
-            final_v.setY(0);
-        } else {
+        //if (gForce.length() == 0 && (fForce.length()/Math.pow(ball.getMass(), 2)) >= initial_v.length()){
+        //    final_v.setX(0);
+        //    final_v.setY(0);
+        //} else {
             final_v = initial_v.add(acc.multiply(step_size));//acc * step_size);
-        }
+        //}
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
         
         //calculateShot(final_v, ball, course);
         if ((int)(final_v.length() * 1000) == 0 && (int)(acc.length() * 1000) == 0) {
             ball.putAtRest();
-            System.out.println("l: " + ball.getLocation());
-            System.out.println("v: " + initial_v);
+            //System.out.println("l: " + ball.getLocation());
+            //System.out.println("v: " + initial_v);
             return new Vector2D(0, 0);
         }
         return final_v;
@@ -57,8 +57,8 @@ public class EulerSolver implements PhysicsEngine{
 
     public Vector2D friction_force(Ball ball, Vector2D initial_v) {
         double frictionF = (fric_coefficient * ball.getMass() * grav_constant * initial_v.length()) / Math.sqrt(Math.pow(initial_v.getX(), 2) + Math.pow(initial_v.getY(),2));
-        double x_fforce = -(initial_v.getX()/Math.sqrt(frictionF/initial_v.length()));
-        double y_fforce = -(initial_v.getY()/Math.sqrt(frictionF/initial_v.length()));
+        double x_fforce = -(initial_v.getX()/Math.sqrt((1/frictionF)/initial_v.length()));
+        double y_fforce = -(initial_v.getY()/Math.sqrt((1/frictionF)/initial_v.length()));
         Vector2D fForce = new Vector2D(x_fforce, y_fforce);
         return fForce;
     }
