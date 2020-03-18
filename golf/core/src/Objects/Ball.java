@@ -3,6 +3,7 @@ package Objects;
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -10,7 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
-
+import com.badlogic.gdx.math.Vector2;
 
 
 /**
@@ -20,13 +21,14 @@ public class Ball implements GameObject{
 
     private Vector2D location;
     private double mass;
-    private double diameter;
+    private float diameter;
     private Vector2D velocity;
+    private Vector2 position;
 
     private boolean atRest = true;
     private boolean isHit = false;
 
-    private Texture ballTexture = new Texture("ball.jpeg");
+    private TextureRegion ballTexture;
     private ModelInstance model;
     /**
      * constructor for a ball
@@ -34,10 +36,16 @@ public class Ball implements GameObject{
      * @param mass is the mass of the given ball
      * @param diameter is the diameter of the given ball
      */
-    public Ball(Vector2D location, double mass,double diameter){
+    public Ball(Vector2D location, double mass,float diameter){
         this.location = location;
         this.mass = mass;
         this.diameter = diameter;
+    }
+    public Ball(float x, float y , float diameter, TextureRegion reg){
+        this.position.x = x;
+        this.position.y = y;
+        this.diameter = diameter;
+        this.ballTexture = reg;
     }
 
     public Ball(Physics.Vector2D vector2D, int mass, int diameter) {
@@ -83,7 +91,7 @@ public class Ball implements GameObject{
      * setter for the diameter
      * @param newDiameter is the desired diameter
      */
-    public void setDiameter(double newDiameter){
+    public void setDiameter(float newDiameter){
         diameter = newDiameter;
     }
     /**
@@ -138,15 +146,15 @@ public class Ball implements GameObject{
         return model;
     }
 
-    public void createModel(){
+    /*public void createModel(){
         ModelBuilder builder = new ModelBuilder();
         Model sphere;
         sphere = builder.createSphere(diameter,diameter,diameter,50,50,
                 new Material(TextureAttribute.createDiffuse(ballTexture)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAtrributes.Usage.TextureCoordinates);
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
         model = new ModelInstance(sphere,location.x, location.y + (diameter / 2));
-    }
+    }*/
     @Override
     public void render(SpriteBatch batch) {
 
