@@ -19,6 +19,10 @@ public class PlayState extends State {
         gameWorld  = new GameWorld(this);
         Gdx.input.setInputProcessor(new PlayStateInput(this));
     }
+
+    public OrthographicCamera getCamera(){
+        return camera;
+    }
     @Override
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(camera.combined);

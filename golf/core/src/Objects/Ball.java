@@ -84,7 +84,7 @@ public class Ball implements GameObject{
      * getter for the diameter of the ball
      * @return the diameter of the ball
      */
-    public double getDiameter(){
+    public float getDiameter(){
         return diameter;
     }
     /**

@@ -3,18 +3,18 @@ package Physics;
 import java.util.Vector;
 
 public class Vector2D{
-    double x;
-    double y;
-    public Vector2D(double x, double y){
+    float x;
+    float y;
+    public Vector2D(float x, float y){
         this.x = x;
         this.y= y;
     }
 
-    public double getX(){
+    public float getX(){
         return x;
     }
 
-    public double getY(){
+    public float getY(){
         return y;
     }
 
