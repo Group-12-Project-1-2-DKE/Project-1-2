@@ -1,11 +1,18 @@
+package ui;
+
 import java.util.*;
 import java.io.*;
 
 public class FileReaders{
-	public static void main(String[] args){
-		read("text.txt");
-        writeFile("Output.txt");
-	}
+	private double gravity;
+    private double mass;
+    private double coeficientOfFriction;
+    private double initialSpeed;
+    private double tolerance;
+    private double xStart;
+    private double yStart;
+    private double xGoal;
+    private double yGoal;
 
 	public static void read (String fileName){
         FileReader fr = null;
@@ -71,5 +78,86 @@ public class FileReaders{
         }finally{
                 writer.close();
         }
+	}
+
+	// Setters
+
+    public void setGravity(double gravity){
+    	this.gravity = gravity;
+    }
+
+    public void setMass(double mass){
+    	this.mass = mass;
+    }
+
+    public void setCoefficientOfFriction(double coeficientOfFriction){
+    	this.coeficientOfFriction = coeficientOfFriction;
+    }
+
+    public void setInitialSpeed(double initialSpeed){
+    	this.initialSpeed = initialSpeed;
+    }
+
+    public void setTolerance(double tolerance){
+    	this.tolerance = tolerance;
+    }
+
+    public void setXStart(double xStart){
+    	this.xStart = xStart;
+    }
+
+    public void setYStart(double yStart){
+    	this.yStart = yStart;
+    }
+
+    public void setXGoal(double xGoal){
+    	this.xGoal = xGoal;
+    }
+
+    public void setyGoal(double yGoal){
+    	this.yGoal = yGoal;
+    }
+
+    // Getters
+
+    public double getGravity(){
+    	return gravity;
+    }
+
+    public double getMass(){
+    	return mass;
+    }
+
+    public double getCoefficientOfFriction(){
+    	return coeficientOfFriction;
+    }
+
+    public double getInitialSpeed(){
+    	return initialSpeed;
+    }
+
+    public double getTolerance(){
+    	return tolerance;
+    }
+
+    public double getXStart(){
+    	return xStart;
+    }
+
+    public double getYStart(){
+    	return yStart;
+    }
+
+    public double getXGoal(){
+    	return xGoal;
+    }
+
+    public double getYGoal(){
+    	return yGoal;
+    }
+
+	public static void main(String[] args){
+		read("text.txt");
+        writeFile("Output.txt");
 	}
 }
