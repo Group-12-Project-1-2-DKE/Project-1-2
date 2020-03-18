@@ -15,7 +15,15 @@ import javax.swing.*;
 
 public class Mode1 extends JFrame {
 
-    GridLayout experimentLayout = new GridLayout(7,2);
+
+    FileReaders reader = new FileReaders();
+    GridLayout experimentLayout = new GridLayout(11,2);
+    TextField gC = new TextField("9.81");
+    TextField massOfBall = new TextField("45.93");
+    TextField frictionCoeficcient = new TextField("0.131");
+    TextField maxSpeed = new TextField("3");
+    TextField startCoordinates = new TextField("0.0, 0.0");
+    TextField goalCoordinates = new TextField("0.0, 10.0");
 
     public Mode1(String name) {
         super(name);
@@ -44,27 +52,27 @@ public class Mode1 extends JFrame {
         
 
         //Add buttons to experiment with Grid Layout
-        TextField gC = new TextField("9.81");
+        
         compsToExperiment.add(new JLabel("Gravitational constant: "));
         compsToExperiment.add(gC);
 
-        TextField massOfBall = new TextField("45.93");
+        
         compsToExperiment.add(new JLabel("Mass of the ball: "));
         compsToExperiment.add(massOfBall);
 
-        TextField frictionCoeficcient = new TextField("0.131");
+        
         compsToExperiment.add(new JLabel("Friction coefficient: "));
         compsToExperiment.add(frictionCoeficcient);
 
-        TextField maxSpeed = new TextField("3");
+        
         compsToExperiment.add(new JLabel("Maximum speed:  "));
         compsToExperiment.add(maxSpeed);
 
-        TextField startCoordinates = new TextField("0.0, 0.0");
+        
         compsToExperiment.add(new JLabel("Start coordinates:"));
         compsToExperiment.add(startCoordinates);
 
-        TextField goalCoordinates = new TextField("0.0, 10.0");
+        
         compsToExperiment.add(new JLabel("Goal coordinates: "));
         compsToExperiment.add(goalCoordinates);
 
@@ -90,6 +98,13 @@ public class Mode1 extends JFrame {
 
         playButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
+                    
+                    reader.setGravity(Double.valueOf(gC.getText().toString()));
+                    reader.setMass(Double.valueOf(massOfBall.getText().toString()));
+                    reader.setCoefficientOfFriction(Double.valueOf(frictionCoeficcient.getText().toString()));
+                    reader.setInitialSpeed(Double.valueOf(maxSpeed.getText().toString()));
+
+
 
             }
         });
@@ -113,6 +128,9 @@ public class Mode1 extends JFrame {
 
     public static void main(String[] args) {
         /* Use an appropriate Look and Feel */
+
+        
+
         try {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
