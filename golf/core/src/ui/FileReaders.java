@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 
 public class FileReaders{
-	private double gravity;
+    public double gravity;
     private double mass;
     private double coeficientOfFriction;
     private double initialSpeed;
@@ -13,12 +13,16 @@ public class FileReaders{
     private double yStart;
     private double xGoal;
     private double yGoal;
+    private String function;
 
-	public static void read (String fileName){
+    public FileReaders(){ 
+    }
+
+    public void read (String fileName){
         FileReader fr = null;
         LinkedList<Double> num = new LinkedList<Double>();
         try {
-        	fr = new FileReader(fileName);
+            fr = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fr);
 
             String line = "";
@@ -30,19 +34,20 @@ public class FileReaders{
                     if(numbers[i].matches(".*\\d.*")){
                         double num1 = Double.parseDouble(numbers[i]);
                         num.add(num1);
-                        System.out.println(num1);
+                    }else if(numbers[i].equals("Function=")){
+                        function = numbers[++i];
                     }
                 }
             }
-            double gravity = num.pop();
-            double mass = num.pop();
-            double coeficientOfFriction = num.pop();
-            double initialSpeed = num.pop();
-            double tolerance = num.pop();
-            double xStart = num.pop();
-            double yStart = num.pop();
-            double xGoal = num.pop();
-            double yGoal = num.pop();
+            gravity = num.pop();
+            mass = num.pop();
+            coeficientOfFriction = num.pop();
+            initialSpeed = num.pop();
+            tolerance = num.pop();
+            xStart = num.pop();
+            yStart = num.pop();
+            xGoal = num.pop();
+            yGoal = num.pop();
         // Exeptions.
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -50,19 +55,19 @@ public class FileReaders{
         } catch (IOException e) {   
             e.printStackTrace();  
         } finally{
-        	if(fr != null){
-        		try{
-        			fr.close();
-        		} catch(IOException e){
+            if(fr != null){
+                try{
+                    fr.close();
+                } catch(IOException e){
 
-        		}
-        	}
+                }
+            }
         }
-	}
+    }
 
-	public static void writeFile(String fileName){
+    public void writeFile(String fileName){
         PrintWriter writer = null;
-		try {
+        try {
             writer = new PrintWriter(fileName);
             writer.println("Gravity = " + 100);
             writer.println("Mass = ");
@@ -78,86 +83,89 @@ public class FileReaders{
         }finally{
                 writer.close();
         }
-	}
+    }
 
-	// Setters
+    // Setters
 
     public void setGravity(double gravity){
-    	this.gravity = gravity;
+        this.gravity = gravity;
     }
 
     public void setMass(double mass){
-    	this.mass = mass;
+        this.mass = mass;
     }
 
     public void setCoefficientOfFriction(double coeficientOfFriction){
-    	this.coeficientOfFriction = coeficientOfFriction;
+        this.coeficientOfFriction = coeficientOfFriction;
     }
 
     public void setInitialSpeed(double initialSpeed){
-    	this.initialSpeed = initialSpeed;
+        this.initialSpeed = initialSpeed;
     }
 
     public void setTolerance(double tolerance){
-    	this.tolerance = tolerance;
+        this.tolerance = tolerance;
     }
 
     public void setXStart(double xStart){
-    	this.xStart = xStart;
+        this.xStart = xStart;
     }
 
     public void setYStart(double yStart){
-    	this.yStart = yStart;
+        this.yStart = yStart;
     }
 
     public void setXGoal(double xGoal){
-    	this.xGoal = xGoal;
+        this.xGoal = xGoal;
     }
 
     public void setyGoal(double yGoal){
-    	this.yGoal = yGoal;
+        this.yGoal = yGoal;
+    }
+
+    public void setFunction(String function){
+        this.function = function;
     }
 
     // Getters
 
     public double getGravity(){
-    	return gravity;
+        return this.gravity;
     }
 
     public double getMass(){
-    	return mass;
+        return this.mass;
     }
 
     public double getCoefficientOfFriction(){
-    	return coeficientOfFriction;
+        return this.coeficientOfFriction;
     }
 
     public double getInitialSpeed(){
-    	return initialSpeed;
+        return this.initialSpeed;
     }
 
     public double getTolerance(){
-    	return tolerance;
+        return this.tolerance;
     }
 
     public double getXStart(){
-    	return xStart;
+        return this.xStart;
     }
 
     public double getYStart(){
-    	return yStart;
+        return this.yStart;
     }
 
     public double getXGoal(){
-    	return xGoal;
+        return this.xGoal;
     }
 
     public double getYGoal(){
-    	return yGoal;
+        return this.yGoal;
     }
 
-	public static void main(String[] args){
-		read("text.txt");
-        writeFile("Output.txt");
-	}
+    public String getFunction(){
+        return this.function;
+    }
 }
