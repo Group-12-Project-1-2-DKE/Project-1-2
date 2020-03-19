@@ -97,7 +97,7 @@ public class Mode1 extends JFrame {
         JButton playButton = new JButton("Play!");
         comboPanel.add(playButton);
 
-       // JButton playButton = new JButton("Play!");
+        //JButton playButton = new JButton("Play!");
         //compsToExperiment.add(playButton);
 
         pane.add(comboPanel2, BorderLayout.NORTH);
@@ -128,15 +128,15 @@ public class Mode1 extends JFrame {
                     engine.set_grav_constant(reader.getGravity());
                     PuttingSimulator p = new PuttingSimulator(course, engine);
                     
-                    GetVector v = new GetVector("Golf 2D - Mode 1");
+                    GetVector v = new GetVector("Golf 2D - Mode 1", p);
                     v.createAndShowGUI();
                     
-                    System.out.println("Waiting for user to enter value...");
-                    while (!v.userEnteredValue()){
+                    //System.out.println("Waiting for user to enter value...");
+                    //while (!v.userEnteredValue()){
 
-                    }
+                    //}
 
-                    p.take_shot(new Vector2D(v.getTempVectorX(), v.getTempVectorY()));
+                    
             }
         });
     }

@@ -113,7 +113,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		intCam.update();
 
 
-
 		ball = new Animation(0.05f, new TextureRegion(ballFrame1),new TextureRegion(ballFrame2), new TextureRegion(ballFrame3) );
 		ball.setPlayMode(Animation.PlayMode.LOOP);
 		ballreg = new TextureRegion(ballFrame1,50,400,150,60 );
@@ -187,7 +186,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		holeRect.set(holePosition.x,holePosition.y,hole.getWidth(),hole.getHeight());
 
 		while(ballPosition.x != xMax && ballPosition.y != yMax){
-			ballPosition
+			//ballPosition
 		}
 
 		if(collisionCheck()){

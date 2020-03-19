@@ -67,7 +67,7 @@ public class PuttingCourse implements Function2D{
                 components[i][j] = power_c;
             }
         }
-        //System.out.println(Arrays.deepToString(components));
+        System.out.println(Arrays.deepToString(components));
     }
      
     public Color[][] calculate_colors(){

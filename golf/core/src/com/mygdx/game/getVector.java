@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import Physics.*;
+
 
 
 public class GetVector extends JFrame {
@@ -22,10 +24,12 @@ public class GetVector extends JFrame {
     private double tempVectorX;
     private double tempVectorY;
     private boolean userEnteredValue = false;
+    private PuttingSimulator p;
 
-    public GetVector(String name) {
+    public GetVector(String name, PuttingSimulator p) {
         super(name);
         setResizable(false);
+        this.p = p;
     }
 
     public void addComponentsToPane(final Container pane) {
@@ -71,10 +75,15 @@ public class GetVector extends JFrame {
                     setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
                     setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
                     userEnteredValue = true;
+                    System.out.println(getTempVectorX());
+                    System.out.println(getTempVectorY());
+                    p.take_shot(new Vector2D(getTempVectorX(), getTempVectorY()));
+
                     //frame2.setVisible(false);
                 } catch (NumberFormatException n){
                     System.out.println("Not a number!");
                 }
+
             }
         });
     }

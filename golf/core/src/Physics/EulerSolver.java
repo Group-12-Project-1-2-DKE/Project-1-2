@@ -3,7 +3,7 @@ package Physics;
 import Objects.*;
 
 public class EulerSolver implements PhysicsEngine{
-    private double step_size = 0.001;
+    private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = 9.81;
 
@@ -26,8 +26,16 @@ public class EulerSolver implements PhysicsEngine{
         //}
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
         
+        if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
+            final_v.setX(- 1 * final_v.getX()) ;
+        }
+
+        if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
+            final_v.setY(- 1 * final_v.getY());
+        }
+
         //calculateShot(final_v, ball, course);
-        if ((int)(final_v.length() * 1000) == 0 && (int)(acc.length() * 1000) == 0) {
+        if ((int)(final_v.length() * 10) == 0 && (int)(acc.length() * 10) == 0) {
             ball.putAtRest();
             //System.out.println("l: " + ball.getLocation());
             //System.out.println("v: " + initial_v);
@@ -64,8 +72,8 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public Vector2D calculate_acc(Vector2D Fres, Ball ball) {
-        double x_acc = Fres.getX() / Math.pow(1/ball.getMass(), 2);
-        double y_acc = Fres.getY() / Math.pow(1/ball.getMass(), 2);
+        double x_acc = Fres.getX() / Math.pow(ball.getMass(), 2);
+        double y_acc = Fres.getY() / Math.pow(ball.getMass(), 2);
         Vector2D acc = new Vector2D(x_acc, y_acc);
         return acc;
     }
