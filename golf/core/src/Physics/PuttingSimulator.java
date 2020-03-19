@@ -46,6 +46,6 @@ public class PuttingSimulator{
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
         }
-        //System.out.println("Done!");
+        System.out.println("Final ball location: " + course.getBall().getLocation());
     }
 }
