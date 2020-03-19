@@ -26,6 +26,14 @@ public class EulerSolver implements PhysicsEngine{
         //}
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
         
+        if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
+            final_v.setX(- 1 * final_v.getX());
+        }
+
+        if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
+            final_v.setY(- 1 * final_v.getY());
+        }
+
         //calculateShot(final_v, ball, course);
         if ((int)(final_v.length() * 1000) == 0 && (int)(acc.length() * 1000) == 0) {
             ball.putAtRest();

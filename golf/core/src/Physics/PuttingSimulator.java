@@ -1,5 +1,7 @@
 package Physics;
 
+import com.mygdx.game.MyGdxGame;
+
 import Course.PuttingCourse;
 import Objects.*;
 
@@ -45,6 +47,7 @@ public class PuttingSimulator{
         course.getBall().hit();
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+            //MyGdxGame.setBallPosition(course.getBall().getLocation());
         }
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
