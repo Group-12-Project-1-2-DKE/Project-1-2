@@ -6,6 +6,7 @@ import Objects.*;
 public class PuttingSimulator{
     PuttingCourse course; 
     PhysicsEngine engine; 
+    int shot_counter = 0;
     
     //Main method for testing
     public static void main(String[] args) {
@@ -39,11 +40,12 @@ public class PuttingSimulator{
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
+        shot_counter++;
         Vector2D next_velocity = initial_ball_velocity;
         course.getBall().hit();
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
         }
-        //System.out.println("Done!")
+        //System.out.println("Done!");
     }
 }

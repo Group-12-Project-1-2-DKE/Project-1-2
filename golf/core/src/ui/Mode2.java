@@ -32,7 +32,7 @@ public class Mode2 extends JFrame {
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,2));
 
-        JLabel label = new JLabel("Please give the file name:           ");
+        JLabel label = new JLabel("Please give the file name:        ");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
         comboPanel2.add(label);
 

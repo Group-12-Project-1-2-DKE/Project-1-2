@@ -1,3 +1,5 @@
+package Objects;
+
 import java.util.*;
 
 // Class that generates the map.
