@@ -16,7 +16,7 @@ public class Mode1 extends JFrame {
 
 
     FileReaders reader = new FileReaders();
-    GridLayout experimentLayout = new GridLayout(9,2);
+    GridLayout experimentLayout = new GridLayout(8,2);
     TextField gC = new TextField("9.81");
     TextField massOfBall = new TextField("45.93");
     TextField frictionCoeficcient = new TextField("0.131");
@@ -44,7 +44,7 @@ public class Mode1 extends JFrame {
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,2));
 
-        JLabel label = new JLabel("Please specify your preferences:");
+        JLabel label = new JLabel("Please specify your preferences:", SwingConstants.CENTER);
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
 
         comboPanel2.add(label);
@@ -88,6 +88,8 @@ public class Mode1 extends JFrame {
 
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
+        comboPanel.add(new JLabel(""));
+        comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
 
         JButton playButton = new JButton("Play!");
