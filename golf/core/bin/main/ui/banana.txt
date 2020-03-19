@@ -1,0 +1,9 @@
+Gravity = 200
+Mass = 300
+Coefficient of friction = 400
+initial speed = 500
+tolerence for the goal = 600
+Start position X = 0.0
+Start position Y = 0.0
+Goal position X = 0.0
+Goal position Y = 10

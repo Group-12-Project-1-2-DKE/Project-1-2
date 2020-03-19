@@ -39,7 +39,9 @@ public class FileReaders{
                     }
                 }
             }
+            System.out.println(gravity);
             gravity = num.pop();
+            System.out.println(gravity);
             mass = num.pop();
             coeficientOfFriction = num.pop();
             initialSpeed = num.pop();

@@ -63,6 +63,14 @@ public class SelectScreen extends JFrame {
                  frame.setVisible(false);
             }
         });
+
+        Mode2Button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+
+                 Mode2.createAndShowGUI();
+                 frame.setVisible(false);
+            }
+        });
     }
 
     /**

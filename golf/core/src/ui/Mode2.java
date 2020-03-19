@@ -60,7 +60,10 @@ public class Mode2 extends JFrame {
             public void actionPerformed(ActionEvent e){
 
                 //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
-                reader.read(file.toString());
+                
+                String str = file.getText();
+                System.out.println(str);
+                reader.read(str);
 
             }
         });
