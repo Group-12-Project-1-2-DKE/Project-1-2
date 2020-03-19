@@ -21,11 +21,11 @@ public class PuttingCourse implements Function2D{
      * Main method for testing
      */
     public static void main(String[] args){
-        Function2D h = new PuttingCourse("0.5*x^3 + y", new Vector2D(0,0), new Vector2D(10,0),
-        new Ball(new Vector2D(0,0), 3, 0.5), 0.05, 4, 4);
+        //Function2D h = new PuttingCourse("0.5*x^3 + y", new Vector2D(0,0), new Vector2D(10,0),
+        //new Ball(new Vector2D(0,0), 3, 0.5), 0.05, 4, 4);
 
-        System.out.println(h.evaluate(new Vector2D(1, 1)));
-        System.out.println(h.gradient(new Vector2D(1, 1)));
+        //System.out.println(h.evaluate(new Vector2D(1, 1)));
+        //System.out.println(h.gradient(new Vector2D(1, 1)));
     }
     
      /**
