@@ -14,6 +14,7 @@ import javax.swing.*;
 
 public class Mode2 extends JFrame {
 
+    FileReaders reader = new FileReaders();
     GridLayout experimentLayout2 = new GridLayout(2,2);
     TextField file = new TextField("");
 
@@ -59,6 +60,7 @@ public class Mode2 extends JFrame {
             public void actionPerformed(ActionEvent e){
 
                 //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
+                reader.read(file.toString());
 
             }
         });
