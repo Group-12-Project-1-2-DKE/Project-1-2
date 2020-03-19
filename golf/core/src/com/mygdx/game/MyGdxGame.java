@@ -134,8 +134,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void setBallPosition(Vector2D newVector){
 
-		ballPosition.x = newVector.getX();
-		ballPosition.y = newVector.getY();
+		ballPosition.x = (float)newVector.getX();
+		ballPosition.y = (float)newVector.getY();
 
 	}
 
