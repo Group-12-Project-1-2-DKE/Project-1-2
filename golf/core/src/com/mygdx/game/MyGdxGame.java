@@ -28,6 +28,8 @@ import states.StateManager;
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
+	
+	
 	private StateManager manager;
 	private OrthographicCamera camera;
 	private Animation ball;
@@ -35,6 +37,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Vector2 ballPosition = new Vector2(40,50);
 	private float time = 0;
 	private Array<Obstacle> obstacles = new Array<>();
+
+	private double tempVectorX;
+	private double tempVectorY;
 
 	private Texture ballFrame1, ballFrame2, ballFrame3;
 	private static final float startX = 400;
@@ -132,10 +137,18 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	}
 
+	public void setTempVectorX(double tempVectorX){
+        this.tempVectorX = tempVectorX;
+    }
+
+    public void setTempVectorY(double tempVectorY){
+        this.tempVectorY = tempVectorY;
+    }
+
 	private void setBallPosition(Vector2D newVector){
 
-		ballPosition.x = newVector.getX();
-		ballPosition.y = newVector.getY();
+		ballPosition.x = (float)newVector.getX();
+		ballPosition.y = (float)newVector.getY();
 
 	}
 

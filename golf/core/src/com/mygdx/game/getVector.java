@@ -14,7 +14,8 @@ import javax.swing.*;
 
 public class getVector extends JFrame {
 
-
+    static getVector frame2 = new getVector("Golf 2D - Mode 2");
+    MyGdxGame game = new MyGdxGame();
     GridLayout experimentLayout2 = new GridLayout(2,2);
     TextField vectorXField = new TextField("");
     TextField vectorYField = new TextField("");
@@ -63,10 +64,9 @@ public class getVector extends JFrame {
         shootButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
-                //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
-                
-                
-
+                game.setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
+                game.setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
+                //frame2.setVisible(false);
             }
         });
     }
@@ -78,7 +78,7 @@ public class getVector extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        getVector frame2 = new getVector("Golf 2D - Mode 2");
+        
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         frame2.addComponentsToPane(frame2.getContentPane());
