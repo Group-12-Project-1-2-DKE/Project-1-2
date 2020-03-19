@@ -25,10 +25,9 @@ public class Mode1 extends JFrame {
     TextField startCoordinatesY = new TextField("0.0");
     TextField goalCoordinatesX = new TextField("0.0");
     TextField goalCoordinatesY = new TextField("10.0");
-    TextField coX = new TextField("X");
-    TextField coY = new TextField("Y");
-    TextField acceleration = new TextField("0");
-    TextField height = new TextField("0");
+    TextField tolerance = new TextField("3");
+    
+    TextField function = new TextField("-0.01* x + 0.003* x^2 + 0.04 * y");
 
 
     public Mode1(String name) {
@@ -64,11 +63,11 @@ public class Mode1 extends JFrame {
         compsToExperiment.add(new JLabel("Max speed:  "));
         compsToExperiment.add(maxSpeed);
 
-        compsToExperiment.add(new JLabel("Acceleration:  "));
-        compsToExperiment.add(acceleration);
-
         compsToExperiment.add(new JLabel("Heigth:  "));
-        compsToExperiment.add(height);
+        compsToExperiment.add(function);
+
+        compsToExperiment.add(new JLabel("Tolerance:  "));
+        compsToExperiment.add(tolerance);
 
         compsToExperiment.add(new JLabel("Start coordinates:"));
         JPanel start = new JPanel();
@@ -87,19 +86,10 @@ public class Mode1 extends JFrame {
 
         compsToExperiment.add(end);
 
-        compsToExperiment.add(new JLabel("The x and y: "));
-        JPanel XY = new JPanel();
-        XY.setLayout(new GridLayout(1,2));
-        XY.add(coX);
-        XY.add(coY);
-
-        compsToExperiment.add(XY);
-
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
         comboPanel.add(new JLabel(""));
-        comboPanel.add(new JLabel(""));
-        comboPanel.add(new JLabel(""));
+
         JButton playButton = new JButton("Play!");
         comboPanel.add(playButton);
 
@@ -117,9 +107,14 @@ public class Mode1 extends JFrame {
                     reader.setGravity(Double.valueOf(gC.getText().toString()));
                     reader.setMass(Double.valueOf(massOfBall.getText().toString()));
                     reader.setCoefficientOfFriction(Double.valueOf(frictionCoeficcient.getText().toString()));
-                    reader.setInitialSpeed(Double.valueOf(maxSpeed.getText().toString()));
-                    
-
+                    reader.setMaxSpeed(Double.valueOf(maxSpeed.getText().toString()));
+                    reader.setTolerance(Double.valueOf(tolerance.getText().toString()));
+                    reader.setXStart(Double.valueOf(startCoordinatesX.getText().toString()));
+                    reader.setYStart(Double.valueOf(startCoordinatesY.getText().toString()));
+                    reader.setXGoal(Double.valueOf(goalCoordinatesX.getText().toString()));
+                    reader.setyGoal(Double.valueOf(goalCoordinatesY.getText().toString()));
+                    String str = function.getText();
+                    reader.setFunction(str);
 
             }
         });

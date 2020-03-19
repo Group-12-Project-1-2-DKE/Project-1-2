@@ -1,3 +1,4 @@
+
 package com.mygdx.game;
 
 import Course.PuttingCourse;
@@ -123,6 +124,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		resetWorld();
+	}
+
+	private void takeShot(){
+
+		takeShot.createAndShowGUI();
+
 	}
 
 	private void resetWorld() {

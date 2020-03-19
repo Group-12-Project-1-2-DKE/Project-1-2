@@ -1,4 +1,4 @@
-package ui;
+package com.mygdx.game;
 
 
 /*
@@ -12,13 +12,14 @@ import javax.swing.*;
 
 
 
-public class Mode2 extends JFrame {
+public class takeShot extends JFrame {
 
-    FileReaders reader = new FileReaders();
+
     GridLayout experimentLayout2 = new GridLayout(2,2);
-    TextField file = new TextField("");
+    TextField vectorXField = new TextField("");
+    TextField vectorYField = new TextField("");
 
-    public Mode2(String name) {
+    public takeShot(String name) {
         super(name);
         setResizable(false);
     }
@@ -32,12 +33,15 @@ public class Mode2 extends JFrame {
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,2));
 
-        JLabel label = new JLabel("Please give the file name:        ");
+        JLabel label = new JLabel("Please give the vectors:        ");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
         comboPanel2.add(label);
 
-        compsToExperiment2.add(new JLabel("File: "));
-        compsToExperiment2.add(file);
+        compsToExperiment2.add(new JLabel("vector X: "));
+        compsToExperiment2.add(vectorXField);
+        
+        compsToExperiment2.add(new JLabel("vector Y: "));
+        compsToExperiment2.add(vectorYField);
         
 
         JPanel comboPanel = new JPanel();
@@ -45,8 +49,8 @@ public class Mode2 extends JFrame {
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
-        JButton playButton = new JButton("Play!");
-        comboPanel.add(playButton);
+        JButton shootButton = new JButton("Shoot!");
+        comboPanel.add(shootButton);
 
        // JButton playButton = new JButton("Play!");
         //compsToExperiment.add(playButton);
@@ -56,13 +60,12 @@ public class Mode2 extends JFrame {
         pane.add(comboPanel, BorderLayout.SOUTH);
 
 
-        playButton.addActionListener(new ActionListener(){
+        shootButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
                 //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
                 
-                String str = file.getText();
-                reader.read(str);
+                
 
             }
         });
@@ -75,7 +78,7 @@ public class Mode2 extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        Mode2 frame2 = new Mode2("Golf 2D - Mode 2");
+        takeShot frame2 = new takeShot("Golf 2D - Mode 2");
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         frame2.addComponentsToPane(frame2.getContentPane());
