@@ -78,7 +78,7 @@ public class FileReaders{
             writer.println("Gravity = " + 100);
             writer.println("Mass = ");
             writer.println("Coefficient of friction = ");
-            writer.println("initial speed = ");
+            writer.println("Max speed = ");
             writer.println("tolerence for the goal = ");
             writer.println("Start position X = ");
             writer.println("Start position Y = ");

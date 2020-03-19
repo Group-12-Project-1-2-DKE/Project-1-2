@@ -12,14 +12,14 @@ import javax.swing.*;
 
 
 
-public class takeShot extends JFrame {
+public class getVector extends JFrame {
 
 
     GridLayout experimentLayout2 = new GridLayout(2,2);
     TextField vectorXField = new TextField("");
     TextField vectorYField = new TextField("");
 
-    public takeShot(String name) {
+    public getVector(String name) {
         super(name);
         setResizable(false);
     }
@@ -78,7 +78,7 @@ public class takeShot extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        takeShot frame2 = new takeShot("Golf 2D - Mode 2");
+        getVector frame2 = new getVector("Golf 2D - Mode 2");
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         frame2.addComponentsToPane(frame2.getContentPane());

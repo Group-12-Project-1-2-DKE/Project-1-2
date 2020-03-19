@@ -126,9 +126,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		resetWorld();
 	}
 
-	private void takeShot(){
+	private void getVector(){
 
-		takeShot.createAndShowGUI();
+		getVector.createAndShowGUI();
 
 	}
 
