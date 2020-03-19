@@ -1,4 +1,5 @@
 Gravity = 9.81
+Diameter of the ball = 2
 Mass = 45.93
 Coefficient of friction = 0.131
 initial speed = 3

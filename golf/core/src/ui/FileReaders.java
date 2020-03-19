@@ -8,7 +8,7 @@ public class FileReaders{
     private double diameter;
     private double mass;
     private double coeficientOfFriction;
-    private double maxSpeed;
+    private double initialSpeed;
     private double tolerance;
     private double xStart;
     private double yStart;
@@ -49,7 +49,7 @@ public class FileReaders{
             diameter = num.pop();
             mass = num.pop();
             coeficientOfFriction = num.pop();
-            intitialSpeed = num.pop();
+            initialSpeed = num.pop();
             tolerance = num.pop();
             xStart = num.pop();
             yStart = num.pop();
@@ -117,7 +117,7 @@ public class FileReaders{
     }
 
     public void setInitialSpeed(double speed){
-        this.intialSpeed = speed;
+        this.initialSpeed = speed;
     }
 
     public void setTolerance(double tolerance){
@@ -175,7 +175,7 @@ public class FileReaders{
     }
 
     public double getInitialSpeed(){
-        return this.intialSpeed;
+        return this.initialSpeed;
     }
 
     public double getTolerance(){

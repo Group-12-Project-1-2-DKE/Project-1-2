@@ -76,8 +76,8 @@ public class Mode2 extends JFrame {
                 reader.read(str);
 
                 PuttingCourse course = new PuttingCourse(reader.getFunction(), new Vector2D(reader.getXStart(), reader.getYStart()),
-                new Vector2D(reader.getXGoal(), reader.getYGoal()), new Ball(new Vector2D(reader.getXStart(), reader.getYStart()), reader.getMass(), 10),//Diameter has yet to be implemented
-                reader.getCoefficientOfFriction(), 10, reader.getTolerance());
+                new Vector2D(reader.getXGoal(), reader.getYGoal()), new Ball(new Vector2D(reader.getXStart(), reader.getYStart()), reader.getMass(), (float)reader.getDiameter()),//Diameter has yet to be implemented
+                reader.getCoefficientOfFriction(), reader.getMaxVelocity(), reader.getTolerance());
                 EulerSolver engine = new EulerSolver();
                 engine.set_fric_coefficient(course.getFrictionCoefficient());
                 engine.set_grav_constant(reader.getGravity());
