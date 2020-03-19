@@ -32,13 +32,13 @@ public class SelectScreen extends JFrame {
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,1));
 
-        JLabel label = new JLabel(" --- GOLF GAME 2D ---");
+        JLabel label = new JLabel("--- GOLF GAME 2D ---", SwingConstants.CENTER);
         label.setFont(new Font("Tahoma", Font.BOLD, 13));
 
         comboPanel2.add(label);
         comboPanel2.add(new JLabel(""));
 
-        JLabel label3 = new JLabel("Please select:");
+        JLabel label3 = new JLabel("Please select:", SwingConstants.CENTER);
 
         pane.add(comboPanel2, BorderLayout.NORTH);
 
