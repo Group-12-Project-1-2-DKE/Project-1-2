@@ -31,7 +31,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private StateManager manager;
 	private OrthographicCamera camera;
 	private Animation ball;
-	private Vector2 ballPos;
+	private Vector2D ballPos;
 	private Vector2 ballPosition = new Vector2(40,50);
 	private float time = 0;
 	private Array<Obstacle> obstacles = new Array<>();
@@ -129,6 +129,13 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void getVector(){
 
 		getVector.createAndShowGUI();
+
+	}
+
+	private void setBallPosition(Vector2D newVector){
+
+		ballPosition.x = newVector.getX();
+		ballPosition.y = newVector.getY();
 
 	}
 
