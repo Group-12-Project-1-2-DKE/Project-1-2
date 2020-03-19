@@ -5,6 +5,8 @@ import Physics.Function2D;
 import Physics.Vector2D;
 import java.util.Arrays;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class PuttingCourse implements Function2D{
    
     private Vector2D start; 
@@ -16,16 +18,19 @@ public class PuttingCourse implements Function2D{
     private String equation;
     private String[][][] components;
     private double limstep = 0.0000000001;
+    private final int xUpBoundary = 900;
+    private final int yUpBoundary = 700;
+    
    
     /**
      * Main method for testing
      */
     public static void main(String[] args){
-        //Function2D h = new PuttingCourse("0.5*x^3 + y", new Vector2D(0,0), new Vector2D(10,0),
-        //new Ball(new Vector2D(0,0), 3, 0.5), 0.05, 4, 4);
+        PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
+        new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
 
-        //System.out.println(h.evaluate(new Vector2D(1, 1)));
-        //System.out.println(h.gradient(new Vector2D(1, 1)));
+        Color[][] c = h.calculate_colors();
+        System.out.println(c[0][0] + " " + c[0][1]);
     }
     
      /**
@@ -65,6 +70,28 @@ public class PuttingCourse implements Function2D{
         //System.out.println(Arrays.deepToString(components));
     }
      
+    public Color[][] calculate_colors(){
+        double height;
+        float g;
+        Color[][] colors = new Color[xUpBoundary][yUpBoundary];
+        for (int i = 0; i < xUpBoundary; i++){
+            for (int j = 0; j < yUpBoundary; j++){
+                height = evaluate(new Vector2D(i, j));
+                if (height >= 10){
+                    height = 10;
+                }
+                if (height <= -5){
+                    height = -5;
+                }
+                g = (float)((height + 5) * (255/15.0));
+                Color c = new Color(0, g, 0, 1);
+                colors[(int)(i)][(int)(j)] = c;
+            }
+        }
+        return colors;
+    }
+
+
     /*@Override
      /**
       * methof to evaluate the height
