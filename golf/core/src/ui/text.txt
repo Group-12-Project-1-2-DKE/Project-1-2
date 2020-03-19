@@ -8,3 +8,5 @@ Start position Y = 0.0
 Goal position X = 0.0
 Goal position Y = 10
 Function= 3x+2
+xVelocity = 0
+yVelocity = 2

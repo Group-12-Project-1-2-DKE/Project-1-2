@@ -15,7 +15,11 @@ public class FileReaders{
     private double yGoal;
     private String function;
 
-    public FileReaders(){ 
+    private double xVelocity;
+    private double yVelocity;
+
+    public FileReaders(){
+        
     }
 
     public void read (String fileName){
@@ -48,6 +52,8 @@ public class FileReaders{
             yStart = num.pop();
             xGoal = num.pop();
             yGoal = num.pop();
+            xVelocity = num.pop();
+            yVelocity = num.pop();
         // Exeptions.
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -78,7 +84,8 @@ public class FileReaders{
             writer.println("Start position Y = ");
             writer.println("Goal position X = ");
             writer.println("Goal position Y = ");
-            writer.println("Function= ");
+            writer.println("Ball latest position X = ");
+            writer.println("Ball latest position Y = ");
             
         } catch (IOException e) {
         }finally{
@@ -128,6 +135,14 @@ public class FileReaders{
         this.function = function;
     }
 
+    public void setxVelocity(double xVelocity){
+        this.xVelocity = xVelocity;
+    }
+
+    public void setyVelocity(double yVelocity){
+        this.yVelocity = yVelocity;
+    }
+
     // Getters
 
     public double getGravity(){
@@ -168,5 +183,13 @@ public class FileReaders{
 
     public String getFunction(){
         return this.function;
+    }
+
+    public double getxVelocity(){
+        return this.xVelocity;
+    }
+
+    public double getyVelocity(){
+        return this.yVelocity;
     }
 }
