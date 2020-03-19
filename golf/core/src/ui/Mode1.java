@@ -12,6 +12,7 @@ import javax.swing.*;
 import Objects.*;
 import Physics.*;
 import Course.*;
+import com.mygdx.game.*;
 
 public class Mode1 extends JFrame {
 
@@ -127,8 +128,13 @@ public class Mode1 extends JFrame {
                     engine.set_grav_constant(reader.getGravity());
                     PuttingSimulator p = new PuttingSimulator(course, engine);
                     
+                    getVector v = new getVector("Golf 2D - Mode 1");
+                    v.createAndShowGUI();
+                    
                     //Here we have to implement how the player takes the shot
-                    p.take_shot(new Vector2D(0, 0));
+                    p.take_shot(new Vector2D(v.getTempVectorX(), v.getTempVectorY()));
+                    //This may not work. If it doesn't, then we probably have to wait until
+                    //a value has been assigned to tempVectorX and tempVectorY.
             }
         });
     }

@@ -14,11 +14,13 @@ import javax.swing.*;
 
 public class getVector extends JFrame {
 
-    static getVector frame2 = new getVector("Golf 2D - Mode 2");
+    //getVector frame2 = new getVector("Golf 2D - Mode 2");
     MyGdxGame game = new MyGdxGame();
     GridLayout experimentLayout2 = new GridLayout(2,2);
     TextField vectorXField = new TextField("");
     TextField vectorYField = new TextField("");
+    private double tempVectorX;
+	private double tempVectorY;
 
     public getVector(String name) {
         super(name);
@@ -64,11 +66,27 @@ public class getVector extends JFrame {
         shootButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
-                game.setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
-                game.setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
+                setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
+                setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
                 //frame2.setVisible(false);
             }
         });
+    }
+
+    public void setTempVectorX(double tempVectorX){
+        this.tempVectorX = tempVectorX;
+    }
+
+    public void setTempVectorY(double tempVectorY){
+        this.tempVectorY = tempVectorY;
+    }
+
+    public double getTempVectorX(){
+        return tempVectorX;
+    }
+
+    public double getTempVectorY(){
+        return tempVectorY;
     }
 
     /**
@@ -76,15 +94,15 @@ public class getVector extends JFrame {
      * this method is invoked from the
      * event dispatch thread.
      */
-    static void createAndShowGUI() {
+    public void createAndShowGUI() {
         //Create and set up the window.
         
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
-        frame2.addComponentsToPane(frame2.getContentPane());
+        addComponentsToPane(getContentPane());
         //Display the window.
-        frame2.pack();
-        frame2.setVisible(true);
+        pack();
+        setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -109,7 +127,7 @@ public class getVector extends JFrame {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                //createAndShowGUI();
             }
         });
     }

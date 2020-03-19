@@ -38,8 +38,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private float time = 0;
 	private Array<Obstacle> obstacles = new Array<>();
 
-	private double tempVectorX;
-	private double tempVectorY;
+	
 
 	private Texture ballFrame1, ballFrame2, ballFrame3;
 	private static final float startX = 400;
@@ -133,17 +132,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void getVector(){
 
-		getVector.createAndShowGUI();
+		//getVector.createAndShowGUI();
 
 	}
 
-	public void setTempVectorX(double tempVectorX){
-        this.tempVectorX = tempVectorX;
-    }
-
-    public void setTempVectorY(double tempVectorY){
-        this.tempVectorY = tempVectorY;
-    }
+	
 
 	private void setBallPosition(Vector2D newVector){
 
