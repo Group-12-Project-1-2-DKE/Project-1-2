@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 
 public class SelectScreen extends JFrame {
     static SelectScreen frame = new SelectScreen("Golf - Menu");
-    GridLayout experimentLayout = new GridLayout(2,3);
+    GridLayout experimentLayout = new GridLayout(1,2);
 
     public SelectScreen(String name) {
         super(name);
@@ -38,21 +38,21 @@ public class SelectScreen extends JFrame {
         ImageIcon icon = new ImageIcon("golf.jpg");
         JLabel label2 = new JLabel(icon);
 
-        compsToExperiment.add(new JLabel(""));
-        compsToExperiment.add(label2);
-        compsToExperiment.add(new JLabel(""));
+        JLabel label = new JLabel("   --- GOLF GAME 2D ---");
+        label.setFont(new Font("Tahoma", Font.BOLD, 12));
 
+        pane.add(label, BorderLayout.NORTH);
+
+        pane.add(label2, BorderLayout.CENTER);
 
         //Add buttons to experiment with Grid Layout
         JButton Mode1Button = new JButton("Mode 1");
         compsToExperiment.add(Mode1Button);
 
-        compsToExperiment.add(new JLabel(""));
-
         JButton Mode2Button = new JButton("Mode 2");
         compsToExperiment.add(Mode2Button);
 
-        pane.add(compsToExperiment, BorderLayout.NORTH);
+        pane.add(compsToExperiment, BorderLayout.SOUTH);
 
 
         Mode1Button.addActionListener(new ActionListener(){
