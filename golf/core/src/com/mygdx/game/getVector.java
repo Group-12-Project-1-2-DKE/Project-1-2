@@ -12,17 +12,18 @@ import javax.swing.*;
 
 
 
-public class getVector extends JFrame {
+public class GetVector extends JFrame {
 
-    //getVector frame2 = new getVector("Golf 2D - Mode 2");
+    //GetVector frame2 = new GetVector("Golf 2D - Mode 2");
     MyGdxGame game = new MyGdxGame();
     GridLayout experimentLayout2 = new GridLayout(2,2);
     TextField vectorXField = new TextField("");
     TextField vectorYField = new TextField("");
     private double tempVectorX;
-	private double tempVectorY;
+    private double tempVectorY;
+    private boolean userEnteredValue = false;
 
-    public getVector(String name) {
+    public GetVector(String name) {
         super(name);
         setResizable(false);
     }
@@ -66,9 +67,14 @@ public class getVector extends JFrame {
         shootButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
-                setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
-                setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
-                //frame2.setVisible(false);
+                try{
+                    setTempVectorX(Double.valueOf(vectorXField.getText().toString()));
+                    setTempVectorY(Double.valueOf(vectorYField.getText().toString()));
+                    userEnteredValue = true;
+                    //frame2.setVisible(false);
+                } catch (NumberFormatException n){
+                    System.out.println("Not a number!");
+                }
             }
         });
     }
@@ -89,6 +95,10 @@ public class getVector extends JFrame {
         return tempVectorY;
     }
 
+    public boolean userEnteredValue(){
+        return userEnteredValue;
+    }
+
     /**
      * Create the GUI and show it.  For thread safety,
      * this method is invoked from the
@@ -103,6 +113,7 @@ public class getVector extends JFrame {
         //Display the window.
         pack();
         setVisible(true);
+        userEnteredValue = false;
     }
 
     public static void main(String[] args) {
