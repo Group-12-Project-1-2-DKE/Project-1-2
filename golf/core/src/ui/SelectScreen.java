@@ -35,15 +35,25 @@ public class SelectScreen extends JFrame {
         compsToExperiment.setBackground(Color.LIGHT_GRAY);
 
         //adds a picture to the frame
-        ImageIcon icon = new ImageIcon("golf.jpg");
-        JLabel label2 = new JLabel(icon);
+      //  ImageIcon icon = new ImageIcon("golf.jpg");
+       // JLabel label2 = new JLabel(icon);
 
-        JLabel label = new JLabel("   --- GOLF GAME 2D ---");
-        label.setFont(new Font("Tahoma", Font.BOLD, 12));
+        JPanel comboPanel2 = new JPanel();
+        comboPanel2.setLayout(new GridLayout(2,1));
 
-        pane.add(label, BorderLayout.NORTH);
+        JLabel label = new JLabel(" --- GOLF GAME 2D ---");
+        label.setFont(new Font("Tahoma", Font.BOLD, 13));
 
-        pane.add(label2, BorderLayout.CENTER);
+        comboPanel2.add(label);
+        comboPanel2.add(new JLabel(""));
+
+        JLabel label3 = new JLabel("Please select:");
+
+        pane.add(comboPanel2, BorderLayout.NORTH);
+
+       // pane.add(label2, BorderLayout.CENTER);
+
+        pane.add(label3, BorderLayout.CENTER);
 
         //Add buttons to experiment with Grid Layout
         JButton Mode1Button = new JButton("Mode 1");
