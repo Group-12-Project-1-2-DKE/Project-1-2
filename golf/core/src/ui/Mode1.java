@@ -118,7 +118,7 @@ public class Mode1 extends JFrame {
                     reader.setMass(Double.valueOf(massOfBall.getText().toString()));
                     reader.setCoefficientOfFriction(Double.valueOf(frictionCoeficcient.getText().toString()));
                     reader.setInitialSpeed(Double.valueOf(maxSpeed.getText().toString()));
-
+                    
 
 
             }
