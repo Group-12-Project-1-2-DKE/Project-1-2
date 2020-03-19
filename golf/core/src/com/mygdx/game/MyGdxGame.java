@@ -4,6 +4,7 @@ package com.mygdx.game;
 import Course.PuttingCourse;
 import Objects.Ball;
 import Objects.Obstacle;
+import Physics.PuttingSimulator;
 import Physics.Vector2D;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 //import com.sun.tools.corba.se.idl.constExpr.Or;
 import states.PlayState;
@@ -28,8 +30,8 @@ import states.StateManager;
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
-	
-	
+
+
 	private StateManager manager;
 	private OrthographicCamera camera;
 	private Animation ball;
@@ -37,12 +39,13 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Vector2 ballPosition = new Vector2(40,50);
 	private float time = 0;
 	private Array<Obstacle> obstacles = new Array<>();
+	PuttingSimulator simulator;
 
-	
+
 
 	private Texture ballFrame1, ballFrame2, ballFrame3;
-	private static final float startX = 400;
-	private  static final float startY = 250;
+	private static final float startX = 900;
+	private  static final float startY = 700;
 
 	private static final int xMax = 890;
 	private static final int yMax = 700;
@@ -56,7 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	private TextureRegion lightGreen;
 	private TextureRegion water; //for minus height
 
-   private TextureRegion ballreg ;
+	private TextureRegion ballreg ;
 	private static final float fluctuation = -30;
 
 
@@ -70,7 +73,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	private double friction;
 	private double maxVelocity;
 	private  double velocity = 0;
-
+	private float initialVel = 30;
+	private Vector2 grav = new Vector2();
+	private float nextVelocity;
 	//private static final float velocity = output of the velocity vector maybe?
 	//privater static final accelaration = a(x)
 	//private static height = h(x)
@@ -87,9 +92,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
 
-	
 	@Override
 	public void create () {
+		//simulator = new PuttingSimulator();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false,800,800);
 		batch = new SpriteBatch();
@@ -111,6 +116,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		intCam = new OrthographicCamera();
 		intCam.setToOrtho(false, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		intCam.update();
+
 
 
 		ball = new Animation(0.05f, new TextureRegion(ballFrame1),new TextureRegion(ballFrame2), new TextureRegion(ballFrame3) );
@@ -135,7 +141,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	}
 
-	
+
 
 	private void setBallPosition(Vector2D newVector){
 
@@ -172,11 +178,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void updateWorld() {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		time += deltaTime;
-         // add ball movement
-		if(Gdx.input.justTouched()){
+		// add ball movement
+		/*if(Gdx.input.justTouched()){
 			System.out.println("a new play is created");
 			manager.pushState(new PlayState(manager));
-		}
+		}*/
 		//if statemnt for camera to follow the ball
 		if(camera.position.x - ballPosition.x >700 + ballreg.getRegionWidth()){
 			camera.position.x = ballPosition.x - 20; //change the numbers if necessary
@@ -185,10 +191,19 @@ public class MyGdxGame extends ApplicationAdapter {
 		ballRect.set(ballPosition.x,ballPosition.y,ballFrame1.getWidth(),ballFrame1.getHeight());
 		holeRect.set(holePosition.x,holePosition.y,hole.getWidth(),hole.getHeight());
 
+//<<<<<<< HEAD
+		if(Gdx.input.justTouched()){
+			grav.set(initialVel,23f);
+		}
+		//if(Gdx.input.justTouched()){
+		//	ballPosition +=
+		//}
+//=======
 		while(ballPosition.x != xMax && ballPosition.y != yMax){
 			//ballPosition
 		}
 
+//>>>>>>> 889258991ce8c875d48b1b635c6f9f70d7e32498
 		if(collisionCheck()){
 			System.out.println("ball reached to the flag position");
 			resetWorld();
@@ -232,6 +247,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		return collision;
 	}
 
+	public void takeShot(){}
+
 
 
 	@Override
@@ -240,3 +257,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		img.dispose();
 	}
 }
+/*public void take_shot(Vector2D initial_ball_velocity){
+        Vector2D next_velocity = initial_ball_velocity;
+        course.getBall().hit();
+        while (course.getBall().isHit()){
+            next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+        }
+        //System.out.println("Done!")
+    }*/
