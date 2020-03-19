@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 
 public class FileReaders{
-    public double gravity;
+    private double gravity;
     private double mass;
     private double coeficientOfFriction;
     private double initialSpeed;

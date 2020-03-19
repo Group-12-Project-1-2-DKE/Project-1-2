@@ -34,12 +34,12 @@ public class Ball implements GameObject{
      * constructor for a ball
      * @param location is the position vector of the ball
      * @param mass is the mass of the given ball
-     * @param diameter is the diameter of the given ball
+     * @param d is the diameter of the given ball
      */
-    public Ball(Vector2D location, double mass,float diameter){
+    public Ball(Vector2D location, double mass, float d){
         this.location = location;
         this.mass = mass;
-        this.diameter = diameter;
+        this.diameter = d;
     }
     public Ball(float x, float y , float diameter, TextureRegion reg){
         this.position.x = x;
