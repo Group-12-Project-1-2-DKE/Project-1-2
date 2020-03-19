@@ -112,9 +112,8 @@ public class Ball implements GameObject{
      * method that applies a given force to move a ball
      * @param force a velocity vector that represents the force applied to the ball
      */
-    public void hit(Vector2D force){
-
-        this.velocity = force;
+    public void hit(){//Vector2D force){
+        //this.velocity = force;
         atRest = false;
         isHit = true;
     }
@@ -139,7 +138,7 @@ public class Ball implements GameObject{
         Vector2D stoppedVelocity = new Vector2D(0, 0);
         velocity = stoppedVelocity;
         atRest = true;
-
+        isHit = false;
     }
 
     public ModelInstance getModel() {
