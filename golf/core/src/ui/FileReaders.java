@@ -5,6 +5,7 @@ import java.io.*;
 
 public class FileReaders{
     private double gravity;
+    private double diameter;
     private double mass;
     private double coeficientOfFriction;
     private double initialSpeed;
@@ -14,6 +15,7 @@ public class FileReaders{
     private double xGoal;
     private double yGoal;
     private String function;
+    private double maxVelocity;
 
     private double xVelocity;
     private double yVelocity;
@@ -43,9 +45,8 @@ public class FileReaders{
                     }
                 }
             }
-            System.out.println(gravity);
             gravity = num.pop();
-            System.out.println(gravity);
+            diameter = num.pop();
             mass = num.pop();
             coeficientOfFriction = num.pop();
             initialSpeed = num.pop();
@@ -56,6 +57,8 @@ public class FileReaders{
             yGoal = num.pop();
             xVelocity = num.pop();
             yVelocity = num.pop();
+            maxVelocity = num.pop();
+
         // Exeptions.
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -99,6 +102,10 @@ public class FileReaders{
 
     public void setGravity(double gravity){
         this.gravity = gravity;
+    }
+
+    public void setDiameter(double diameter){
+        this.diameter = diameter;
     }
 
     public void setMass(double mass){
@@ -145,10 +152,18 @@ public class FileReaders{
         this.yVelocity = yVelocity;
     }
 
+    public void setMaxVelocity(double maxVelocity){
+        this.maxVelocity = maxVelocity;
+    }
+
     // Getters
 
     public double getGravity(){
         return this.gravity;
+    }
+
+    public double getDiameter(){
+        return this.diameter;
     }
 
     public double getMass(){
@@ -193,5 +208,9 @@ public class FileReaders{
 
     public double getyVelocity(){
         return this.yVelocity;
+    }
+
+    public double getMaxVelocity(){
+        return this.maxVelocity;
     }
 }
