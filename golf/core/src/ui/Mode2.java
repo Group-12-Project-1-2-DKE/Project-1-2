@@ -14,72 +14,30 @@ import javax.swing.*;
 
 public class Mode2 extends JFrame {
 
-    GridLayout experimentLayout = new GridLayout(9,2);
-    TextField height = new TextField("0");
+    GridLayout experimentLayout2 = new GridLayout(2,2);
+    TextField file = new TextField("");
 
-    public Mode1(String name) {
+    public Mode2(String name) {
         super(name);
         setResizable(false);
     }
 
     public void addComponentsToPane(final Container pane) {
 
-        final JPanel compsToExperiment = new JPanel();
-        compsToExperiment.setLayout(experimentLayout);
-        compsToExperiment.setBackground(Color.LIGHT_GRAY);
+        final JPanel compsToExperiment2 = new JPanel();
+        compsToExperiment2.setLayout(experimentLayout2);
+        compsToExperiment2.setBackground(Color.LIGHT_GRAY);
 
         JPanel comboPanel2 = new JPanel();
         comboPanel2.setLayout(new GridLayout(2,2));
 
-        JLabel label = new JLabel("Please specify your preferences:");
+        JLabel label = new JLabel("Please give the file name:           ");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
-
         comboPanel2.add(label);
 
-        //Add buttons to experiment with Grid Layout
+        compsToExperiment2.add(new JLabel("File: "));
+        compsToExperiment2.add(file);
         
-        compsToExperiment.add(new JLabel("Gravitational constant: "));
-        compsToExperiment.add(gC);
-
-        compsToExperiment.add(new JLabel("Mass of the ball: "));
-        compsToExperiment.add(massOfBall);
-
-        compsToExperiment.add(new JLabel("Friction coefficient: "));
-        compsToExperiment.add(frictionCoeficcient);
-        
-        compsToExperiment.add(new JLabel("Max speed:  "));
-        compsToExperiment.add(maxSpeed);
-
-        compsToExperiment.add(new JLabel("Acceleration:  "));
-        compsToExperiment.add(acceleration);
-
-        compsToExperiment.add(new JLabel("Heigth:  "));
-        compsToExperiment.add(height);
-
-        compsToExperiment.add(new JLabel("Start coordinates:"));
-        JPanel start = new JPanel();
-        start.setLayout(new GridLayout(1,2));
-        start.add(startCoordinatesX);
-        start.add(startCoordinatesY);
-
-        compsToExperiment.add(start);
-
-        
-        compsToExperiment.add(new JLabel("Goal coordinates: "));
-        JPanel end = new JPanel();
-        end.setLayout(new GridLayout(1,2));
-        end.add(goalCoordinatesX);
-        end.add(goalCoordinatesY);
-
-        compsToExperiment.add(end);
-
-        compsToExperiment.add(new JLabel("The x and y: "));
-        JPanel XY = new JPanel();
-        XY.setLayout(new GridLayout(1,2));
-        XY.add(coX);
-        XY.add(coY);
-
-        compsToExperiment.add(XY);
 
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
@@ -93,19 +51,14 @@ public class Mode2 extends JFrame {
         //compsToExperiment.add(playButton);
 
         pane.add(comboPanel2, BorderLayout.NORTH);
-        pane.add(compsToExperiment, BorderLayout.CENTER);
+        pane.add(compsToExperiment2, BorderLayout.CENTER);
         pane.add(comboPanel, BorderLayout.SOUTH);
 
 
         playButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                    
-                    reader.setGravity(Double.valueOf(gC.getText().toString()));
-                    reader.setMass(Double.valueOf(massOfBall.getText().toString()));
-                    reader.setCoefficientOfFriction(Double.valueOf(frictionCoeficcient.getText().toString()));
-                    reader.setInitialSpeed(Double.valueOf(maxSpeed.getText().toString()));
 
-
+                //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
 
             }
         });
@@ -118,13 +71,13 @@ public class Mode2 extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        Mode1 frame = new Mode1("Golf 2D - Mode 1");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Mode2 frame2 = new Mode2("Golf 2D - Mode 2");
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
-        frame.addComponentsToPane(frame.getContentPane());
+        frame2.addComponentsToPane(frame2.getContentPane());
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        frame2.pack();
+        frame2.setVisible(true);
     }
 
     public static void main(String[] args) {
