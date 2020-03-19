@@ -15,7 +15,7 @@ import javax.swing.*;
 public class Mode2 extends JFrame {
 
     FileReaders reader = new FileReaders();
-    GridLayout experimentLayout2 = new GridLayout(2,2);
+    GridLayout experimentLayout2 = new GridLayout(2,1);
     TextField file = new TextField("");
 
     public Mode2(String name) {
@@ -27,19 +27,29 @@ public class Mode2 extends JFrame {
 
         final JPanel compsToExperiment2 = new JPanel();
         compsToExperiment2.setLayout(experimentLayout2);
-        compsToExperiment2.setBackground(Color.LIGHT_GRAY);
 
         JPanel comboPanel2 = new JPanel();
-        comboPanel2.setLayout(new GridLayout(2,2));
+        comboPanel2.setLayout(new GridLayout(2,1));
 
-        JLabel label = new JLabel("Please give the file name:        ");
+        JPanel comboPanel3 = new JPanel();
+        comboPanel3.setLayout(new GridLayout(2,1));
+        comboPanel3.setBackground(Color.LIGHT_GRAY);
+
+        JLabel label = new JLabel("Specify your file:        ");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
         comboPanel2.add(label);
 
-        compsToExperiment2.add(new JLabel("File: "));
-        compsToExperiment2.add(file);
-        
+        comboPanel3.add(new JLabel("File: "));
+        comboPanel3.add(file);
 
+        JLabel instructions = new JLabel("Please enter the source code", SwingConstants.CENTER);
+        JLabel instructions2 = new JLabel("to your preferred file.", SwingConstants.CENTER);
+
+        comboPanel2.add(comboPanel3);
+
+        compsToExperiment2.add(instructions);
+        compsToExperiment2.add(instructions2);
+        
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
         comboPanel.add(new JLabel(""));
@@ -77,10 +87,11 @@ public class Mode2 extends JFrame {
         //Create and set up the window.
         Mode2 frame2 = new Mode2("Golf 2D - Mode 2");
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setSize(300, 175);
+        frame2.setLocationRelativeTo(null);
         //Set up the content pane.
         frame2.addComponentsToPane(frame2.getContentPane());
         //Display the window.
-        frame2.pack();
         frame2.setVisible(true);
     }
 

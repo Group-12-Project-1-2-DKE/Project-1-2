@@ -82,10 +82,11 @@ public class SelectScreen extends JFrame {
         //Create and set up the window.
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(200, 100);
+        frame.setLocationRelativeTo(null);
         //Set up the content pane.
         frame.addComponentsToPane(frame.getContentPane());
         //Display the window.
-        frame.pack();
         frame.setVisible(true);
     }
 

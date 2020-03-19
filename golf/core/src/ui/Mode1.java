@@ -131,10 +131,11 @@ public class Mode1 extends JFrame {
         //Create and set up the window.
         Mode1 frame = new Mode1("Golf 2D - Mode 1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 300);
+        frame.setLocationRelativeTo(null);
         //Set up the content pane.
         frame.addComponentsToPane(frame.getContentPane());
         //Display the window.
-        frame.pack();
         frame.setVisible(true);
     }
 
