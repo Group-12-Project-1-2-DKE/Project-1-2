@@ -78,6 +78,7 @@ public class FileReaders{
             writer.println("Start position Y = ");
             writer.println("Goal position X = ");
             writer.println("Goal position Y = ");
+            writer.println("Function= ");
             
         } catch (IOException e) {
         }finally{
