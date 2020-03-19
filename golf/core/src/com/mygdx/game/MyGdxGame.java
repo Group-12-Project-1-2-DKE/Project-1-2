@@ -193,9 +193,15 @@ public class MyGdxGame extends ApplicationAdapter {
 		ballRect.set(ballPosition.x,ballPosition.y,ballFrame1.getWidth(),ballFrame1.getHeight());
 		holeRect.set(holePosition.x,holePosition.y,hole.getWidth(),hole.getHeight());
 
+		while(ballPosition.x != xMax && ballPosition.y != yMax){
+			ballPosition
+		}
+
 		if(collisionCheck()){
 			System.out.println("ball reached to the flag position");
 		}
+
+
 	}
 
 	private void drawWorld() {
