@@ -192,6 +192,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		if(collisionCheck()){
 			System.out.println("ball reached to the flag position");
+			resetWorld();
 		}
 
 
