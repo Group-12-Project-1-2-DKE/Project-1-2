@@ -1,4 +1,4 @@
-package ui;
+package com.mygdx.game;
 
 
 /*
@@ -9,17 +9,17 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import Physics.*;
-import Objects.*;
-import Course.*;
 
-public class Mode2 extends JFrame {
 
-    FileReaders reader = new FileReaders();
-    GridLayout experimentLayout2 = new GridLayout(2,1);
-    TextField file = new TextField("");
 
-    public Mode2(String name) {
+public class getVector extends JFrame {
+
+
+    GridLayout experimentLayout2 = new GridLayout(2,2);
+    TextField vectorXField = new TextField("");
+    TextField vectorYField = new TextField("");
+
+    public getVector(String name) {
         super(name);
         setResizable(false);
     }
@@ -28,36 +28,29 @@ public class Mode2 extends JFrame {
 
         final JPanel compsToExperiment2 = new JPanel();
         compsToExperiment2.setLayout(experimentLayout2);
+        compsToExperiment2.setBackground(Color.LIGHT_GRAY);
 
         JPanel comboPanel2 = new JPanel();
-        comboPanel2.setLayout(new GridLayout(2,1));
+        comboPanel2.setLayout(new GridLayout(2,2));
 
-        JPanel comboPanel3 = new JPanel();
-        comboPanel3.setLayout(new GridLayout(2,1));
-        comboPanel3.setBackground(Color.LIGHT_GRAY);
-
-        JLabel label = new JLabel("Specify your file:        ");
+        JLabel label = new JLabel("Please give the vectors:        ");
         label.setFont(new Font("Tahoma", Font.BOLD, 12));
         comboPanel2.add(label);
 
-        comboPanel3.add(new JLabel("File: "));
-        comboPanel3.add(file);
-
-        JLabel instructions = new JLabel("Please enter the source code", SwingConstants.CENTER);
-        JLabel instructions2 = new JLabel("to your preferred file.", SwingConstants.CENTER);
-
-        comboPanel2.add(comboPanel3);
-
-        compsToExperiment2.add(instructions);
-        compsToExperiment2.add(instructions2);
+        compsToExperiment2.add(new JLabel("vector X: "));
+        compsToExperiment2.add(vectorXField);
         
+        compsToExperiment2.add(new JLabel("vector Y: "));
+        compsToExperiment2.add(vectorYField);
+        
+
         JPanel comboPanel = new JPanel();
         comboPanel.setLayout(new GridLayout(2,2));
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
         comboPanel.add(new JLabel(""));
-        JButton playButton = new JButton("Play!");
-        comboPanel.add(playButton);
+        JButton shootButton = new JButton("Shoot!");
+        comboPanel.add(shootButton);
 
        // JButton playButton = new JButton("Play!");
         //compsToExperiment.add(playButton);
@@ -67,23 +60,12 @@ public class Mode2 extends JFrame {
         pane.add(comboPanel, BorderLayout.SOUTH);
 
 
-        playButton.addActionListener(new ActionListener(){
+        shootButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
 
                 //READER NEEDS TO BE IMPLEMENTED HERE (TO READ THE FILE NAME)
                 
-                String str = file.getText();
-                reader.read(str);
-
-                PuttingCourse course = new PuttingCourse(reader.getFunction(), new Vector2D(reader.getXStart(), reader.getYStart()),
-                new Vector2D(reader.getXGoal(), reader.getYGoal()), new Ball(new Vector2D(reader.getXStart(), reader.getYStart()), reader.getMass(), 10),//Diameter has yet to be implemented
-                reader.getCoefficientOfFriction(), 10, reader.getTolerance());
-                EulerSolver engine = new EulerSolver();
-                engine.set_fric_coefficient(course.getFrictionCoefficient());
-                engine.set_grav_constant(reader.getGravity());
-                PuttingSimulator p = new PuttingSimulator(course, engine);
                 
-                p.take_shot(new Vector2D(reader.getxVelocity(), reader.getyVelocity()));
 
             }
         });
@@ -96,13 +78,12 @@ public class Mode2 extends JFrame {
      */
     static void createAndShowGUI() {
         //Create and set up the window.
-        Mode2 frame2 = new Mode2("Golf 2D - Mode 2");
+        getVector frame2 = new getVector("Golf 2D - Mode 2");
         frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setSize(300, 175);
-        frame2.setLocationRelativeTo(null);
         //Set up the content pane.
         frame2.addComponentsToPane(frame2.getContentPane());
         //Display the window.
+        frame2.pack();
         frame2.setVisible(true);
     }
 

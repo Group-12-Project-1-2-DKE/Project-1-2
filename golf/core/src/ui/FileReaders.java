@@ -7,7 +7,7 @@ public class FileReaders{
     private double gravity;
     private double mass;
     private double coeficientOfFriction;
-    private double initialSpeed;
+    private double maxSpeed;
     private double tolerance;
     private double xStart;
     private double yStart;
@@ -43,12 +43,10 @@ public class FileReaders{
                     }
                 }
             }
-            System.out.println(gravity);
             gravity = num.pop();
-            System.out.println(gravity);
             mass = num.pop();
             coeficientOfFriction = num.pop();
-            initialSpeed = num.pop();
+            maxSpeed = num.pop();
             tolerance = num.pop();
             xStart = num.pop();
             yStart = num.pop();
@@ -80,7 +78,7 @@ public class FileReaders{
             writer.println("Gravity = " + 100);
             writer.println("Mass = ");
             writer.println("Coefficient of friction = ");
-            writer.println("initial speed = ");
+            writer.println("Max speed = ");
             writer.println("tolerence for the goal = ");
             writer.println("Start position X = ");
             writer.println("Start position Y = ");
@@ -109,8 +107,8 @@ public class FileReaders{
         this.coeficientOfFriction = coeficientOfFriction;
     }
 
-    public void setInitialSpeed(double initialSpeed){
-        this.initialSpeed = initialSpeed;
+    public void setMaxSpeed(double maxSpeed){
+        this.maxSpeed = maxSpeed;
     }
 
     public void setTolerance(double tolerance){
@@ -159,8 +157,8 @@ public class FileReaders{
         return this.coeficientOfFriction;
     }
 
-    public double getInitialSpeed(){
-        return this.initialSpeed;
+    public double getMaxSpeed(){
+        return this.maxSpeed;
     }
 
     public double getTolerance(){
