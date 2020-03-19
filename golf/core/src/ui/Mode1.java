@@ -9,8 +9,9 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-
+import Objects.*;
+import Physics.*;
+import Course.*;
 
 public class Mode1 extends JFrame {
 
@@ -109,7 +110,7 @@ public class Mode1 extends JFrame {
                     reader.setGravity(Double.valueOf(gC.getText().toString()));
                     reader.setMass(Double.valueOf(massOfBall.getText().toString()));
                     reader.setCoefficientOfFriction(Double.valueOf(frictionCoeficcient.getText().toString()));
-                    reader.setMaxSpeed(Double.valueOf(maxSpeed.getText().toString()));
+                    reader.setMaxVelocity(Double.valueOf(maxSpeed.getText().toString()));
                     reader.setTolerance(Double.valueOf(tolerance.getText().toString()));
                     reader.setXStart(Double.valueOf(startCoordinatesX.getText().toString()));
                     reader.setYStart(Double.valueOf(startCoordinatesY.getText().toString()));
@@ -118,6 +119,16 @@ public class Mode1 extends JFrame {
                     String str = function.getText();
                     reader.setFunction(str);
 
+                    PuttingCourse course = new PuttingCourse(reader.getFunction(), new Vector2D(reader.getXStart(), reader.getYStart()),
+                    new Vector2D(reader.getXGoal(), reader.getYGoal()), new Ball(new Vector2D(reader.getXStart(), reader.getYStart()), reader.getMass(), (float)reader.getDiameter()),//Diameter has yet to be implemented
+                    reader.getCoefficientOfFriction(), reader.getMaxVelocity(), reader.getTolerance());
+                    EulerSolver engine = new EulerSolver();
+                    engine.set_fric_coefficient(course.getFrictionCoefficient());
+                    engine.set_grav_constant(reader.getGravity());
+                    PuttingSimulator p = new PuttingSimulator(course, engine);
+                    
+                    //Here we have to implement how the player takes the shot
+                    p.take_shot(new Vector2D(0, 0));
             }
         });
     }

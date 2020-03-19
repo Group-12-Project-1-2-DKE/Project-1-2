@@ -5,15 +5,17 @@ import java.io.*;
 
 public class FileReaders{
     private double gravity;
+    private double diameter;
     private double mass;
     private double coeficientOfFriction;
-    private double maxSpeed;
+    private double initialSpeed;
     private double tolerance;
     private double xStart;
     private double yStart;
     private double xGoal;
     private double yGoal;
     private String function;
+    private double maxVelocity;
 
     private double xVelocity;
     private double yVelocity;
@@ -44,9 +46,10 @@ public class FileReaders{
                 }
             }
             gravity = num.pop();
+            diameter = num.pop();
             mass = num.pop();
             coeficientOfFriction = num.pop();
-            maxSpeed = num.pop();
+            initialSpeed = num.pop();
             tolerance = num.pop();
             xStart = num.pop();
             yStart = num.pop();
@@ -54,6 +57,8 @@ public class FileReaders{
             yGoal = num.pop();
             xVelocity = num.pop();
             yVelocity = num.pop();
+            maxVelocity = num.pop();
+
         // Exeptions.
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -99,6 +104,10 @@ public class FileReaders{
         this.gravity = gravity;
     }
 
+    public void setDiameter(double diameter){
+        this.diameter = diameter;
+    }
+
     public void setMass(double mass){
         this.mass = mass;
     }
@@ -107,8 +116,8 @@ public class FileReaders{
         this.coeficientOfFriction = coeficientOfFriction;
     }
 
-    public void setMaxSpeed(double maxSpeed){
-        this.maxSpeed = maxSpeed;
+    public void setInitialSpeed(double speed){
+        this.initialSpeed = speed;
     }
 
     public void setTolerance(double tolerance){
@@ -143,10 +152,18 @@ public class FileReaders{
         this.yVelocity = yVelocity;
     }
 
+    public void setMaxVelocity(double maxVelocity){
+        this.maxVelocity = maxVelocity;
+    }
+
     // Getters
 
     public double getGravity(){
         return this.gravity;
+    }
+
+    public double getDiameter(){
+        return this.diameter;
     }
 
     public double getMass(){
@@ -157,8 +174,8 @@ public class FileReaders{
         return this.coeficientOfFriction;
     }
 
-    public double getMaxSpeed(){
-        return this.maxSpeed;
+    public double getInitialSpeed(){
+        return this.initialSpeed;
     }
 
     public double getTolerance(){
@@ -191,5 +208,9 @@ public class FileReaders{
 
     public double getyVelocity(){
         return this.yVelocity;
+    }
+
+    public double getMaxVelocity(){
+        return this.maxVelocity;
     }
 }

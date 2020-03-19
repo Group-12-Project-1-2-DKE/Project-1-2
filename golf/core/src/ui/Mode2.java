@@ -9,8 +9,9 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-
+import Physics.*;
+import Objects.*;
+import Course.*;
 
 public class Mode2 extends JFrame {
 
@@ -73,6 +74,16 @@ public class Mode2 extends JFrame {
                 
                 String str = file.getText();
                 reader.read(str);
+
+                PuttingCourse course = new PuttingCourse(reader.getFunction(), new Vector2D(reader.getXStart(), reader.getYStart()),
+                new Vector2D(reader.getXGoal(), reader.getYGoal()), new Ball(new Vector2D(reader.getXStart(), reader.getYStart()), reader.getMass(), (float)reader.getDiameter()),//Diameter has yet to be implemented
+                reader.getCoefficientOfFriction(), reader.getMaxVelocity(), reader.getTolerance());
+                EulerSolver engine = new EulerSolver();
+                engine.set_fric_coefficient(course.getFrictionCoefficient());
+                engine.set_grav_constant(reader.getGravity());
+                PuttingSimulator p = new PuttingSimulator(course, engine);
+                
+                p.take_shot(new Vector2D(reader.getxVelocity(), reader.getyVelocity()));
 
             }
         });
