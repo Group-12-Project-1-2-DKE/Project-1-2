@@ -219,7 +219,8 @@ public class OptionScreen implements Screen {
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
                 this.dispose();
-                game.setScreen(new MainMenu(game));
+                Gdx.app.exit();
+                new GolfGame();
             }
         } else {
             game.batch.draw(playButtonInactive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
