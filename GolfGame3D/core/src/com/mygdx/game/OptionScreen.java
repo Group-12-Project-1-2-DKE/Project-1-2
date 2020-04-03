@@ -1,12 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -43,12 +41,15 @@ public class OptionScreen implements Screen {
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
+
+        // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
         playButtonInactive = new Texture("play_button_inactive.png");
         backButtonActivated = new Texture("back_arrow_activated.png");
         backButtonInactivated = new Texture("back_arrow_inactivated.png");
         stage = new Stage();
 
+        // Create the textFields and add them to the "frame".
         Gdx.input.setInputProcessor(stage);
         Skin customizedMenuSkin = new Skin(Gdx.files.internal("uiskin.json"));
         gravity = new TextField("", customizedMenuSkin);
@@ -155,6 +156,7 @@ public class OptionScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
 
+        // Create all the label and add them to the "frame".
         FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter1.size = 40;
@@ -211,7 +213,7 @@ public class OptionScreen implements Screen {
         font7.dispose();
         font.draw(game.batch,"Start Coordinates (x,y):", 25,400);
 
-
+        // Create the play button.
         int x = ScreenSpace.WIDTH / 2 - PLAY_WIDTH / 2;
         if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
@@ -223,9 +225,11 @@ public class OptionScreen implements Screen {
             game.batch.draw(playButtonInactive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
         }
 
+        // Create the go back button.
         int z = 35;
         if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             game.batch.draw(backButtonActivated, z, PLAY_Y, BACK_WIDTH, BACK_WIDTH);
+            // If the button id clicked, go back to the main menu.
             if (Gdx.input.isTouched()){
                 this.dispose();
                 game.setScreen(new MainMenu(game));
