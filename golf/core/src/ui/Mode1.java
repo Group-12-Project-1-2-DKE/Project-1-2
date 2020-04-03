@@ -128,7 +128,7 @@ public class Mode1 extends JFrame {
                     engine.set_grav_constant(reader.getGravity());
                     PuttingSimulator p = new PuttingSimulator(course, engine);
                     
-                    GetVector v = new GetVector("Golf 2D - Mode 1", p);
+                    getVector v = new getVector("Golf 2D - Mode 1", p);
                     v.createAndShowGUI();
                     
                     //System.out.println("Waiting for user to enter value...");

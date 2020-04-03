@@ -14,7 +14,7 @@ import Physics.*;
 
 
 
-public class GetVector extends JFrame {
+public class getVector extends JFrame {
 
     //GetVector frame2 = new GetVector("Golf 2D - Mode 2");
     MyGdxGame game = new MyGdxGame();
@@ -26,7 +26,7 @@ public class GetVector extends JFrame {
     private boolean userEnteredValue = false;
     private PuttingSimulator p;
 
-    public GetVector(String name, PuttingSimulator p) {
+    public getVector(String name, PuttingSimulator p) {
         super(name);
         setResizable(false);
         this.p = p;
