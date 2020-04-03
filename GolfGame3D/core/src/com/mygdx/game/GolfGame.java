@@ -3,6 +3,7 @@ package com.mygdx.game;
 import Course.PuttingCourse;
 import Objects.Ball;
 import Physics.EulerSolver;
+import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
 import Physics.Vector2D;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -31,6 +32,7 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	private Ball gameBall;
 	private Vector2D ballPos;
 	private EulerSolver eulerSolver;//i just added this in case we need it
+	private PhysicsEngine engine;
 
 	private Environment environment;//environment to adjust the lights
 
@@ -40,6 +42,8 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	private Model model; //keeps information about our objects to be rendered
 	private ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
+	private ModelInstance flag;
+	private ModelInstance grounBall;
 	private ModelBatch modelBatch; //this is a kind of brush to draw our object
 	private ArrayList<ModelInstance> instances; // arraylist to store the models we're going to render to the screen
 
@@ -67,8 +71,17 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	@Override
 	public void create() {
 		//we initialize everything we have here
+
 		gameBall = new Ball(new Vector2D(0, 0), 10, 5); //i entered some random values
 		course = new PuttingCourse("x^2+1", new Vector2D(3, 5), new Vector2D(8, 9), gameBall, 0, 7, 4);//again some  random values
+		simulator = new PuttingSimulator(course,engine);
+		eulerSolver = new EulerSolver();
+		eulerSolver.set_step_size(0.01);
+		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
+		engine = eulerSolver;
+
+		ballPos = new Vector2D(course.getFlag().getX(),course.getFlag().getY());
+
 		stage = new Stage(); //to show the texts on the screen
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
@@ -99,24 +112,42 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(10f, 0.1f, 10f);
 
+		modelBuilder.node().id = "flag";
+		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
+				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.5f,2f,0.5f,10);
+
+		modelBuilder.node().id = "groundBalls";
+		modelBuilder.part("parcel" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(0.5f,0.5f,0.5f,5,5);
+
 		model = modelBuilder.end();
 		//create instances of  models
 		ball = new ModelInstance(model, "ball");
 		ground = new ModelInstance(model, "ground");
+		flag = new ModelInstance(model, "flag");
 
 		//set ball position according to the height function
 		ball.transform.setTranslation((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) + 1f, (float) course.getStart().getY());
+		flag.transform.setTranslation((float)course.getFlag().getX(), 2.5f + (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())),(float)course.getFlag().getY());
 
 		instances = new ArrayList<>();
 		instances.add(ball);
+		instances.add(flag);
+		for(float j = -5f; j <= 5f; j = j+ 0.3f){
+			for(float i = 0; i <= 199; i = i+ 0.3f){
+				grounBall = new ModelInstance(model, "groundBalls");
+				grounBall.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
+				instances.add(grounBall);
+			}
+		}
 		//instead of the ground above, i added the ground that is generated according to the equation in puttingCourse class
-		instances.addAll(course.getCourseShape(model));
+		//instances.addAll(course.getCourseShape(model));
 
 		environment = new Environment();//some lightning stuff
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-		simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
+		//simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
 	}
 
 	@Override
@@ -142,14 +173,14 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		for (ModelInstance instance : instances) {
 			if (isVisible(camera, instance)) { //if the instances are visible  we render them
 				modelBatch.render(instance, environment);
-				visibleCount++;
+				//visibleCount++;
 			}
 		}
 		modelBatch.end();
 
 		stringBuilder.setLength(0);
 		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());//to see the frame per second
-		stringBuilder.append("Visible : ").append(visibleCount);  //to see the number of visible instances
+		stringBuilder.append("Visible : ").append(0);  //to see the number of visible instances
 		label.setText(stringBuilder);
 		stage.draw();
 
