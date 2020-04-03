@@ -43,7 +43,7 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	private ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
 	private ModelInstance flag;
-	private ModelInstance grounBall;
+	private ModelInstance groundPieces;
 	private ModelBatch modelBatch; //this is a kind of brush to draw our object
 	private ArrayList<ModelInstance> instances; // arraylist to store the models we're going to render to the screen
 
@@ -73,7 +73,7 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		//we initialize everything we have here
 
 		gameBall = new Ball(new Vector2D(0, 0), 10, 5); //i entered some random values
-		course = new PuttingCourse("x^2+1", new Vector2D(3, 5), new Vector2D(8, 9), gameBall, 0, 7, 4);//again some  random values
+		course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(3, 5), new Vector2D(8, 9), gameBall, 0, 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
@@ -108,17 +108,13 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.WHITE))).sphere(0.5f, 0.5f, 0.5f, 10, 10);
 
-		modelBuilder.node().id = "ground";
-		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(10f, 0.1f, 10f);
-
 		modelBuilder.node().id = "flag";
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.5f,2f,0.5f,10);
 
-		modelBuilder.node().id = "groundBalls";
+		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("parcel" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(0.5f,0.5f,0.5f,5,5);
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(0.5f,1f,1f);//sphere(0.5f,0.5f,0.5f,5,5);
 
 		model = modelBuilder.end();
 		//create instances of  models
@@ -135,9 +131,9 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		instances.add(flag);
 		for(float j = -5f; j <= 5f; j = j+ 0.3f){
 			for(float i = 0; i <= 199; i = i+ 0.3f){
-				grounBall = new ModelInstance(model, "groundBalls");
-				grounBall.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
-				instances.add(grounBall);
+				groundPieces = new ModelInstance(model, "groundPieces");
+				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
+				instances.add(groundPieces);
 			}
 		}
 		//instead of the ground above, i added the ground that is generated according to the equation in puttingCourse class
@@ -167,6 +163,7 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 
 		cameraInputController.update();
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//some default stuff
+		Gdx.gl.glClearColor(0f,0.4f,0.6f,0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		modelBatch.begin(camera);
@@ -180,7 +177,8 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 
 		stringBuilder.setLength(0);
 		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());//to see the frame per second
-		stringBuilder.append("Visible : ").append(0);  //to see the number of visible instances
+		//stringBuilder.append("Visible : ").append(0);  //to see the number of visible instances
+		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
 
