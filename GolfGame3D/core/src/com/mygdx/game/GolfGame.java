@@ -129,8 +129,8 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		for(float j = -5f; j <= 5f; j = j+ 0.3f){
-			for(float i = 0; i <= 199; i = i+ 0.3f){
+		for(float j = -2f; j <= 2f; j = j+ 0.2f){
+			for(float i = 0; i <= 99; i = i+ 0.2f){
 				groundPieces = new ModelInstance(model, "groundPieces");
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
