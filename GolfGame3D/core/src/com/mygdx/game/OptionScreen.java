@@ -56,55 +56,55 @@ public class OptionScreen implements Screen {
         // Create the textFields and add them to the "frame".
         Gdx.input.setInputProcessor(stage);
         Skin customizedMenuSkin = new Skin(Gdx.files.internal("uiskin.json"));
-        gravity = new TextField("", customizedMenuSkin);
+        gravity = new TextField("9.81", customizedMenuSkin);
         gravity.setPosition(ScreenSpace.WIDTH - 210,725);
         gravity.setSize(200, 30);
         gravity.setColor(Color.WHITE);
         stage.addActor(gravity);
 
-        ballDiameter = new TextField("", customizedMenuSkin);
+        ballDiameter = new TextField("2", customizedMenuSkin);
         ballDiameter.setPosition(ScreenSpace.WIDTH - 210,675);
         ballDiameter.setSize(200, 30);
         ballDiameter.setColor(Color.WHITE);
         stage.addActor(ballDiameter);
 
-        ballMass = new TextField("", customizedMenuSkin);
+        ballMass = new TextField("45.93", customizedMenuSkin);
         ballMass.setPosition(ScreenSpace.WIDTH - 210,625);
         ballMass.setSize(200, 30);
         ballMass.setColor(Color.WHITE);
         stage.addActor(ballMass);
 
-        coefficientOfFriction = new TextField("", customizedMenuSkin);
+        coefficientOfFriction = new TextField("0.131", customizedMenuSkin);
         coefficientOfFriction.setPosition(ScreenSpace.WIDTH - 210,575);
         coefficientOfFriction.setSize(200, 30);
         coefficientOfFriction.setColor(Color.WHITE);
         stage.addActor(coefficientOfFriction);
 
-        function = new TextField("", customizedMenuSkin);
+        function = new TextField("3x+2", customizedMenuSkin);
         function.setPosition(ScreenSpace.WIDTH - 210,525);
         function.setSize(200, 30);
         function.setColor(Color.WHITE);
         stage.addActor(function);
 
-        goalX = new TextField("", customizedMenuSkin);
+        goalX = new TextField("100", customizedMenuSkin);
         goalX.setPosition(25,425);
         goalX.setSize(200, 30);
         goalX.setColor(Color.WHITE);
         stage.addActor(goalX);
 
-        goalY = new TextField("", customizedMenuSkin);
+        goalY = new TextField("100", customizedMenuSkin);
         goalY.setPosition(250,425);
         goalY.setSize(200, 30);
         goalY.setColor(Color.WHITE);
         stage.addActor(goalY);
 
-        startX = new TextField("", customizedMenuSkin);
+        startX = new TextField("5", customizedMenuSkin);
         startX.setPosition(25,325);
         startX.setSize(200, 30);
         startX.setColor(Color.WHITE);
         stage.addActor(startX);
 
-        startY = new TextField("", customizedMenuSkin);
+        startY = new TextField("5", customizedMenuSkin);
         startY.setPosition(250,325);
         startY.setSize(200, 30);
         startY.setColor(Color.WHITE);
