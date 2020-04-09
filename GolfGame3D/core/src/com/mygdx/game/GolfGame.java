@@ -6,10 +6,7 @@ import Physics.EulerSolver;
 import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
 import Physics.Vector2D;
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +22,7 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.util.ArrayList;
 
-public class GolfGame extends InputAdapter implements ApplicationListener {
+public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private PuttingCourse course;
 	private PuttingSimulator simulator;
@@ -52,6 +49,7 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	private BitmapFont font;
 	private StringBuilder stringBuilder;
 
+	private ScreenSpace game;
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
@@ -71,7 +69,8 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	@Override
 	public void create() {
 		//we initialize everything we have here
-
+        game = new ScreenSpace();
+        game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(0, 0), 10, 5); //i entered some random values
 		course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(3, 5), new Vector2D(8, 9), gameBall, 0, 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
@@ -146,8 +145,9 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 		//simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
 	}
 
+
 	@Override
-	public void render() {
+	public void render(float delta) {
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= this.ballPos.getX()) &&
 				(this.ballPos.getX() <= course.getFlag().getX() + course.getTolerance())))
@@ -196,24 +196,37 @@ public class GolfGame extends InputAdapter implements ApplicationListener {
 	}
 
 	@Override
+	public void hide() {
+
+	}
+
+	@Override
 	public void dispose() {
 		model.dispose();
 		modelBatch.dispose();
 	}
 
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
+	@Override
+	public void show() {
 
 	}
+
+
+
+	/*public void resize(int width, int height) {
+		stage.getViewport().update(width, height, true);
+
+	}*/
 
 	public boolean isVisible(final Camera camera, final ModelInstance instance) {
 		ball.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position); //we should also modify this method
 	}
 
-	/*public void setCourse(Menu menu){
-		//TODO : add the preferences selected from the menu
+	/*public void setCourse(OptionScreen menu){
+
 }*/
+
 
 
 }

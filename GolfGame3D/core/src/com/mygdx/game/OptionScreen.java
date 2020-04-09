@@ -39,8 +39,12 @@ public class OptionScreen implements Screen {
 
     Stage stage;
 
+    public GolfGame hold;
+
     public OptionScreen(ScreenSpace game){
         this.game = game;
+
+        hold = new GolfGame();
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
@@ -219,8 +223,9 @@ public class OptionScreen implements Screen {
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
                 this.dispose();
-                Gdx.app.exit();
-                new GolfGame();
+                hold.create();
+                game.setScreen(hold);
+
             }
         } else {
             game.batch.draw(playButtonInactive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
@@ -269,4 +274,6 @@ public class OptionScreen implements Screen {
     public void dispose() {
 
     }
+
+
 }
