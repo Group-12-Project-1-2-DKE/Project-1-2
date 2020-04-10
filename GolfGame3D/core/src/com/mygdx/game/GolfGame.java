@@ -50,12 +50,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private StringBuilder stringBuilder;
 
 	private ScreenSpace game;
+	private OptionScreen optionScreen;
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
 
 	private final int WIDTH = 800;
 	private final int HEIGHT = 800;
+
+	private boolean gameOver = false;
 
 	public GolfGame(PuttingCourse course, PuttingSimulator simulator) {
 		this.course = course;
@@ -71,15 +74,16 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		//we initialize everything we have here
         game = new ScreenSpace();
         game.setScreen(new MainMenu(game));
+        optionScreen = new OptionScreen(game);
 		gameBall = new Ball(new Vector2D(0, 0), 10, 5); //i entered some random values
-		course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(3, 5), new Vector2D(8, 9), gameBall, 0, 7, 4);//again some  random values
+		course = new PuttingCourse(optionScreen.getFunction(), new Vector2D(optionScreen.getStartX(), optionScreen.getStartY()), new Vector2D(optionScreen.getGoalX(), optionScreen.getGoalY()), gameBall, optionScreen.getCoefficientOfFriction(), 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 		engine = eulerSolver;
 
-		ballPos = new Vector2D(course.getFlag().getX(),course.getFlag().getY());
+		ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
 
 		stage = new Stage(); //to show the texts on the screen
 		font = new BitmapFont();
@@ -113,7 +117,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("parcel" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(0.5f,1f,1f);//sphere(0.5f,0.5f,0.5f,5,5);
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(2f,1f,1f);//sphere(0.5f,0.5f,0.5f,5,5);
 
 		model = modelBuilder.end();
 		//create instances of  models
@@ -122,14 +126,13 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		flag = new ModelInstance(model, "flag");
 
 		//set ball position according to the height function
-		ball.transform.setTranslation((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) + 1f, (float) course.getStart().getY());
-		flag.transform.setTranslation((float)course.getFlag().getX(), 2.5f + (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())),(float)course.getFlag().getY());
-
+		ball.transform.setTranslation((float) optionScreen.getStartX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) optionScreen.getStartY());
+		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())),(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		for(float j = -2f; j <= 2f; j = j+ 0.2f){
-			for(float i = 0; i <= 99; i = i+ 0.2f){
+		for(float j = -5f; j <= 2f; j = j+ 0.2f){
+			for(float i = -1f; i <= 99; i = i+ 0.2f){
 				groundPieces = new ModelInstance(model, "groundPieces");
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
@@ -155,9 +158,13 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				&& (this.ballPos.getY() <= course.getFlag().getY() + course.getTolerance()))) {
 			//maybe also add when the velocity is too small to the if statement
 			//TODO : add game over screen
+			gameOver = true;
+			System.out.println("Ball reached to the flag");
 		} else {
-			//here we should add the ball position update stuff to move the ball
-			System.out.println();
+			/*while(this.ballPos != course.getBall().getLocation()){
+				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
+				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);
+			}*/
 		}
 
 
