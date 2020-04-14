@@ -224,9 +224,5 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	}
 
 	/*public void setCourse(OptionScreen menu){
-
 }*/
-
-
-
 }
