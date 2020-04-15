@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+
 
 import java.util.ArrayList;
 
@@ -83,7 +83,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 		engine = eulerSolver;
 
-		initialPos = course.getStart();
 		ballPos = course.getStart();
 		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
 		position = new Vector3((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),course.getStart().getY())), (float)course.getStart().getY());
