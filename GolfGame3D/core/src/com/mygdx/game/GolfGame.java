@@ -37,7 +37,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private CameraInputController cameraInputController;// to rotate around the screen
 
 	private Model model; //keeps information about our objects to be rendered
-	private ModelInstance ball; //we use this to render our model
+	 public static ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
@@ -118,8 +118,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.5f,2f,0.5f,10);
 
 		modelBuilder.node().id = "groundPieces";
-		modelBuilder.part("parcel" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN))).box(2f,1f,1f);//sphere(0.5f,0.5f,0.5f,5,5);
+		modelBuilder.part("sphere" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(0.5f,0.5f,0.5f,5,5);
 
 		model = modelBuilder.end();
 		//create instances of  models
@@ -167,10 +167,9 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		} else {
 			/*while(this.ballPos != course.getBall().getLocation()){
 				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
-				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);
-			}*/
-			ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())),
-					(float)course.getBall().getLocation().getY());
+				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);*/
+
+
 		}
 
 
@@ -235,6 +234,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		ball.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position); //we should also modify this method
 	}
+
 
 	/*public void setCourse(OptionScreen menu){
 }*/
