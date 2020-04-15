@@ -86,25 +86,25 @@ public class OptionScreen implements Screen {
         function.setColor(Color.WHITE);
         stage.addActor(function);
 
-        goalX = new TextField("100", customizedMenuSkin);
+        goalX = new TextField("0", customizedMenuSkin);
         goalX.setPosition(25,425);
         goalX.setSize(200, 30);
         goalX.setColor(Color.WHITE);
         stage.addActor(goalX);
 
-        goalY = new TextField("100", customizedMenuSkin);
+        goalY = new TextField("5", customizedMenuSkin);
         goalY.setPosition(250,425);
         goalY.setSize(200, 30);
         goalY.setColor(Color.WHITE);
         stage.addActor(goalY);
 
-        startX = new TextField("5", customizedMenuSkin);
+        startX = new TextField("0", customizedMenuSkin);
         startX.setPosition(25,325);
         startX.setSize(200, 30);
         startX.setColor(Color.WHITE);
         stage.addActor(startX);
 
-        startY = new TextField("5", customizedMenuSkin);
+        startY = new TextField("0", customizedMenuSkin);
         startY.setPosition(250,325);
         startY.setSize(200, 30);
         startY.setColor(Color.WHITE);

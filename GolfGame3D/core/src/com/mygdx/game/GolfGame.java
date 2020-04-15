@@ -55,8 +55,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
 
-	private final int WIDTH = 800;
-	private final int HEIGHT = 800;
 
 	private boolean gameOver = false;
 
@@ -77,7 +75,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
         game = new ScreenSpace();
         game.setScreen(new MainMenu(game));
         optionScreen = new OptionScreen(game);
-		gameBall = new Ball(new Vector2D(0, 0), 10, 5); //i entered some random values
+		gameBall = new Ball(new Vector2D(optionScreen.getStartX(),optionScreen.getStartY()), 10, 5); //i entered some random values
 		course = new PuttingCourse(optionScreen.getFunction(), new Vector2D(optionScreen.getStartX(), optionScreen.getStartY()), new Vector2D(optionScreen.getGoalX(), optionScreen.getGoalY()), gameBall, optionScreen.getCoefficientOfFriction(), 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
 		eulerSolver = new EulerSolver();
@@ -85,8 +83,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 		engine = eulerSolver;
 
-		ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
-
+		initialPos = course.getStart();
+		ballPos = course.getStart();
+		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
+		position = new Vector3((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),course.getStart().getY())), (float)course.getStart().getY());
+		
 		stage = new Stage(); //to show the texts on the screen
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
@@ -95,7 +96,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		//here we set our camera
 		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//67 is just a common value for the angle
-		camera.position.set(10f, 10f, 10f);
+		camera.position.set((float)course.getStart().getX() - 0.7f + 1f, 6.97f, 6f);
 		camera.lookAt(0, 0, 0);//to start from the origin
 		camera.near = 1f;
 		camera.far = 300f;
@@ -129,12 +130,12 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		//set ball position according to the height function
 		ball.transform.setTranslation((float) optionScreen.getStartX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) optionScreen.getStartY());
-		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())),(float)course.getFlag().getY());
+		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		for(float j = -5f; j <= 2f; j = j+ 0.2f){
-			for(float i = -1f; i <= 99; i = i+ 0.2f){
+		for(float j = -15f; j <= 15f; j = j+ 0.3f){
+			for(float i = -50f; i <= 99; i = i+ 0.3f){
 				groundPieces = new ModelInstance(model, "groundPieces");
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
@@ -169,6 +170,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
 				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);
 			}*/
+			ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())),
+					(float)course.getBall().getLocation().getY());
 		}
 
 
