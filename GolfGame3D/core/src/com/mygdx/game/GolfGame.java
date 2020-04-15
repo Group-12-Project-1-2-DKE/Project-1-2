@@ -60,6 +60,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private boolean gameOver = false;
 
+	public int attempt = 0;
+
 	public GolfGame(PuttingCourse course, PuttingSimulator simulator) {
 		this.course = course;
 		this.simulator = simulator;
@@ -158,6 +160,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				&& (this.ballPos.getY() <= course.getFlag().getY() + course.getTolerance()))) {
 			//maybe also add when the velocity is too small to the if statement
 			//TODO : add game over screen
+			this.dispose();
+			game.setScreen(new Congrat(game, attempt));
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
