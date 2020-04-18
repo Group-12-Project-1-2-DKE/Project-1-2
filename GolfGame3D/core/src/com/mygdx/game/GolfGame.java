@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 
-
 import java.util.ArrayList;
 
 public class GolfGame extends Game implements ApplicationListener, Screen {
@@ -39,7 +38,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private CameraInputController cameraInputController;// to rotate around the screen
 
 	private Model model; //keeps information about our objects to be rendered
-	public ModelInstance ball; //we use this to render our model
+	 public static ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
@@ -75,34 +74,19 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	public void create() {
 		//we initialize everything we have here
         game = new ScreenSpace();
-<<<<<<< HEAD
         game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(Variables.startX,Variables.startY), 10, 5); //i entered some random values
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
-=======
-		game.setScreen(new MainMenu(game));
-        optionScreen = new OptionScreen(game);
-		gameBall = new Ball(new Vector2D(optionScreen.getStartX(),optionScreen.getStartY()), 10, 5); //i entered some random values
-		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
-		//course = new PuttingCourse(optionScreen.getFunction(), new Vector2D(optionScreen.getStartX(), optionScreen.getStartY()), new Vector2D(optionScreen.getGoalX(), optionScreen.getGoalY()), gameBall, optionScreen.getCoefficientOfFriction(), 7, 0.15);//again some  random values
-		/*course = new PuttingCourse(optionScreen.getFunction(), new Vector2D(optionScreen.getStartX(), optionScreen.getStartY()), new Vector2D(optionScreen.getGoalX(),optionScreen.getGoalY()),
-				new Ball(new Vector2D(optionScreen.getStartX(),optionScreen.getGoalY()), 0.9, 1), 0.1, 5, 4);*/
-		 course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(0, 0), new Vector2D(2, 5),
-				gameBall, 0.1, 5, 4);
->>>>>>> 162733e3fe4999561689c712c03d7aaafeccf1b4
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
-		eulerSolver.set_grav_constant(9.81);
 		engine = eulerSolver;
-		simulator = new PuttingSimulator(course,engine);
-
 
 		ballPos = course.getStart();
 		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
 		position = new Vector3((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),course.getStart().getY())), (float)course.getStart().getY());
-		
+
 		stage = new Stage(); //to show the equation on the screen
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
@@ -145,11 +129,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		flag = new ModelInstance(model, "flag");
 
 		//set ball position according to the height function
-<<<<<<< HEAD
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) Variables.startY);
-=======
-		ball.transform.setTranslation((float) optionScreen.getStartX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY()))  + 2f , (float) optionScreen.getStartY());
->>>>>>> 162733e3fe4999561689c712c03d7aaafeccf1b4
 		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
@@ -169,19 +149,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		//simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
-		try{
-			long start = System.currentTimeMillis();
-			simulator.take_shot(new Vector2D(2, 0));
-			System.out.println(System.currentTimeMillis() - start);
-		} catch (StackOverflowError s){
-			System.out.println(s);
-		}
 	}
 
 
 	@Override
 	public void render(float delta) {
-<<<<<<< HEAD
 		/*
 		batch = new SpriteBatch();
 
@@ -198,8 +170,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		//font.draw(game.batch,"Speed:", 5,ScreenSpace.HEIGHT-25);
 		*/
 		//game.batch.end();
-=======
->>>>>>> 162733e3fe4999561689c712c03d7aaafeccf1b4
 
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= this.ballPos.getX()) &&
@@ -213,10 +183,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
-
-              ball.transform.setTranslation((float)gameBall.getLocation().getX(),(float)course.evaluate(new Vector2D(gameBall.getLocation().getX(),gameBall.getLocation().getY())) + 2.5f,
-					  (float)gameBall.getLocation().getY());
-			//ball.transform.setTranslation((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),(float)course.getStart().getY())),(float)course.getStart().getY());
 			/*while(this.ballPos != course.getBall().getLocation()){
 				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
 				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);*/
