@@ -8,6 +8,7 @@ import Physics.PuttingSimulator;
 import Physics.Vector2D;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.*;
@@ -42,15 +43,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
 	private ModelBatch modelBatch; //this is a kind of brush to draw our object
+	public SpriteBatch batch;
 	private ArrayList<ModelInstance> instances; // arraylist to store the models we're going to render to the screen
 
 	private Stage stage; //stage is for the text fields, etc.
 	private Label label;
-	private BitmapFont font;
+	BitmapFont font;
 	private StringBuilder stringBuilder;
 
 	private ScreenSpace game;
-	private OptionScreen optionScreen;
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
@@ -74,9 +75,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		//we initialize everything we have here
         game = new ScreenSpace();
         game.setScreen(new MainMenu(game));
-        optionScreen = new OptionScreen(game);
-		gameBall = new Ball(new Vector2D(optionScreen.getStartX(),optionScreen.getStartY()), 10, 5); //i entered some random values
-		course = new PuttingCourse(optionScreen.getFunction(), new Vector2D(optionScreen.getStartX(), optionScreen.getStartY()), new Vector2D(optionScreen.getGoalX(), optionScreen.getGoalY()), gameBall, optionScreen.getCoefficientOfFriction(), 7, 4);//again some  random values
+		gameBall = new Ball(new Vector2D(Variables.startX,Variables.startY), 10, 5); //i entered some random values
+		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
 		simulator = new PuttingSimulator(course,engine);
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
@@ -87,11 +87,12 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
 		position = new Vector3((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),course.getStart().getY())), (float)course.getStart().getY());
 		
-		stage = new Stage(); //to show the texts on the screen
+		stage = new Stage(); //to show the equation on the screen
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
 		stage.addActor(label);
 		stringBuilder = new StringBuilder();
+
 
 		//here we set our camera
 		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//67 is just a common value for the angle
@@ -128,7 +129,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		flag = new ModelInstance(model, "flag");
 
 		//set ball position according to the height function
-		ball.transform.setTranslation((float) optionScreen.getStartX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) optionScreen.getStartY());
+		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) Variables.startY);
 		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
@@ -153,6 +154,23 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	@Override
 	public void render(float delta) {
+		/*
+		batch = new SpriteBatch();
+
+		game.batch.begin();
+		FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter1.size = 10;
+		font = font1.generateFont(parameter1);
+		font.setColor(Color.WHITE);
+		font1.dispose();
+		/*
+		font.draw(game.batch,"Direction x:", 5,ScreenSpace.HEIGHT-5);
+		//font.draw(game.batch,"Direction y:", 5,ScreenSpace.HEIGHT-15);
+		//font.draw(game.batch,"Speed:", 5,ScreenSpace.HEIGHT-25);
+		*/
+		//game.batch.end();
+
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= this.ballPos.getX()) &&
 				(this.ballPos.getX() <= course.getFlag().getX() + course.getTolerance())))

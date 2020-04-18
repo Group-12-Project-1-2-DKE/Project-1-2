@@ -80,7 +80,7 @@ public class OptionScreen implements Screen {
         coefficientOfFriction.setColor(Color.WHITE);
         stage.addActor(coefficientOfFriction);
 
-        function = new TextField("3x+2", customizedMenuSkin);
+        function = new TextField("3x+2+y", customizedMenuSkin);
         function.setPosition(ScreenSpace.WIDTH - 210,525);
         function.setSize(200, 30);
         function.setColor(Color.WHITE);
@@ -223,6 +223,16 @@ public class OptionScreen implements Screen {
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
                 this.dispose();
+                Variables.gravity = Float.parseFloat(gravity.getText());
+                Variables.ballDiameter = Float.parseFloat(ballDiameter.getText());
+                Variables.ballMass = Float.parseFloat(ballMass.getText());
+                Variables.coefficientOfFriction = Float.parseFloat(coefficientOfFriction.getText());
+                Variables.function = function.getText();
+                Variables.goalX = Float.parseFloat(goalX.getText());
+                Variables.goalY = Float.parseFloat(goalY.getText());
+                Variables.startX = Float.parseFloat(startX.getText());
+                Variables.startY = Float.parseFloat(startY.getText());
+
                 hold.create();
                 game.setScreen(hold);
 

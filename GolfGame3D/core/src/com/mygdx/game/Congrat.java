@@ -61,6 +61,7 @@ public class Congrat implements Screen {
         font.draw(game.batch, Integer.toString(attempt) , ScreenSpace.WIDTH / 2,350);
         font.draw(game.batch,"times !!", 200,250);
 
+        // Create and display the exit button.
         int x = ScreenSpace.WIDTH -350;
         if (Gdx.input.getX() < x + EXIT_WIDTH && Gdx.input.getX() > x){
             if(ScreenSpace.HEIGHT - Gdx.input.getY()< EXIT_Y + EXIT_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY()> EXIT_Y) {
@@ -76,11 +77,12 @@ public class Congrat implements Screen {
             game.batch.draw(exitButtonInactive, x, EXIT_Y, EXIT_WIDTH, EXIT_HEIGHT);
         }
 
+        // Create and display the replay button.
         int y = 75;
         if (Gdx.input.getX() < y + REPLAY_WIDTH && Gdx.input.getX() > y){
             if ( ScreenSpace.HEIGHT - Gdx.input.getY() < REPLAY_Y + REPLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > REPLAY_Y){
                 game.batch.draw(replayButtonActive, y, REPLAY_Y, REPLAY_WIDTH, REPLAY_HEIGHT);
-                // If the play button is clicked, create an option screen.
+                // If the replay button is clicked, create an option screen.
                 if (Gdx.input.isTouched()){
                     this.dispose();
                     game.setScreen(new OptionScreen(game));
@@ -96,27 +98,17 @@ public class Congrat implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 }
