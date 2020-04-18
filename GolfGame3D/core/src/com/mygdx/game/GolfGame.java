@@ -38,7 +38,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private CameraInputController cameraInputController;// to rotate around the screen
 
 	private Model model; //keeps information about our objects to be rendered
-	 public static ModelInstance ball; //we use this to render our model
+	public  ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
@@ -76,12 +76,16 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
         game = new ScreenSpace();
         game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(Variables.startX,Variables.startY), 10, 5); //i entered some random values
-		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
-		simulator = new PuttingSimulator(course,engine);
+		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
+		//course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
+		course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(0, 0), new Vector2D(2, 5),
+				gameBall, 0.1, 5, 4);
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
+		eulerSolver.set_grav_constant(9.81);
 		engine = eulerSolver;
+		simulator = new PuttingSimulator(course,engine);
 
 		ballPos = course.getStart();
 		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
@@ -140,6 +144,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
 			}
+
+			try{
+				long start = System.currentTimeMillis();
+				simulator.take_shot(new Vector2D(2, 0));
+				System.out.println(System.currentTimeMillis() - start);
+			} catch (StackOverflowError s){
+				System.out.println(s);
+			}
+
 		}
 		//instead of the ground above, i added the ground that is generated according to the equation in puttingCourse class
 		//instances.addAll(course.getCourseShape(model));
@@ -172,10 +185,10 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		//game.batch.end();
 
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
-		if (((((course.getFlag().getX() - course.getTolerance() <= this.ballPos.getX()) &&
-				(this.ballPos.getX() <= course.getFlag().getX() + course.getTolerance())))
-				&& (course.getFlag().getY() - course.getTolerance() <= this.ballPos.getY())
-				&& (this.ballPos.getY() <= course.getFlag().getY() + course.getTolerance()))) {
+		if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
+				(course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
+				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
+				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
 			//maybe also add when the velocity is too small to the if statement
 			//TODO : add game over screen
 			this.dispose();
@@ -186,7 +199,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			/*while(this.ballPos != course.getBall().getLocation()){
 				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
 				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);*/
-
+			ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) + 1f,
+			(float)course.getBall().getLocation().getY());
 
 		}
 
