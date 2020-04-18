@@ -9,9 +9,10 @@ public class PuttingSimulator{
     PuttingCourse course;
     PhysicsEngine engine;
     int shot_counter = 0;
+    private GolfGame game;
 
     //Main method for testing
-    public static void main(String[] args) {
+   public static void main(String[] args) {
         PuttingCourse course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(4, 0), new Vector2D(0, 0),
                 new Ball(new Vector2D(4, 0), 0.9, 1), 0.1, 5, 4);
         EulerSolver e = new EulerSolver();
@@ -31,6 +32,7 @@ public class PuttingSimulator{
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){
         this.course = course;
         this.engine = engine;
+        game = new GolfGame();
     }
 
     public void setBallPosition(Vector2D vector){
@@ -47,7 +49,8 @@ public class PuttingSimulator{
         course.getBall().hit();
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
-            //MyGdxGame.setBallPosition(course.getBall().getLocation());
+           // GolfGame.ball.transform.setTranslation((float)next_velocity.getX(),(float)course.evaluate(new Vector2D(next_velocity.getX(),next_velocity.getY())),
+                 //   (float)next_velocity.getY() + 2.5f);
         }
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
