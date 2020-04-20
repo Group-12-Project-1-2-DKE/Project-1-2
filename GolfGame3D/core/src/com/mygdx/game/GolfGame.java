@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -18,7 +19,8 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 import java.util.ArrayList;
@@ -52,6 +54,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private StringBuilder stringBuilder;
 
 	private ScreenSpace game;
+
+	private TextButton shoot;
+	private TextField dirX;
+	private TextField dirY;
+	private TextField speed;
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
@@ -107,7 +114,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		camera.update();
 		//input controller to see the objects from different perspectives
 		cameraInputController = new CameraInputController(camera);
-		Gdx.input.setInputProcessor(cameraInputController);
 
 		modelBatch = new ModelBatch();
 		//here we build our models to be rendered
@@ -144,15 +150,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
 			}
-
-			try{
-				long start = System.currentTimeMillis();
-				simulator.take_shot(new Vector2D(2, 0));
-				System.out.println(System.currentTimeMillis() - start);
-			} catch (StackOverflowError s){
-				System.out.println(s);
-			}
-
 		}
 		//instead of the ground above, i added the ground that is generated according to the equation in puttingCourse class
 		//instances.addAll(course.getCourseShape(model));
@@ -162,27 +159,68 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		//simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
+
+		Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
+
+		// Create the text area.
+		TextArea dirxText = new TextArea( "Direction x:",skin1);
+		dirxText.setDisabled(true);
+		dirxText.setPosition(0,ScreenSpace.HEIGHT-30);
+		dirxText.setSize(100, 30);
+		stage.addActor(dirxText);
+		TextArea diryText = new TextArea( "Direction y:",skin1);
+		diryText.setDisabled(true);
+		diryText.setPosition(0,ScreenSpace.HEIGHT-60);
+		diryText.setSize(100, 30);
+		stage.addActor(diryText);
+		TextArea speedText = new TextArea( "speed:",skin1);
+		speedText.setDisabled(true);
+		speedText.setPosition(0,ScreenSpace.HEIGHT-90);
+		speedText.setSize(100, 30);
+		stage.addActor(speedText);
+
+		// Create the play button.
+		shoot = new TextButton("Shoot", skin1);
+		shoot.setDisabled(true);
+		shoot.setPosition(0,ScreenSpace.HEIGHT-120);
+		shoot.setSize(150, 30);
+		stage.addActor(shoot);
+
+		// Create the texfield.
+		dirX = new TextField("0",skin1);
+		dirX.setPosition(100,ScreenSpace.HEIGHT-30);
+		dirX.setSize(50, 30);
+		stage.addActor(dirX);
+		dirY = new TextField("0",skin1);
+		dirY.setPosition(100,ScreenSpace.HEIGHT-60);
+		dirY.setSize(50, 30);
+		stage.addActor(dirY);
+		speed = new TextField("12",skin1);
+		speed.setPosition(100,ScreenSpace.HEIGHT-90);
+		speed.setSize(50, 30);
+		stage.addActor(speed);
 	}
 
 
 	@Override
 	public void render(float delta) {
-		/*
-		batch = new SpriteBatch();
+		//Stage stage1 = new Stage();
 
-		game.batch.begin();
-		FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter1.size = 10;
-		font = font1.generateFont(parameter1);
-		font.setColor(Color.WHITE);
-		font1.dispose();
-		/*
-		font.draw(game.batch,"Direction x:", 5,ScreenSpace.HEIGHT-5);
-		//font.draw(game.batch,"Direction y:", 5,ScreenSpace.HEIGHT-15);
-		//font.draw(game.batch,"Speed:", 5,ScreenSpace.HEIGHT-25);
-		*/
-		//game.batch.end();
+		//move to the map, but because the camera is following the ball it is strange
+		if(Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > (ScreenSpace.HEIGHT) -150){
+			Gdx.input.setInputProcessor(stage);
+		}else{
+			Gdx.input.setInputProcessor(cameraInputController);
+		}
+
+		// Action listener for the play button.
+		shoot.addListener(new ClickListener(){
+			@Override
+			public void touchUp(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {
+				takeShot();
+			}
+		});
+
 
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
@@ -196,9 +234,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
-			/*while(this.ballPos != course.getBall().getLocation()){
-				//ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY() + 2.5f, (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())));
-				ball.transform.setTranslation((float)ballPos.getX(),(float)ballPos.getY(),2.5f);*/
 			ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) + 1f,
 			(float)course.getBall().getLocation().getY());
 
@@ -225,7 +260,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
-
+		//stage1.draw();
 
 	}
 
@@ -267,7 +302,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		return camera.frustum.pointInFrustum(position); //we should also modify this method
 	}
 
-
-	/*public void setCourse(OptionScreen menu){
-}*/
+	// This method will be called when the user will click on the shoot button
+	// It will recalculate the position of the ball and display it.
+	public void takeShot (){
+		try{
+			long start = System.currentTimeMillis();
+			simulator.take_shot(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
+			System.out.println(System.currentTimeMillis() - start);
+		} catch (StackOverflowError s){
+			System.out.println(s);
+		}
+	}
 }
