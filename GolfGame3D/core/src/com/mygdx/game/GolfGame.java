@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import ui.FileReaders;
 
 
 import java.util.ArrayList;
@@ -71,14 +72,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	public int attempt = 0;
 
+	private FileReaders reader;
+
 	public GolfGame(PuttingCourse course, PuttingSimulator simulator) {
 		this.course = course;
 		this.simulator = simulator;
 
 	}
 
-	public GolfGame() {
-	}
+	public GolfGame() {}
 
 	@Override
 	public void create() {
@@ -87,9 +89,16 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
         game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(Variables.startX,Variables.startY), 10, 5); //i entered some random values
 		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
-		//course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
-		course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(0, 0), new Vector2D(2, 5),
-				gameBall, 0.1, 5, 4);
+		reader = new FileReaders();
+
+		if(Variables.mode == 2){
+			course = new PuttingCourse(reader.getFunction(),new Vector2D(reader.getXStart(),reader.getYStart()),
+					new Vector2D(reader.getXGoal(),reader.getYGoal()),gameBall,reader.getCoefficientOfFriction(),reader.getMaxVelocity(),reader.getTolerance());
+		}else {
+			course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
+
+		}
+
 		eulerSolver = new EulerSolver();
 		eulerSolver.set_step_size(0.01);
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
@@ -36,10 +37,12 @@ public class OptionScreen implements Screen {
     TextField goalY;
     TextField startX;
     TextField startY;
+    TextField mode;
 
     Stage stage;
 
     public GolfGame hold;
+
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
@@ -109,6 +112,12 @@ public class OptionScreen implements Screen {
         startY.setSize(200, 30);
         startY.setColor(Color.WHITE);
         stage.addActor(startY);
+
+        mode = new TextField("1", customizedMenuSkin);
+        mode.setPosition(270, 270);
+        mode.setSize(200,30);
+        mode.setColor(Color.WHITE);
+        stage.addActor(mode);
     }
 
     public float getGravity() {
@@ -145,6 +154,10 @@ public class OptionScreen implements Screen {
 
     public float getStartY() {
         return Float.parseFloat(startY.getText());
+    }
+
+    public float getMode(){
+        return Float.parseFloat(mode.getText());
     }
 
 
@@ -216,6 +229,14 @@ public class OptionScreen implements Screen {
         font.setColor(Color.WHITE);
         font7.dispose();
         font.draw(game.batch,"Start Coordinates (x,y):", 25,400);
+
+        FreeTypeFontGenerator font8 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter8 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter8.size = 30;
+        font = font8.generateFont(parameter8);
+        font.setColor(Color.YELLOW);
+        font8.dispose();
+        font.draw(game.batch,"Select mode : ",25,300 );
 
         // Create the play button.
         int x = ScreenSpace.WIDTH / 2 - PLAY_WIDTH / 2;
