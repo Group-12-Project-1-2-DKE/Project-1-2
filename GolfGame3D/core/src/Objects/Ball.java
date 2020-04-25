@@ -1,17 +1,10 @@
 package Objects;
 
 import Physics.Vector2D;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.GolfGame;
 
 
 /**
@@ -169,12 +162,6 @@ public class Ball {
     }
 }
 
-    /*public void createModel(){
-        ModelBuilder builder = new ModelBuilder();
-        Model sphere;
-        sphere = builder.createSphere(diameter,diameter,diameter,50,50,
-                new Material(TextureAttribute.createDiffuse(ballTexture)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
-        model = new ModelInstance(sphere,location.x, location.y + (diameter / 2));
-    }*/
+
+
 

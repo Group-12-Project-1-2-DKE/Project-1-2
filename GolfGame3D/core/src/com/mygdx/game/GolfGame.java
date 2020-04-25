@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -40,7 +41,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private CameraInputController cameraInputController;// to rotate around the screen
 
 	private Model model; //keeps information about our objects to be rendered
-	public  ModelInstance ball; //we use this to render our model
+	public static ModelInstance ball; //we use this to render our model
 	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
@@ -59,6 +60,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private TextField dirX;
 	private TextField dirY;
 	private TextField speed;
+
+	private Texture groundTexture;
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
@@ -138,12 +141,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		ground = new ModelInstance(model, "ground");
 		flag = new ModelInstance(model, "flag");
 
+
 		//set ball position according to the height function
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) Variables.startY);
 		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
+		groundTexture = new Texture("groundTexture.jpg");
 		for(float j = -15f; j <= 15f; j = j+ 0.3f){
 			for(float i = -50f; i <= 99; i = i+ 0.3f){
 				groundPieces = new ModelInstance(model, "groundPieces");
@@ -186,7 +191,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		shoot.setSize(150, 30);
 		stage.addActor(shoot);
 
-		// Create the texfield.
+		// Create the text field.
 		dirX = new TextField("0",skin1);
 		dirX.setPosition(100,ScreenSpace.HEIGHT-30);
 		dirX.setSize(50, 30);
@@ -234,8 +239,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
-			ball.transform.setTranslation((float)course.getBall().getLocation().getX(),(float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) + 1f,
-			(float)course.getBall().getLocation().getY());
+				ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
+						(float) course.getBall().getLocation().getY() + 2);
 
 		}
 
@@ -313,4 +318,5 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			System.out.println(s);
 		}
 	}
+
 }
