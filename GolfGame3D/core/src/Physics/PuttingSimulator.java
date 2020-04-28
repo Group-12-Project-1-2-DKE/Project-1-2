@@ -13,20 +13,26 @@ public class PuttingSimulator{
 
     //Main method for testing
    public static void main(String[] args) {
+        Ball ball = new Ball(new Vector2D(4, 0), 1, 1);
         PuttingCourse course = new PuttingCourse("0.02*x^2 + 0.02*y^2", new Vector2D(4, 0), new Vector2D(0, 0),
-                new Ball(new Vector2D(4, 0), 0.9, 1), 0.1, 5, 4);
+                ball, 0.1, 5, 4);
+        RungeKuttaSolver r = new RungeKuttaSolver();
         EulerSolver e = new EulerSolver();
+        System.out.println(r.gravitational_force(ball, course));
+        System.out.println(e.gravitational_force(ball, course));
+        //Nu shit met friction force testen.
+
         e.set_step_size(0.01);
         e.set_fric_coefficient(course.getFrictionCoefficient());
-        PhysicsEngine engine = e;
-        PuttingSimulator p = new PuttingSimulator(course, engine);
-        try{
+        PuttingSimulator p = new PuttingSimulator(course, e);
+        /*try{
             long start = System.currentTimeMillis();
             p.take_shot(new Vector2D(2, 0));
             System.out.println(System.currentTimeMillis() - start);
         } catch (StackOverflowError s){
             System.out.println(s);
         }
+         */
     }
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){

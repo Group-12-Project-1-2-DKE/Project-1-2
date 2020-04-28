@@ -9,7 +9,20 @@ public class RungeKuttaSolver implements PhysicsEngine{
 
     @Override
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course) {
+
         return null;
+    }
+
+    public Vector2D gravitational_force(Ball ball, Function2D height){
+        Vector2D gradient = height.gradient(ball.getLocation());
+        double x = -1 * ball.getMass() * grav_constant * gradient.getX();
+        double y = -1 * ball.getMass() * grav_constant * gradient.getY();
+        return new Vector2D(x, y);
+    }
+
+    public Vector2D friction_force(Ball ball, Vector2D initial_v) {
+        double frictionF = -(fric_coefficient * ball.getMass() * grav_constant / initial_v.length());
+        return initial_v.multiply(frictionF);
     }
 
     @Override

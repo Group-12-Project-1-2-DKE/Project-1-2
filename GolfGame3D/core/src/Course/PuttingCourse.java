@@ -66,6 +66,7 @@ public class PuttingCourse implements Function2D{
         String[] plus_c = equation.split("\\+");
         components = new String[plus_c.length][][];
 
+        //TODO: Implement sin and cos and stuff
         for (int i = 0; i < plus_c.length; i++){
             String p = plus_c[i];
             String[] times_c = p.split("\\*");
@@ -76,7 +77,7 @@ public class PuttingCourse implements Function2D{
                 components[i][j] = power_c;
             }
         }
-        System.out.println(Arrays.deepToString(components));
+        //System.out.println(Arrays.deepToString(components));
     }
 
     //This method is not really used
@@ -129,6 +130,7 @@ public class PuttingCourse implements Function2D{
      * @return gradient
      */
     public Vector2D gradient(Vector2D p){
+        //TODO: Maybe we need to change this to a method from NM to make it more accurate
         double x_derivative = (evaluate(new Vector2D(p.getX() + limstep, p.getY())) - evaluate(p)) / limstep;
         double y_derivative = (evaluate(new Vector2D(p.getX(), p.getY() + limstep)) - evaluate(p)) / limstep;
 

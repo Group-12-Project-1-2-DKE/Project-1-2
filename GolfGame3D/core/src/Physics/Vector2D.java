@@ -26,8 +26,7 @@ public class Vector2D{
     }
 
     public Vector2D add(Vector2D vector){
-        Vector2D result = new Vector2D(this.getX() + vector.getX(), this.getY()+ vector.getY());
-        return result;
+        return new Vector2D(this.getX() + vector.getX(), this.getY()+ vector.getY());
     }
 
     public Vector2D multiply(double factor){
@@ -35,8 +34,7 @@ public class Vector2D{
     }
 
     public double length() {
-        double length = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-        return length;
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
     public String toString(){

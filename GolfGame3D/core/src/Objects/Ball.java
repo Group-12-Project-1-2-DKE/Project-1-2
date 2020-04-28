@@ -44,9 +44,6 @@ public class Ball {
         this.ballTexture = reg;
     }
 
-    public Ball(Physics.Vector2D vector2D, int mass, int diameter) {
-    }
-
     /**
      * getter for the mass
      *
