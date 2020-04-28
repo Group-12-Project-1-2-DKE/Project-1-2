@@ -38,8 +38,8 @@ public class PuttingCourse implements Function2D{
         PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
 
-        Color[][] c = h.calculate_colors();
-        System.out.println(c[0][0] + " " + c[0][1]);
+        //Color[][] c = h.calculate_colors();
+        //System.out.println(c[0][0] + " " + c[0][1]);
     }
 
     /**
@@ -79,6 +79,8 @@ public class PuttingCourse implements Function2D{
         System.out.println(Arrays.deepToString(components));
     }
 
+    //This method is not really used
+    /*
     public Color[][] calculate_colors(){
         double height;
         float g;
@@ -99,6 +101,7 @@ public class PuttingCourse implements Function2D{
         }
         return colors;
     }
+     */
 
     public ArrayList<ModelInstance> getCourseShape(Model model){
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -119,27 +122,6 @@ public class PuttingCourse implements Function2D{
         }
         return instances;
     }
-
-    /*@Override
-     /**
-      * methof to evaluate the height
-      * @return the height as a double
-     */
-    /*public double evaluateHeight(Vector2D vector){
-        //TODO complete the method
-        return 0;
-    }
-    /**
-     *  method to evaluate the slope
-     * @return
-     *//*
-    @Override
-    public Vector2D gradient(Vector2D vector){
-        double x0 = vector.getX();
-        double y0 = vector.getY();
-        //TODO complete this method
-
-    }*/
 
     /**
      * Calculates gradient at current coordinates (aka your vector)
@@ -206,16 +188,6 @@ public class PuttingCourse implements Function2D{
     public String getEquation(){
         return equation;
     }
-
-    /**
-     * method that evaluates the friction
-     * @return friction coefficient
-     *//*
-    @Override
-    public double evaluateFriction(){
-        //TODO complete the method
-        return 0;
-    } */
 
     public void setLimstep(double limstep){
         this.limstep = limstep;
