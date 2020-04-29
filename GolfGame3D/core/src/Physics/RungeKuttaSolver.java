@@ -28,7 +28,6 @@ public class RungeKuttaSolver implements PhysicsEngine{
             final_v.setY(- 1 * final_v.getY());
         }
 
-        //TODO: make this prettier, also in EulerSolver
         if (final_v.length() < max_error && k.length() < max_error) {
             ball.putAtRest();
             //System.out.println("l: " + ball.getLocation());
