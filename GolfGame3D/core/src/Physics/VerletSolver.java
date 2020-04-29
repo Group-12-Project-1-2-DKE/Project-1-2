@@ -6,6 +6,7 @@ public class VerletSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = 9.81;
+    private double max_error = 0.1;
 
     @Override
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course) {
@@ -25,5 +26,10 @@ public class VerletSolver implements PhysicsEngine{
     @Override
     public void set_grav_constant(double g) {
         grav_constant = g;
+    }
+
+    @Override
+    public void set_max_error(double e) {
+        max_error = e;
     }
 }

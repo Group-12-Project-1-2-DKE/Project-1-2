@@ -5,7 +5,7 @@ public class EulerSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = 9.81;
-    int cnt = 0;
+    private double max_error = 0.1;
 
     public EulerSolver(){
 
@@ -28,18 +28,12 @@ public class EulerSolver implements PhysicsEngine{
             final_v.setY(- 1 * final_v.getY());
         }
 
-        cnt++;
-        if (cnt <= 10){
-            System.out.println(acc);
-            System.out.println(initial_v.getX() / initial_v.length());
-        }
-
         //calculateShot(final_v, ball, course);
-        if ((int)(final_v.length() * 10) == 0 && (int)(acc.length() * 10) == 0) {
+        if (final_v.length() < max_error && acc.length() < max_error) {
             ball.putAtRest();
-            System.out.println("l: " + ball.getLocation());
-            System.out.println("v: " + final_v);
-            System.out.println("a: " + acc);
+            //System.out.println("l: " + ball.getLocation());
+            //System.out.println("v: " + final_v);
+            //System.out.println("a: " + acc);
             return new Vector2D(0, 0);
         }
         return final_v;
@@ -55,6 +49,11 @@ public class EulerSolver implements PhysicsEngine{
 
     public void set_grav_constant(double g){
         grav_constant = g;
+    }
+
+    @Override
+    public void set_max_error(double e) {
+        max_error = e;
     }
 
     public Vector2D gravitational_force(Ball ball, Function2D height){

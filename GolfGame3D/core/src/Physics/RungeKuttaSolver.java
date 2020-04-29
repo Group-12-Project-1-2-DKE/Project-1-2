@@ -6,7 +6,7 @@ public class RungeKuttaSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = 9.81;
-    int cnt = 0;
+    private double max_error = 0.1;
 
     @Override
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course) {
@@ -28,17 +28,12 @@ public class RungeKuttaSolver implements PhysicsEngine{
             final_v.setY(- 1 * final_v.getY());
         }
 
-        cnt++;
-        if (cnt <= 10){
-            System.out.println(k);
-        }
-
         //TODO: make this prettier, also in EulerSolver
-        if ((int)(final_v.length() * 10) == 0 && (int)(k.length() * 10) == 0) {
+        if (final_v.length() < max_error && k.length() < max_error) {
             ball.putAtRest();
-            System.out.println("l: " + ball.getLocation());
-            System.out.println("v: " + final_v);
-            System.out.println("a: " + k);
+            //System.out.println("l: " + ball.getLocation());
+            //System.out.println("v: " + final_v);
+            //System.out.println("a: " + k);
             return new Vector2D(0, 0);
         }
         return final_v;
@@ -77,5 +72,10 @@ public class RungeKuttaSolver implements PhysicsEngine{
     @Override
     public void set_grav_constant(double g) {
         grav_constant = g;
+    }
+
+    @Override
+    public void set_max_error(double e) {
+        max_error = e;
     }
 }

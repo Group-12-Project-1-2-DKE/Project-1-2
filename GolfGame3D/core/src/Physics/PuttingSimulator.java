@@ -14,40 +14,29 @@ public class PuttingSimulator{
     private GolfGame game;
 
     //Main method for testing
-   public static void main(String[] args) {
+    public static void main(String[] args) {
         Ball ball = new Ball(new Vector2D(4, 0), 1, 1);
-        PuttingCourse course = new PuttingCourse("2",//"0.02*x^2 + 0.02*y^2",
+        PuttingCourse course = new PuttingCourse("0.02*x^2 + 0.02*y^2",
                 new Vector2D(4, 0), new Vector2D(0, 0),
                 ball, 0.1, 5, 4);
         RungeKuttaSolver r = new RungeKuttaSolver();
         EulerSolver e = new EulerSolver();
-        System.out.println(r.gravitational_force(ball, course));
-        Vector2D gForce = e.gravitational_force(ball, course);
-        //Nu shit met friction force testen.
-        Vector2D test = new Vector2D(1, 1);
-        System.out.println(r.friction_force(ball, test));
-        Vector2D fForce = e.friction_force(ball, test);
-        System.out.println(fForce);
-        Vector2D Fres = gForce.add(fForce);
 
-        System.out.println(r.calculate_acc(course, test, ball));
-        System.out.println(e.calculate_acc(Fres, ball));
-
-        System.out.println(r.calculateShot(test, ball, course));
-        System.out.println(e.calculateShot(test, ball, course));
-
-        //e.set_step_size(0.0001);
+        e.set_max_error(0.01);
+        e.set_step_size(0.001);
         e.set_fric_coefficient(course.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(course, e);
         long start = System.currentTimeMillis();
-        p.take_shot(new Vector2D(2, 0));
+        p.take_shot(new Vector2D(2, 2));
         System.out.println(System.currentTimeMillis() - start);
 
-        //r.set_step_size(0.0001);
-        start = System.currentTimeMillis();
+        ball.setLocation(new Vector2D(4, 0));
+        r.set_max_error(0.01);
+        r.set_step_size(0.001);
         r.set_fric_coefficient(course.getFrictionCoefficient());
         p = new PuttingSimulator(course, r);
-        p.take_shot(new Vector2D(2, 0));
+        start = System.currentTimeMillis();
+        p.take_shot(new Vector2D(2, 2));
         System.out.println(System.currentTimeMillis() - start);
     }
 
@@ -66,19 +55,10 @@ public class PuttingSimulator{
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
-        int cnt = 0;
-
         shot_counter++;
         Vector2D next_velocity = initial_ball_velocity;
         course.getBall().hit();
-        while (course.getBall().isHit() && cnt <= 50){
-            cnt++;
-            if (cnt <= 10){
-                System.out.println(cnt);
-                System.out.println(course.getBall().getLocation());
-                System.out.println(next_velocity);
-            }
-
+        while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
            //GolfGame.ball.transform.setTranslation((float)next_velocity.getX(),(float)course.evaluate(new Vector2D(next_velocity.getX(),next_velocity.getY())),
                    //(float)next_velocity.getY() + 2.5f);

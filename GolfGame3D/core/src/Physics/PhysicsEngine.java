@@ -7,4 +7,5 @@ public interface PhysicsEngine{
     void set_step_size(double h);
     void set_fric_coefficient(double f);
     void set_grav_constant(double g);
+    void set_max_error(double e);
 }
