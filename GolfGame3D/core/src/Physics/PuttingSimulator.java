@@ -11,6 +11,7 @@ public class PuttingSimulator{
     PuttingCourse course;
     PhysicsEngine engine;
     int shot_counter = 0;
+    int counter = 0;
     private GolfGame game;
 
     //Main method for testing
@@ -66,6 +67,39 @@ public class PuttingSimulator{
 
         }
         System.out.println("Final ball location: " + course.getBall().getLocation());
+    }
+
+    public Vector2D take_shotSlowly(Vector2D initial_ball_velocity,int fifty) {
+
+
+
+
+        Vector2D next_velocity = initial_ball_velocity;
+
+        if (course.getBall().isHit() && counter <= fifty){
+            counter++;
+            if (counter <= 10){
+                System.out.println(counter);
+                System.out.println(course.getBall().getLocation());
+                System.out.println(next_velocity);
+                System.out.println("-----------");
+            }
+
+            next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+            //GolfGame.ball.transform.setTranslation((float)next_velocity.getX(),(float)course.evaluate(new Vector2D(next_velocity.getX(),next_velocity.getY())),
+            //(float)next_velocity.getY() + 2.5f);
+            //updateBall((float)next_velocity.getX(),(float)next_velocity.getY());
+
+        }
+
+        if (counter==fifty+1 || !course.getBall().isHit() ) {
+            shot_counter++;
+            System.out.println("Final ball location: " + course.getBall().getLocation());
+            counter=0;
+            return null;
+        }
+
+        return next_velocity;
     }
 
     public void updateBall(float x, float y){

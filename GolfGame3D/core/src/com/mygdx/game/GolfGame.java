@@ -32,6 +32,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private PuttingCourse course;
 	private PuttingSimulator simulator;
 	private Ball gameBall;
+	private Boolean ballReachedFlag = false;
 	private Vector2D ballPos;
 	private EulerSolver eulerSolver;//i just added this in case we need it
 	private PhysicsEngine engine;
@@ -66,6 +67,9 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private int visibleCount;//keeps track of the number of model instances that are visible
 	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
+
+	private int visCount;//keeps track of the number of model instances that are visible
+	private Vector3 pos = new Vector3(); //this one also will be used to check if an instance is visible
 
 
 	private boolean gameOver = false;
@@ -198,6 +202,17 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		shoot.setDisabled(true);
 		shoot.setPosition(0,ScreenSpace.HEIGHT-120);
 		shoot.setSize(150, 30);
+
+		shoot.addListener(new ClickListener(){
+			@Override
+			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+				//takeShot();
+				ballReachedFlag=true;
+				shoot.setVisible(false);
+				course.getBall().hit();
+
+			}
+		});
 		stage.addActor(shoot);
 
 		// Create the text field.
@@ -215,26 +230,19 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		stage.addActor(speed);
 	}
 
-
+	public float myDelta = 0;
+	public Vector2D myVector;
 	@Override
 	public void render(float delta) {
+		super.render();
 		//Stage stage1 = new Stage();
-
+		myDelta += delta;
 		//move to the map, but because the camera is following the ball it is strange
 		if(Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > (ScreenSpace.HEIGHT) -150){
 			Gdx.input.setInputProcessor(stage);
 		}else{
 			Gdx.input.setInputProcessor(cameraInputController);
 		}
-
-		// Action listener for the play button.
-		shoot.addListener(new ClickListener(){
-			@Override
-			public void touchUp(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {
-				takeShot();
-			}
-		});
-
 
 		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
@@ -244,7 +252,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			//maybe also add when the velocity is too small to the if statement
 			//TODO : add game over screen
 			this.dispose();
-			game.setScreen(new Congrat(game, attempt));
+			//game.setScreen(new Congrat(game, attempt));
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
@@ -253,7 +261,35 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		}
 
+		if (true&& ballReachedFlag) {
+			try{
+				long start = System.currentTimeMillis();
+				if (myVector==null) {
+					myVector=simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())),50);
+				}else {
+					myVector=simulator.take_shotSlowly(myVector, 50);
+				}
+				//System.out.println(System.currentTimeMillis() - start);
+			} catch (StackOverflowError s){
+				//System.out.println(s);
+			}
 
+
+
+			myDelta=0;
+			if ( myVector==null) {
+				ballReachedFlag=false;
+				shoot.setVisible(true);
+				//System.out.println("My vec null");
+			}
+		}
+
+		if ( myVector!=null) {
+			camera.translate((float)myVector.getX()/100,0,0);
+		}
+
+		camera.lookAt((float)course.getBall().getLocation().getX(),-(float)course.getBall().getLocation().getY(),0.0f);
+		camera.update();
 		cameraInputController.update();
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//some default stuff
 		Gdx.gl.glClearColor(0f,0.4f,0.6f,0);
@@ -267,6 +303,12 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			}
 		}
 		modelBatch.end();
+
+		if (gameOver) {
+			this.dispose();
+
+			game.setScreen(new Congrat(game,attempt));
+		}
 
 		stringBuilder.setLength(0);
 		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());//to see the frame per second
@@ -296,7 +338,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	@Override
 	public void dispose() {
 		model.dispose();
-		modelBatch.dispose();
+		//modelBatch.dispose();
 	}
 
 	@Override
@@ -313,6 +355,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	public boolean isVisible(final Camera camera, final ModelInstance instance) {
 		ball.transform.getTranslation(position);
+		return camera.frustum.pointInFrustum(position); //we should also modify this method
+	}
+
+	public boolean isVisibleAll(final Camera camera, final ModelInstance instance) {
+		instance.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position); //we should also modify this method
 	}
 

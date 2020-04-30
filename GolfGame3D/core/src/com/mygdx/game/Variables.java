@@ -10,4 +10,5 @@ public class Variables {
     public static float goalY;
     public static float startX;
     public static float startY;
+    public static float mode;
 }
