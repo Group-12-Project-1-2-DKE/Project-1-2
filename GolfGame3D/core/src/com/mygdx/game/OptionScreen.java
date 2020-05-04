@@ -83,7 +83,8 @@ public class OptionScreen implements Screen {
         coefficientOfFriction.setColor(Color.WHITE);
         stage.addActor(coefficientOfFriction);
 
-        function = new TextField("3x+2+y", customizedMenuSkin);
+        //Please use * for every multiplication. 3x doesn't work and should be 3*x
+        function = new TextField("3*x^2+2*y^2", customizedMenuSkin);
         function.setPosition(ScreenSpace.WIDTH - 210,525);
         function.setSize(200, 30);
         function.setColor(Color.WHITE);
