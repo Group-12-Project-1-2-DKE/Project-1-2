@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
@@ -41,13 +40,13 @@ public class OptionScreen implements Screen {
 
     Stage stage;
 
-    public GolfGame hold;
+    //public GolfGame hold;
 
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
-        hold = new GolfGame();
+        //hold = new GolfGame();
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
@@ -120,48 +119,6 @@ public class OptionScreen implements Screen {
         stage.addActor(mode);
     }
 
-    public float getGravity() {
-        return Float.parseFloat(gravity.getText());
-    }
-
-    public float getBallDiameter() {
-        return Float.parseFloat(ballDiameter.getText());
-    }
-
-    public float getBallMass() {
-        return Float.parseFloat(ballMass.getText());
-    }
-
-    public float getCoefficientOfFriction() {
-        return Float.parseFloat(coefficientOfFriction.getText());
-    }
-
-    public String getFunction() {
-        return function.getText();
-    }
-
-    public float getGoalX() {
-        return Float.parseFloat(goalX.getText());
-    }
-
-    public float getGoalY() {
-        return Float.parseFloat(goalY.getText());
-    }
-
-    public float getStartX() {
-        return Float.parseFloat(startX.getText());
-    }
-
-    public float getStartY() {
-        return Float.parseFloat(startY.getText());
-    }
-
-    public float getMode(){
-        return Float.parseFloat(mode.getText());
-    }
-
-
-
     @Override
     public void show() {
 
@@ -183,57 +140,43 @@ public class OptionScreen implements Screen {
         font.draw(game.batch,"Gravity:", 25,750);
 
         FreeTypeFontGenerator font2 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter2.size = 40;
-        font = font2.generateFont(parameter2);
+        font = font2.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font2.dispose();
         font.draw(game.batch,"Ball Diameter:", 25,700);
 
         FreeTypeFontGenerator font3 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter3 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter3.size = 40;
-        font = font3.generateFont(parameter3);
+        font = font3.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font3.dispose();
         font.draw(game.batch,"Ball Mass:", 25,650);
 
         FreeTypeFontGenerator font4 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter4 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter4.size = 40;
-        font = font4.generateFont(parameter4);
+        font = font4.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font4.dispose();
         font.draw(game.batch,"Coefficient of Friction:", 25,600);
 
         FreeTypeFontGenerator font5 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter5 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter5.size = 40;
-        font = font5.generateFont(parameter5);
+        font = font5.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font5.dispose();
         font.draw(game.batch,"Function:", 25,550);
 
         FreeTypeFontGenerator font6 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter6 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter6.size = 40;
-        font = font6.generateFont(parameter6);
+        font = font6.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font6.dispose();
         font.draw(game.batch,"Goal Coordinates(x,y):", 25,500);
 
         FreeTypeFontGenerator font7 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter7 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter7.size = 40;
-        font = font7.generateFont(parameter7);
+        font = font7.generateFont(parameter1);
         font.setColor(Color.WHITE);
         font7.dispose();
         font.draw(game.batch,"Start Coordinates (x,y):", 25,400);
 
         FreeTypeFontGenerator font8 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter8 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter8.size = 30;
-        font = font8.generateFont(parameter8);
+        font = font8.generateFont(parameter1);
         font.setColor(Color.YELLOW);
         font8.dispose();
         font.draw(game.batch,"Select mode : ",25,300 );
@@ -243,7 +186,6 @@ public class OptionScreen implements Screen {
         if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
-                this.dispose();
                 Variables.gravity = Float.parseFloat(gravity.getText());
                 Variables.ballDiameter = Float.parseFloat(ballDiameter.getText());
                 Variables.ballMass = Float.parseFloat(ballMass.getText());
@@ -254,8 +196,8 @@ public class OptionScreen implements Screen {
                 Variables.startX = Float.parseFloat(startX.getText());
                 Variables.startY = Float.parseFloat(startY.getText());
 
-                hold.create();
-                game.setScreen(hold);
+                this.dispose();
+                //game.setScreen(new GolfGame());
 
             }
         } else {
