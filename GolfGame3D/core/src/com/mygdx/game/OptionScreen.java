@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,13 +41,13 @@ public class OptionScreen implements Screen {
 
     Stage stage;
 
-    //public GolfGame hold;
+    public GolfGame hold;
 
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
-        //hold = new GolfGame();
+        hold = new GolfGame();
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
@@ -117,6 +118,12 @@ public class OptionScreen implements Screen {
         mode.setSize(200,30);
         mode.setColor(Color.WHITE);
         stage.addActor(mode);
+
+        FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter1.size = 40;
+        font = font1.generateFont(parameter1);
+        font.setColor(Color.WHITE);
     }
 
     @Override
@@ -131,54 +138,13 @@ public class OptionScreen implements Screen {
         game.batch.begin();
 
         // Create all the label and add them to the "frame".
-        FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter1.size = 40;
-        font = font1.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font1.dispose();
         font.draw(game.batch,"Gravity:", 25,750);
-
-        FreeTypeFontGenerator font2 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font2.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font2.dispose();
         font.draw(game.batch,"Ball Diameter:", 25,700);
-
-        FreeTypeFontGenerator font3 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font3.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font3.dispose();
         font.draw(game.batch,"Ball Mass:", 25,650);
-
-        FreeTypeFontGenerator font4 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font4.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font4.dispose();
         font.draw(game.batch,"Coefficient of Friction:", 25,600);
-
-        FreeTypeFontGenerator font5 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font5.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font5.dispose();
         font.draw(game.batch,"Function:", 25,550);
-
-        FreeTypeFontGenerator font6 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font6.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font6.dispose();
         font.draw(game.batch,"Goal Coordinates(x,y):", 25,500);
-
-        FreeTypeFontGenerator font7 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font7.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font7.dispose();
         font.draw(game.batch,"Start Coordinates (x,y):", 25,400);
-
-        FreeTypeFontGenerator font8 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        font = font8.generateFont(parameter1);
-        font.setColor(Color.YELLOW);
-        font8.dispose();
         font.draw(game.batch,"Select mode : ",25,300 );
 
         // Create the play button.
@@ -197,7 +163,8 @@ public class OptionScreen implements Screen {
                 Variables.startY = Float.parseFloat(startY.getText());
 
                 this.dispose();
-                //game.setScreen(new GolfGame());
+                hold.create();
+                game.setScreen(hold);
 
             }
         } else {

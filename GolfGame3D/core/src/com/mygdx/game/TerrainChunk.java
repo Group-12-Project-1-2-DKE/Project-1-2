@@ -1,7 +1,7 @@
-//package com.mygdx.game.Terrain;
+//package com.mygdx.game;
 //
 //import com.badlogic.gdx.graphics.Color;
-//import com.mygdx.game.screen.Settings;
+//import com.mygdx.game.Variables;
 //import org.mariuszgromada.math.mxparser.Function;
 //
 //import java.util.concurrent.ThreadLocalRandom;
@@ -18,7 +18,7 @@
 //    int vertexSize;
 //    int positionSize = 3;
 //
-//    int mapSize = Settings.getMapSize();
+//    // int mapSize = Variables.getMapSize();        // Variables
 //
 //    Function mapFunction;
 //
@@ -30,7 +30,7 @@
 //     * Terrainchunk constructor to receive the determine height & width by user and other parameters
 //     * @param function represents what the actual function will look like and is determined in settings by the user
 //     */
-//    public TerrainChunk(Function function,boolean sand) {
+//    public TerrainChunk(Function function) {
 //
 //        if ((mapSize + 1) * (mapSize + 1) > Short.MAX_VALUE) {
 //            throw new IllegalArgumentException(
@@ -45,7 +45,6 @@
 //        this.vertexSize = vertexSize;
 //        this.sand = sand;
 //
-//        sandInfo = Settings.getSandInfo();
 //
 //        buildVertices();
 //        buildIndices();
@@ -71,18 +70,7 @@
 //            for (int x = 0; x < widthPitch; x++) {
 //                // POSITION
 //                vertices[idx++] = scale * x;
-//
-//                if(sand){
-//                    //10% of the terrain would be sand
-//                    if(sandInfo[z][x]==1&& (mapFunction.calculate(z, x)>0)){
-//                        vertices[idx++] = (float) (-mapFunction.calculate(z, x));
-//                    }else{
-//                        vertices[idx++] = 0;
-//                    }
-//                }else{
-//                    vertices[idx++] = (float) (-mapFunction.calculate(z, x));
-//                }
-//
+//                vertices[idx++] = (float) (-mapFunction.calculate(z, x));
 //                vertices[idx++] = scale * z;
 //
 //                // NORMAL, skip these for now
