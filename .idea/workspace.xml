@@ -2,22 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="07100539-086b-458a-a7f3-33af2599d096" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/jarAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/5.4.1/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/Congrat.class" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/Congrat.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/GolfGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/GolfGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/OptionScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/OptionScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/ScreenSpace.class" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/build/classes/java/main/com/mygdx/game/ScreenSpace.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GolfGame3D/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GolfGame3D/.idea/GolfGame3D.iml" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.idea/GolfGame3D.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GolfGame3D/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GolfGame3D/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GolfGame3D/core/build/libs/core-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/build/libs/core-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GolfGame3D/core/src/com/mygdx/game/Congrat.java" beforeDir="false" afterPath="$PROJECT_DIR$/GolfGame3D/core/src/com/mygdx/game/Congrat.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +34,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -51,14 +52,29 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1584524189457</updated>
+      <workItem from="1588328236659" duration="10000" />
+      <workItem from="1588509072386" duration="20000" />
+      <workItem from="1588509117511" duration="54000" />
+      <workItem from="1588527348642" duration="197000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
     <state x="618" y="301" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585744843201">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="618" y="301" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824@0.0.1536.824" timestamp="1585744843201" />
+    <state x="740" y="221" key="FileChooserDialogImpl" timestamp="1588509138523">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="221" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1588509138523" />
+    <state x="625" y="218" key="NewModule_or_Project.wizard" timestamp="1588509168444">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="625" y="218" key="NewModule_or_Project.wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1588509168444" />
     <state x="249" y="0" key="SettingsEditor" timestamp="1585744813055">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
