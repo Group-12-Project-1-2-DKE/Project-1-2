@@ -1,5 +1,6 @@
 package AI;
 
+import Course.PuttingCourse;
 import Physics.Function2D;
 import Physics.Vector2D;
 
@@ -9,5 +10,5 @@ public interface AI {
      * @param course
      * @return initial velocity vector
      */
-    Vector2D calculate_turn(Function2D course);
+    Vector2D calculate_turn(PuttingCourse course, double[] heights, double step_size);
 }
