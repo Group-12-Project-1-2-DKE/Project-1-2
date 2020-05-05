@@ -7,26 +7,19 @@ public class EulerSolver implements PhysicsEngine{
     private double grav_constant = 9.81;
     private double max_error = 0.1;
 
-    public Vector2D stuff = new Vector2D(0, 0);
-    public int count = 0;
-
     public EulerSolver(){
 
     }
 
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course){
         //Vector2D gForce = gravitational_force(ball, course);
-        Vector2D fForce = friction_force(ball, initial_v);
-        stuff = stuff.add(fForce);
-        count++;
+        //Vector2D fForce = friction_force(ball, initial_v);
         //Vector2D Fres = gForce.add(fForce);
         Vector2D acc = calculate_acc(course, initial_v, ball).multiply(step_size);
 
         Vector2D final_v = initial_v.add(acc);//acc * step_size);
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
 
-        //TODO: uncomment this
-        /*
         if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
             final_v.setX(- 1 * final_v.getX()) ;
         }
@@ -34,7 +27,6 @@ public class EulerSolver implements PhysicsEngine{
         if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
             final_v.setY(- 1 * final_v.getY());
         }
-         */
 
         //calculateShot(final_v, ball, course);
         if (final_v.length() < max_error && acc.length() < max_error) {
