@@ -56,6 +56,7 @@ public class PuttingSimulator{
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
+        System.out.println("Initial ball location: " + course.getBall().getLocation());
         shot_counter++;
         Vector2D next_velocity = initial_ball_velocity;
         course.getBall().hit();
