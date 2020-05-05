@@ -27,8 +27,8 @@ public class PuttingCourse implements Function2D{
     private String equation;
     private String[][][] components;
     private double limstep = 0.0000000001;
-    private final int xUpBoundary = 900;
-    private final int yUpBoundary = 700;
+    private final int xUpBoundary = 200;
+    private final int yUpBoundary = 200;
 
 
     /**

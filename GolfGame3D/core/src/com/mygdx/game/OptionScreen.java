@@ -83,7 +83,7 @@ public class OptionScreen implements Screen {
         coefficientOfFriction.setColor(Color.WHITE);
         stage.addActor(coefficientOfFriction);
 
-        function = new TextField("3x+2+y", customizedMenuSkin);
+        function = new TextField("0.02*x^2 + 0.02*y^2", customizedMenuSkin);
         function.setPosition(ScreenSpace.WIDTH - 210,525);
         function.setSize(200, 30);
         function.setColor(Color.WHITE);

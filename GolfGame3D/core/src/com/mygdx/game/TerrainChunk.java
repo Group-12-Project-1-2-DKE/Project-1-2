@@ -8,7 +8,7 @@
 //
 //import static com.badlogic.gdx.math.MathUtils.random;
 //
-////https://xoppa.github.io/blog/interacting-with-3d-objects/
+////https://www.badlogicgames.com/forum/viewtopic.php?t=18524
 //
 //public class TerrainChunk {
 //

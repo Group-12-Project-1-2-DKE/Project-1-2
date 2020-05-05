@@ -162,8 +162,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		instances.add(ball);
 		instances.add(flag);
 		groundTexture = new Texture("groundTexture.jpg");
-		for(float j = -15f; j <= 15f; j = j+ 0.3f){
-			for(float i = -50f; i <= 99; i = i+ 0.3f){
+		for(float j = -50f; j <= 100; j = j+ 0.3f){
+			for(float i = -50f; i <= 100; i = i+ 0.3f){
 				groundPieces = new ModelInstance(model, "groundPieces");
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
