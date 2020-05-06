@@ -140,13 +140,13 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		ground = new ModelInstance(model, "ground");
 		flag = new ModelInstance(model, "flagPole");
 
-		
+
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) Variables.startY);
 		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 1.5f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		instances.add(fl);
+		
 
 		for(float j = -50f; j <= 99; j = j+ 0.3f){
 			for(float i = -50f; i <= 99; i = i+ 0.3f){
