@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import ui.FileReaders;
 
 
 public class OptionScreen implements Screen {
@@ -48,12 +49,15 @@ public class OptionScreen implements Screen {
     Stage stage;
 
     public GolfGame hold;
+    private FileReaders reader;
 
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
         hold = new GolfGame();
+        
+        reader = new FileReaders();
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
