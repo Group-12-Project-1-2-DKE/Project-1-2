@@ -27,6 +27,9 @@ import ui.FileReaders;
 
 import java.util.ArrayList;
 
+/**
+ * class that contains the main game graphics
+ */
 public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private PuttingCourse course;
@@ -34,24 +37,24 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private Ball gameBall;
 	private Boolean ballReachedFlag = false;
 	private Vector2D ballPos;
-	private EulerSolver eulerSolver;//i just added this in case we need it
+	private EulerSolver eulerSolver;
 	private PhysicsEngine engine;
 
-	private Environment environment;//environment to adjust the lights
+	private Environment environment;
 
 	private PerspectiveCamera camera;
-	private CameraInputController cameraInputController;// to rotate around the screen
+	private CameraInputController cameraInputController;
 
-	private Model model; //keeps information about our objects to be rendered
-	public static ModelInstance ball; //we use this to render our model
+	private Model model;
+	public static ModelInstance ball;
 	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
-	private ModelBatch modelBatch; //this is a kind of brush to draw our object
-	public SpriteBatch batch;
-	private ArrayList<ModelInstance> instances; // arraylist to store the models we're going to render to the screen
+	private ModelInstance fl;
+	private ModelBatch modelBatch;
+	private ArrayList<ModelInstance> instances;
 
-	private Stage stage; //stage is for the text fields, etc.
+	private Stage stage;
 	private Label label;
 	BitmapFont font;
 	private StringBuilder stringBuilder;
@@ -63,32 +66,15 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private TextField dirY;
 	private TextField speed;
 
-	private Texture groundTexture;
-
-	private int visibleCount;//keeps track of the number of model instances that are visible
-	private Vector3 position = new Vector3(); //this one also will be used to check if an instance is visible
-
-	private int visCount;//keeps track of the number of model instances that are visible
-	private Vector3 pos = new Vector3(); //this one also will be used to check if an instance is visible
-
-
+	private Vector3 position = new Vector3();
 	private boolean gameOver = false;
-
 	public int attempt = 0;
-
 	private FileReaders reader;
-
-	public GolfGame(PuttingCourse course, PuttingSimulator simulator) {
-		this.course = course;
-		this.simulator = simulator;
-
-	}
 
 	public GolfGame() {}
 
 	@Override
 	public void create() {
-		//we initialize everything we have here
         game = new ScreenSpace();
         game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(Variables.startX,Variables.startY), 10, 5); //i entered some random values
@@ -111,28 +97,24 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		simulator = new PuttingSimulator(course,engine);
 
 		ballPos = course.getStart();
-		//ballPos = new Vector2D(course.getStart().getX(),course.getStart().getY());
 		position = new Vector3((float)course.getStart().getX(),(float)course.evaluate(new Vector2D(course.getStart().getX(),course.getStart().getY())), (float)course.getStart().getY());
 
-		stage = new Stage(); //to show the equation on the screen
+		stage = new Stage();
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
 		stage.addActor(label);
 		stringBuilder = new StringBuilder();
 
 
-		//here we set our camera
-		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//67 is just a common value for the angle
+		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set((float)course.getStart().getX() - 0.7f + 1f, 6.97f, 6f);
-		camera.lookAt(0, 0, 0);//to start from the origin
+		camera.lookAt(0, 0, 0);
 		camera.near = 1f;
 		camera.far = 300f;
 		camera.update();
-		//input controller to see the objects from different perspectives
 		cameraInputController = new CameraInputController(camera);
 
 		modelBatch = new ModelBatch();
-		//here we build our models to be rendered
 		ModelBuilder modelBuilder = new ModelBuilder();
 		modelBuilder.begin();
 
@@ -140,47 +122,51 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.WHITE))).sphere(0.5f, 0.5f, 0.5f, 10, 10);
 
-		modelBuilder.node().id = "flag";
+		modelBuilder.node().id = "flagPole";
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.5f,2f,0.5f,10);
+				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.3f,2f,0.5f,10);
 
 		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("sphere" , GL20.GL_TRIANGLES, VertexAttributes.Usage.Position| VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN))).sphere(0.5f,0.5f,0.5f,5,5);
 
+		modelBuilder.node().id = "flag";
+		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.YELLOW)))
+				.box(0.25f,1f,1f);
+
+
 		model = modelBuilder.end();
-		//create instances of  models
 		ball = new ModelInstance(model, "ball");
 		ground = new ModelInstance(model, "ground");
-		flag = new ModelInstance(model, "flag");
+		flag = new ModelInstance(model, "flagPole");
 
 
-		//set ball position according to the height function
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) , (float) Variables.startY);
-		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY());
+		flag.transform.setTranslation((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 1.5f,(float)course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		groundTexture = new Texture("groundTexture.jpg");
-		for(float j = -50f; j <= 100; j = j+ 0.3f){
-			for(float i = -50f; i <= 100; i = i+ 0.3f){
+		
+
+		for(float j = -50f; j <= 99; j = j+ 0.3f){
+			for(float i = -50f; i <= 99; i = i+ 0.3f){
+				Vector3 pos = new Vector3(i ,(float) course.evaluate(new Vector2D(i,j)), j);
 				groundPieces = new ModelInstance(model, "groundPieces");
+				if(pos.equals(new Vector3((float)course.getFlag().getX(),  (float)course.evaluate(new Vector2D(course.getFlag().getX(),course.getFlag().getY())) + 4f,(float)course.getFlag().getY()))){
+					groundPieces.materials.get(0).set(ColorAttribute.createDiffuse(Color.BLACK));
+				}
 				groundPieces.transform.setTranslation(i  , (float)course.evaluate(new Vector2D(i,j)) - 0.25f, j);
 				instances.add(groundPieces);
 			}
 		}
-		//instead of the ground above, i added the ground that is generated according to the equation in puttingCourse class
-		//instances.addAll(course.getCourseShape(model));
 
-		environment = new Environment();//some lightning stuff
+		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-		//simulator.take_shot(new Vector2D(40, 50));//we need to add the initial velocity vector but idk from where);
-
 		Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
 
-		// Create the text area.
+
 		TextArea dirxText = new TextArea( "Direction x:",skin1);
 		dirxText.setDisabled(true);
 		dirxText.setPosition(0,ScreenSpace.HEIGHT-30);
@@ -197,7 +183,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		speedText.setSize(100, 30);
 		stage.addActor(speedText);
 
-		// Create the play button.
+
 		shoot = new TextButton("Shoot", skin1);
 		shoot.setDisabled(true);
 		shoot.setPosition(0,ScreenSpace.HEIGHT-120);
@@ -206,7 +192,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		shoot.addListener(new ClickListener(){
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				//takeShot();
 				ballReachedFlag=true;
 				shoot.setVisible(false);
 				course.getBall().hit();
@@ -215,7 +200,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		});
 		stage.addActor(shoot);
 
-		// Create the text field.
+
 		dirX = new TextField("0",skin1);
 		dirX.setPosition(100,ScreenSpace.HEIGHT-30);
 		dirX.setSize(50, 30);
@@ -235,24 +220,20 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	@Override
 	public void render(float delta) {
 		super.render();
-		//Stage stage1 = new Stage();
 		myDelta += delta;
-		//move to the map, but because the camera is following the ball it is strange
 		if(Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > (ScreenSpace.HEIGHT) -150){
 			Gdx.input.setInputProcessor(stage);
 		}else{
 			Gdx.input.setInputProcessor(cameraInputController);
 		}
 
-		//if ball position is at the flag position - tolerance which means that the ball reached its target position
 		if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
 				(course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
-			//maybe also add when the velocity is too small to the if statement
-			//TODO : add game over screen
+
 			this.dispose();
-			//game.setScreen(new Congrat(game, attempt));
+			game.setScreen(new Congrat(game, attempt));
 			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
@@ -269,18 +250,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				}else {
 					myVector=simulator.take_shotSlowly(myVector, 50);
 				}
-				//System.out.println(System.currentTimeMillis() - start);
 			} catch (StackOverflowError s){
-				//System.out.println(s);
+
 			}
-
-
 
 			myDelta=0;
 			if ( myVector==null) {
 				ballReachedFlag=false;
 				shoot.setVisible(true);
-				//System.out.println("My vec null");
 			}
 		}
 
@@ -291,15 +268,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		camera.lookAt((float)course.getBall().getLocation().getX(),-(float)course.getBall().getLocation().getY(),0.0f);
 		camera.update();
 		cameraInputController.update();
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());//some default stuff
+		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClearColor(0f,0.4f,0.6f,0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		modelBatch.begin(camera);
 		for (ModelInstance instance : instances) {
-			if (isVisible(camera, instance)) { //if the instances are visible  we render them
+			if (isVisible(camera, instance)) {
 				modelBatch.render(instance, environment);
-				//visibleCount++;
 			}
 		}
 		modelBatch.end();
@@ -311,12 +287,10 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 
 		stringBuilder.setLength(0);
-		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());//to see the frame per second
-		//stringBuilder.append("Visible : ").append(0);  //to see the number of visible instances
+		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
-		//stage1.draw();
 
 	}
 
@@ -338,7 +312,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	@Override
 	public void dispose() {
 		model.dispose();
-		//modelBatch.dispose();
 	}
 
 	@Override
@@ -346,25 +319,32 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	}
 
-
-
-	/*public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-
-	}*/
-
+	/**
+	 * this method determines if the given instance is visible on the screen
+	 * @param camera the game camera that makes the instances visible
+	 * @param instance an object that is to be rendered on the screen
+	 * @return true if the instance is visible
+	 */
 	public boolean isVisible(final Camera camera, final ModelInstance instance) {
 		ball.transform.getTranslation(position);
-		return camera.frustum.pointInFrustum(position); //we should also modify this method
+		return camera.frustum.pointInFrustum(position);
 	}
 
+	/**
+	 * this method determines if all of the given instances RE visible on the screen
+	 * @param camera the game camera that makes the instances visible
+	 * @param instance an object that is to be rendered on the screen
+	 * @return true if all instances are visible
+	 */
 	public boolean isVisibleAll(final Camera camera, final ModelInstance instance) {
 		instance.transform.getTranslation(position);
-		return camera.frustum.pointInFrustum(position); //we should also modify this method
+		return camera.frustum.pointInFrustum(position);
 	}
 
-	// This method will be called when the user will click on the shoot button
-	// It will recalculate the position of the ball and display it.
+	/**
+	 * This method will be called when the user will click on the shoot button
+	 *  It will recalculate the position of the ball and display it.
+	 */
 	public void takeShot (){
 		try{
 			long start = System.currentTimeMillis();
