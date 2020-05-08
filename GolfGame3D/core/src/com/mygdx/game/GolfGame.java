@@ -93,6 +93,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		eulerSolver.set_step_size(0.01);
 		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 		eulerSolver.set_grav_constant(9.81);
+		// TODO create the rungeKutta and do the if statement.
 		engine = eulerSolver;
 		simulator = new PuttingSimulator(course,engine);
 
