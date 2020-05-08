@@ -1,10 +1,11 @@
 package Physics;
 import Objects.*;
+import com.mygdx.game.Variables;
 
 public class EulerSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
-    private double grav_constant = 9.81;
+    private double grav_constant = Variables.gravity;
     private double max_error = 0.1;
 
     public EulerSolver(){
