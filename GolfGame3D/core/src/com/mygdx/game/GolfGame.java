@@ -2,10 +2,7 @@ package com.mygdx.game;
 
 import Course.PuttingCourse;
 import Objects.Ball;
-import Physics.EulerSolver;
-import Physics.PhysicsEngine;
-import Physics.PuttingSimulator;
-import Physics.Vector2D;
+import Physics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -38,6 +35,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private Boolean ballReachedFlag = false;
 	private Vector2D ballPos;
 	private EulerSolver eulerSolver;
+	private RungeKuttaSolver rungeKuttaSolver;
 	private PhysicsEngine engine;
 
 	private Environment environment;
@@ -88,12 +86,23 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
 //		}
 
-		eulerSolver = new EulerSolver();
-		eulerSolver.set_step_size(0.01);
-		eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
-		eulerSolver.set_grav_constant(9.81);
-		// TODO create the rungeKutta and do the if statement.
-		engine = eulerSolver;
+		if(Variables.euler == true){
+			eulerSolver = new EulerSolver();
+			eulerSolver.set_step_size(0.01);
+			eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
+			eulerSolver.set_grav_constant(9.81);
+			engine = eulerSolver;
+			System.out.println("euler solver is selected");
+		}
+		else if(Variables.rungeKutta == true){
+			rungeKuttaSolver = new RungeKuttaSolver();
+			rungeKuttaSolver.set_step_size(0.01);
+			rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
+			rungeKuttaSolver.set_grav_constant(9.81);
+			engine = rungeKuttaSolver;
+			System.out.println("runge kutta solver is selected");
+		}
+
 		simulator = new PuttingSimulator(course,engine);
 
 		ballPos = course.getStart();
@@ -325,7 +334,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	 * @param instance an object that is to be rendered on the screen
 	 * @return true if the instance is visible
 	 */
-	public boolean isVisible(final Camera camera, final ModelInstance instance) {
+	private boolean isVisible(final Camera camera, final ModelInstance instance) {
 		ball.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position);
 	}
@@ -336,7 +345,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	 * @param instance an object that is to be rendered on the screen
 	 * @return true if all instances are visible
 	 */
-	public boolean isVisibleAll(final Camera camera, final ModelInstance instance) {
+	private  boolean isVisibleAll(final Camera camera, final ModelInstance instance) {
 		instance.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position);
 	}
@@ -345,7 +354,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	 * This method will be called when the user will click on the shoot button
 	 *  It will recalculate the position of the ball and display it.
 	 */
-	public void takeShot (){
+	private void takeShot (){
 		try{
 			long start = System.currentTimeMillis();
 			simulator.take_shot(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));

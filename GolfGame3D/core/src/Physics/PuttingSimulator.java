@@ -61,19 +61,12 @@ public class PuttingSimulator{
         course.getBall().hit();
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
-           //GolfGame.ball.transform.setTranslation((float)next_velocity.getX(),(float)course.evaluate(new Vector2D(next_velocity.getX(),next_velocity.getY())),
-                   //(float)next_velocity.getY() + 2.5f);
-            //updateBall((float)next_velocity.getX(),(float)next_velocity.getY());
 
         }
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
 
     public Vector2D take_shotSlowly(Vector2D initial_ball_velocity,int fifty) {
-
-
-
-
         Vector2D next_velocity = initial_ball_velocity;
 
         if (course.getBall().isHit() && counter <= fifty){
@@ -86,9 +79,6 @@ public class PuttingSimulator{
             }
 
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
-            //GolfGame.ball.transform.setTranslation((float)next_velocity.getX(),(float)course.evaluate(new Vector2D(next_velocity.getX(),next_velocity.getY())),
-            //(float)next_velocity.getY() + 2.5f);
-            //updateBall((float)next_velocity.getX(),(float)next_velocity.getY());
 
         }
 
