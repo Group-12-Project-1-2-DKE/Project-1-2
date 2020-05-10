@@ -81,6 +81,8 @@ public class MainMenu implements Screen{
                 // also change the color to see the difference.
                 //Variables.euler = true;
                 //Variables.rungeKutta = false;
+                Variables.ai = true;
+                Variables.player = false;
                 button1.getLabel().setColor(Color.YELLOW);
                 button2.getLabel().setColor(Color.WHITE);
                 System.out.println("hi hi");
@@ -93,6 +95,8 @@ public class MainMenu implements Screen{
                 // also change the color to see the difference.
                 //Variables.rungeKutta = true;
                 //Variables.euler = false;
+                Variables.player = true;
+                Variables.ai = false;
                 button2.getLabel().setColor(Color.YELLOW);
                 button1.getLabel().setColor(Color.WHITE);
                 System.out.println("hi");
