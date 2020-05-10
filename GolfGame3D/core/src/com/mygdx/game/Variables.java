@@ -5,6 +5,7 @@ public class Variables {
     //public static float ballDiameter;
     public static float ballMass;
     public static float coefficientOfFriction;
+    public static float tolerance;
     public static String function;
     public static float goalX;
     public static float goalY;
@@ -12,4 +13,5 @@ public class Variables {
     public static float startY;
     public static boolean euler;
     public static boolean rungeKutta;
+
 }

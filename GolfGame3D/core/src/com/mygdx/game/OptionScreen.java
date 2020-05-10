@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,12 +15,10 @@ import ui.FileReaders;
 
 
 public class OptionScreen implements Screen {
-    ButtonGroup buttonGroup;
     TextButton button1;
     TextButton button2;
-    ScreenSpace game;
-    TextureAtlas buttonAtlas;
     TextButton.TextButtonStyle textButtonStyle;
+    ScreenSpace game;
     Texture playButtonActive;
     Texture playButtonInactive;
     Texture backButtonActivated;
@@ -39,6 +36,7 @@ public class OptionScreen implements Screen {
     //TextField ballDiameter;
     TextField ballMass;
     //TextField coefficientOfFriction;
+    TextField tolerance;
     TextField function;
     TextField goalX;
     TextField goalY;
@@ -56,8 +54,9 @@ public class OptionScreen implements Screen {
         this.game = game;
 
         hold = new GolfGame();
-        
+
         reader = new FileReaders();
+        reader.read("C:\\Users\\Arthur Vieillevoye\\Documents\\GitHub\\Project-1-2\\GolfGame3D\\core\\src\\ui\\banana.txt");
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
@@ -69,7 +68,7 @@ public class OptionScreen implements Screen {
         // Create the textFields and add them to the "frame".
         Gdx.input.setInputProcessor(stage);
         Skin customizedMenuSkin = new Skin(Gdx.files.internal("uiskin.json"));
-        gravity = new TextField("9.81", customizedMenuSkin);
+        gravity = new TextField(String.valueOf(Variables.gravity), customizedMenuSkin);
         gravity.setPosition(ScreenSpace.WIDTH - 210,725);
         gravity.setSize(200, 30);
         gravity.setColor(Color.WHITE);
@@ -81,11 +80,17 @@ public class OptionScreen implements Screen {
 //        ballDiameter.setColor(Color.WHITE);
 //        stage.addActor(ballDiameter);
 
-        ballMass = new TextField("45.93", customizedMenuSkin);
+        ballMass = new TextField(String.valueOf(Variables.ballMass), customizedMenuSkin);
         ballMass.setPosition(ScreenSpace.WIDTH - 210,675);
         ballMass.setSize(200, 30);
         ballMass.setColor(Color.WHITE);
         stage.addActor(ballMass);
+
+        tolerance = new TextField(String.valueOf(Variables.tolerance), customizedMenuSkin);
+        tolerance.setPosition(ScreenSpace.WIDTH - 210,625);
+        tolerance.setSize(200, 30);
+        tolerance.setColor(Color.WHITE);
+        stage.addActor(tolerance);
 
 //        coefficientOfFriction = new TextField("0.131", customizedMenuSkin);
 //        coefficientOfFriction.setPosition(ScreenSpace.WIDTH - 210,675);
@@ -93,32 +98,33 @@ public class OptionScreen implements Screen {
 //        coefficientOfFriction.setColor(Color.WHITE);
 //        stage.addActor(coefficientOfFriction);
 
-        function = new TextField("0.02*x^2 + 0.02*y^2", customizedMenuSkin);
-        function.setPosition(ScreenSpace.WIDTH - 210,625);
+        //0.02*x^2 + 0.02*y^2
+        function = new TextField(Variables.function, customizedMenuSkin);
+        function.setPosition(ScreenSpace.WIDTH - 210,575);
         function.setSize(200, 30);
         function.setColor(Color.WHITE);
         stage.addActor(function);
 
-        goalX = new TextField("0", customizedMenuSkin);
-        goalX.setPosition(25,525);
+        goalX = new TextField(String.valueOf(Variables.goalX), customizedMenuSkin);
+        goalX.setPosition(25,475);
         goalX.setSize(200, 30);
         goalX.setColor(Color.WHITE);
         stage.addActor(goalX);
 
-        goalY = new TextField("5", customizedMenuSkin);
-        goalY.setPosition(250,525);
+        goalY = new TextField(String.valueOf(Variables.goalY), customizedMenuSkin);
+        goalY.setPosition(250,475);
         goalY.setSize(200, 30);
         goalY.setColor(Color.WHITE);
         stage.addActor(goalY);
 
-        startX = new TextField("0", customizedMenuSkin);
-        startX.setPosition(25,425);
+        startX = new TextField(String.valueOf(Variables.startX), customizedMenuSkin);
+        startX.setPosition(25,375);
         startX.setSize(200, 30);
         startX.setColor(Color.WHITE);
         stage.addActor(startX);
 
-        startY = new TextField("0", customizedMenuSkin);
-        startY.setPosition(250,425);
+        startY = new TextField(String.valueOf(Variables.startY), customizedMenuSkin);
+        startY.setPosition(250,375);
         startY.setSize(200, 30);
         startY.setColor(Color.WHITE);
         stage.addActor(startY);
@@ -135,8 +141,8 @@ public class OptionScreen implements Screen {
         // Create the buttons.
         button1 = new TextButton("EulerSolver", textButtonStyle);
         button2 = new TextButton("RungeKutta", textButtonStyle);
-        button1.setPosition(40,  300);
-        button2.setPosition(ScreenSpace.WIDTH/2-30,  300);
+        button1.setPosition(40,  250);
+        button2.setPosition(ScreenSpace.WIDTH/2-30,  250);
         stage.addActor(button1);
         stage.addActor(button2);
 
@@ -186,10 +192,11 @@ public class OptionScreen implements Screen {
         //font.draw(game.batch,"Ball Diameter:", 25,700);
         font.draw(game.batch,"Ball Mass:", 25,700);
         //font.draw(game.batch,"Coefficient of Friction:", 25,700);
-        font.draw(game.batch,"Function:", 25,650);
-        font.draw(game.batch,"Goal Coordinates(x,y):", 25,600);
-        font.draw(game.batch,"Start Coordinates (x,y):", 25,500);
-        font.draw(game.batch,"Physic engine : ",25,400 );
+        font.draw(game.batch,"tolerance:", 25,650);
+        font.draw(game.batch,"Function:", 25,600);
+        font.draw(game.batch,"Goal Coordinates(x,y):", 25,550);
+        font.draw(game.batch,"Start Coordinates (x,y):", 25,450);
+        font.draw(game.batch,"Physic engine : ",25,350 );
 
         // Create the play button.
         int x = ScreenSpace.WIDTH / 2 - PLAY_WIDTH / 2;

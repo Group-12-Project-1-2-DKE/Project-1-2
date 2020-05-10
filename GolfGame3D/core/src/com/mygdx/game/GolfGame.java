@@ -83,7 +83,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 //			course = new PuttingCourse(reader.getFunction(),new Vector2D(reader.getXStart(),reader.getYStart()),
 //					new Vector2D(reader.getXGoal(),reader.getYGoal()),gameBall,reader.getCoefficientOfFriction(),reader.getMaxVelocity(),reader.getTolerance());
 //		}else {
-			course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, 4);//again some  random values
+			course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
 //		}
 
 		if(Variables.euler == true){
