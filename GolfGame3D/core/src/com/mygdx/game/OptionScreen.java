@@ -15,14 +15,14 @@ import ui.FileReaders;
 
 
 public class OptionScreen implements Screen {
-    TextButton button1;
-    TextButton button2;
-    TextButton.TextButtonStyle textButtonStyle;
-    ScreenSpace game;
-    Texture playButtonActive;
-    Texture playButtonInactive;
-    Texture backButtonActivated;
-    Texture backButtonInactivated;
+    private TextButton button1;
+    private TextButton button2;
+    private TextButton.TextButtonStyle textButtonStyle;
+    private ScreenSpace game;
+    private Texture playButtonActive;
+    private Texture playButtonInactive;
+    private Texture backButtonActivated;
+    private Texture backButtonInactivated;
 
     private static final int PLAY_WIDTH = 300;
     private static final int PLAY_HEIGHT = 120;
@@ -30,21 +30,21 @@ public class OptionScreen implements Screen {
     private static final int BACK_HEIGHT = 125;
     private static final int PLAY_Y = 75;
 
-    BitmapFont font;
+    private BitmapFont font;
 
-    TextField gravity;
+    private TextField gravity;
     //TextField ballDiameter;
-    TextField ballMass;
+    private TextField ballMass;
     //TextField coefficientOfFriction;
-    TextField tolerance;
-    TextField function;
-    TextField goalX;
-    TextField goalY;
-    TextField startX;
-    TextField startY;
-    TextField mode;
+    private TextField tolerance;
+    private TextField function;
+    private TextField goalX;
+    private TextField goalY;
+    private TextField startX;
+    private TextField startY;
+    private TextField mode;
 
-    Stage stage;
+    private Stage stage;
 
     public GolfGame hold;
     private FileReaders reader;

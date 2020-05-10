@@ -42,6 +42,7 @@ public class MainMenu implements Screen{
         this.game = game;
 
         stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
         FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -67,8 +68,8 @@ public class MainMenu implements Screen{
         stage.addActor(button2);
 
         // Set the default values.
-        //button1.getLabel().setColor(Color.YELLOW);
-        button2.getLabel().setColor(Color.YELLOW);
+        button1.getLabel().setColor(Color.YELLOW);
+        //button2.getLabel().setColor(Color.YELLOW);
         //Variables.euler = true;
         //Variables.rungeKutta = false;
 
@@ -82,6 +83,7 @@ public class MainMenu implements Screen{
                 //Variables.rungeKutta = false;
                 button1.getLabel().setColor(Color.YELLOW);
                 button2.getLabel().setColor(Color.WHITE);
+                System.out.println("hi hi");
             }
         });
         button2.addListener(new ChangeListener() {
