@@ -31,8 +31,9 @@ public class StraighGreedy implements AI{
         Vector2D scaled_direction = direction.multiply(factor);
         Vector2D Ffric = direction.multiply(-ball.getMass() * grav_constant * course.getFrictionCoefficient());
         Vector2D Fresist = new Vector2D(0,0);
-
+        Vector2D Ftotal = new Vector2D(0,0);
         Vector2D returnvec = new Vector2D(direction.getX(), direction.getY());
+
         for (int i = 0; i < heights.length - 1; i++) {
             double h = heights[i];
             double h2 = heights[i + 1];
@@ -40,8 +41,9 @@ public class StraighGreedy implements AI{
             Vector2D gradient = new Vector2D(difference / scaled_direction.getX(), difference / scaled_direction.getY());
             Vector2D Fgrav = gradient.multiply(-ball.getMass() * grav_constant);
             Fresist = Ffric.add(Fgrav);
+            Ftotal = Ftotal.add(Fresist);
         }
-        Vector2D acc = Fresist.multiply((-1/ball.getMass())*(factor));
+        Vector2D acc = Ftotal.multiply((-1/ball.getMass())*(factor));
         double accX = acc.getX();
         double accY = acc.getY();
         if(direction.getY()/direction.getX() > acc.getY()/acc.getX()){
