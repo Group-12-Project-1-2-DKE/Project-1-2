@@ -79,8 +79,8 @@ public class MainMenu implements Screen{
             public void changed (ChangeEvent event, Actor actor) {
                 // If the button is clicked, mark the physic engine mode as true and the other as false
                 // also change the color to see the difference.
-                //Variables.euler = true;
-                //Variables.rungeKutta = false;
+                Variables.ai = true;
+                Variables.singlePlayer = false;
                 button1.getLabel().setColor(Color.YELLOW);
                 button2.getLabel().setColor(Color.WHITE);
                 System.out.println("hi hi");
@@ -91,8 +91,8 @@ public class MainMenu implements Screen{
             public void changed (ChangeEvent event, Actor actor) {
                 // If the button is clicked, mark the physic engine mode as true and the other as false
                 // also change the color to see the difference.
-                //Variables.rungeKutta = true;
-                //Variables.euler = false;
+                Variables.singlePlayer = true;
+                Variables.ai = false;
                 button2.getLabel().setColor(Color.YELLOW);
                 button1.getLabel().setColor(Color.WHITE);
                 System.out.println("hi");

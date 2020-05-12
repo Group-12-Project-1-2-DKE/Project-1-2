@@ -27,10 +27,23 @@ public class FileReaders{
     }
 
     public void read (String fileName){
+        // Get the path of the project on the computer
+        String path = System.getProperty("user.dir");
+        // Specify he path to be the path of the file
+        path = path + "\\core\\src\\ui\\" + fileName;
+        System.out.println(path);
+        File file = new File(path);//path + "\\core\\src\\ui\\" + fileName);
+
+        // If the file doesn't exist print error.
+        if (!file.exists()) {
+            System.out.println("System couldnt file source file!");
+            System.out.println("Application will explode");
+        }
+
         FileReader fr = null;
         LinkedList<Float> num = new LinkedList<Float>();
         try {
-            fr = new FileReader(fileName);
+            fr = new FileReader(path);
             BufferedReader br = new BufferedReader(fr);
 
             String line = "";

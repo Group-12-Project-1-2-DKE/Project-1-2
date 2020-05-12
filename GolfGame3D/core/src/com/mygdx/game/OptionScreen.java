@@ -56,7 +56,7 @@ public class OptionScreen implements Screen {
         hold = new GolfGame();
 
         reader = new FileReaders();
-        reader.read("C:\\Users\\Arthur Vieillevoye\\Documents\\GitHub\\Project-1-2\\GolfGame3D\\core\\src\\ui\\banana.txt");
+        reader.read("banana.txt");
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");
