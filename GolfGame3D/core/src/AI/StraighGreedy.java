@@ -2,15 +2,21 @@ package AI;
 
 import Course.PuttingCourse;
 import Objects.Ball;
-import Physics.Function2D;
-import Physics.Vector2D;
+import Physics.*;
+
+import java.util.Arrays;
 
 public class StraighGreedy implements AI{
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("1", new Vector2D(2,-3), new Vector2D(10,5),
-                new Ball(new Vector2D(2,-3), 3, (float)0.5), 0.05, 4, 4);
-        AI s = new StraighGreedy();
-        //s.calculate_turn(h);
+        PuttingCourse h = new PuttingCourse("0.5*x^2 + 0.1*y", new Vector2D(0,0), new Vector2D(10,5),
+                new Ball(new Vector2D(0,0), 1, (float)0.5), 0.1, 4, 4);
+        StraighGreedy s = new StraighGreedy();
+
+        int steps = 10;
+        double[] heights = s.getHeights(h, h.getBall().getLocation(), h.getFlag(), steps);
+
+        System.out.println(Arrays.toString(heights));
+
     }
 
     /**
@@ -21,18 +27,19 @@ public class StraighGreedy implements AI{
      */
 
     @Override
-    public Vector2D calculate_turn(PuttingCourse course, double[] heights, double step_size) {
+    public Vector2D calculate_turn(PuttingCourse course, int steps) {
         double grav_constant = 9.81;
         Ball ball = course.getBall();
         Vector2D begin = ball.getLocation();
         Vector2D end = course.getFlag();
         Vector2D direction = end.add(begin.multiply(-1));
-        double factor = step_size/direction.length();
-        Vector2D scaled_direction = direction.multiply(factor);
+        double step_size = direction.length()/steps;
+        Vector2D scaled_direction = direction.multiply(1/(double)steps);
         Vector2D Ffric = direction.multiply(-ball.getMass() * grav_constant * course.getFrictionCoefficient());
         Vector2D Fresist = new Vector2D(0,0);
         Vector2D Ftotal = new Vector2D(0,0);
         Vector2D returnvec = new Vector2D(direction.getX(), direction.getY());
+        double[] heights = getHeights(course, begin, end, steps);
 
         for (int i = 0; i < heights.length - 1; i++) {
             double h = heights[i];
@@ -43,7 +50,7 @@ public class StraighGreedy implements AI{
             Fresist = Ffric.add(Fgrav);
             Ftotal = Ftotal.add(Fresist);
         }
-        Vector2D acc = Ftotal.multiply((-1/ball.getMass())*(factor));
+        Vector2D acc = Ftotal.multiply((-1/ball.getMass())*(1/(double)steps));
         double accX = acc.getX();
         double accY = acc.getY();
         if(direction.getY()/direction.getX() > acc.getY()/acc.getX()){
@@ -78,5 +85,22 @@ public class StraighGreedy implements AI{
              */
 
 
+    }
+
+    /**
+     * method to get the heights to provide in calculate_turn method in ai
+     * @return an array of heights of the map
+     */
+    private double[] getHeights(Function2D course, Vector2D begin, Vector2D end, int steps) {
+        double[] heights = new double[steps + 1];
+        Vector2D difference = end.add(begin.multiply(-1));
+        Vector2D step = difference.multiply(1/(double)steps);
+
+        Vector2D current_step = begin.clone();
+        for (int i = 0; i < heights.length; i++){
+            heights[i] = course.evaluate(current_step);
+            current_step = current_step.add(step);
+        }
+        return heights;
     }
 }
