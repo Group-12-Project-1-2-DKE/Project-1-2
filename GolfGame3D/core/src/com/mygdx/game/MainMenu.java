@@ -68,10 +68,9 @@ public class MainMenu implements Screen{
         stage.addActor(button2);
 
         // Set the default values.
-        button1.getLabel().setColor(Color.YELLOW);
-        //button2.getLabel().setColor(Color.YELLOW);
-        //Variables.euler = true;
-        //Variables.rungeKutta = false;
+        button2.getLabel().setColor(Color.YELLOW);
+        Variables.singlePlayer = true;
+        Variables.ai = false;
 
         // Create the actionListener and add them to the specific button.
         button1.addListener(new ChangeListener() {
