@@ -19,6 +19,7 @@ public class StraighGreedy implements AI{
      * @param course
      * @return approximate initial velocity vector
      */
+
     @Override
     public Vector2D calculate_turn(PuttingCourse course, double[] heights, double step_size) {
         double grav_constant = 9.81;
@@ -38,12 +39,12 @@ public class StraighGreedy implements AI{
             Vector2D gradient = new Vector2D(difference/scaled_direction.getX(), difference/scaled_direction.getY());
             Vector2D Fgrav = gradient.multiply(-ball.getMass() * grav_constant);
             Vector2D Fresist = Ffric.add(Fgrav);
-
-            if (Fresist.getX() * scaled_direction.getX() < 0){
-                returnvec.setX(returnvec.getX() - Fresist.getX());
+            Vector2D acc = Fresist.multiply((1/ball.getMass())*(factor));
+            if (acc.getX() * scaled_direction.getX() < 0){
+                returnvec.setX(returnvec.getX() - acc.getX());
             }
-            if (Fresist.getY() * scaled_direction.getY() < 0){
-                returnvec.setY(returnvec.getY() - Fresist.getY());
+            if (acc.getY() * scaled_direction.getY() < 0){
+                returnvec.setY(returnvec.getY() - acc.getY());
             }
         }
         return returnvec;
