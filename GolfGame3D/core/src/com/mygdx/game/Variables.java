@@ -15,5 +15,4 @@ public class Variables {
     public static boolean rungeKutta;
     public static boolean ai;
     public static boolean singlePlayer;
-
 }
