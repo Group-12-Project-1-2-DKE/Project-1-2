@@ -10,5 +10,5 @@ public interface AI {
      * @param course
      * @return initial velocity vector
      */
-    Vector2D calculate_turn(PuttingCourse course, double[] heights, double step_size);
+    Vector2D calculate_turn(PuttingCourse course, int steps);
 }

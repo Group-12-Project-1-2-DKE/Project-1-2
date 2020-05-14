@@ -375,18 +375,4 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			System.out.println(s);
 		}
 	}
-
-	/**
-	 * method to get the heights to provide in calculate_turn method in ai
-	 * @return an array of heights of the map
-	 */
-	private double[] getHeights() {
-		double[] heights = new double[200];
-		for (int j = -50; j <= 99; j = j + 1) {
-			for (int i = -50; i <= 99; i = i + 1) {
-				heights[i] = course.evaluate(new Vector2D(i,j));
-			}
-		}
-		return  heights;
-	}
 }

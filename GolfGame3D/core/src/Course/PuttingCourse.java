@@ -35,7 +35,7 @@ public class PuttingCourse implements Function2D{
      * Main method for testing
      */
     public static void main(String[] args){
-        PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
+        PuttingCourse h = new PuttingCourse("2*x^0.5 + -1*y^-3", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
 
         //Color[][] c = h.calculate_colors();
@@ -59,25 +59,7 @@ public class PuttingCourse implements Function2D{
         this.friction = friction;
         this.maxVelocity = maxVelocity;
         this.tolerance = tolerance;
-        this.equation = equation;
-
-        equation = equation.replaceAll(" ","");
-
-        String[] plus_c = equation.split("\\+");
-        components = new String[plus_c.length][][];
-
-        //TODO: Implement sin and cos and stuff
-        for (int i = 0; i < plus_c.length; i++){
-            String p = plus_c[i];
-            String[] times_c = p.split("\\*");
-            components[i] = new String[times_c.length][];
-            for (int j = 0; j < times_c.length; j++){
-                String t = times_c[j];
-                String[] power_c = t.split("\\^");
-                components[i][j] = power_c;
-            }
-        }
-        //System.out.println(Arrays.deepToString(components));
+        setEquation(equation);
     }
 
     //This method is not really used
@@ -185,6 +167,33 @@ public class PuttingCourse implements Function2D{
             }
         }
         return 0;
+    }
+
+    public void setEquation(String equation){
+        this.equation = equation;
+
+        equation = equation.replaceAll(" ","");
+
+        components = parseEquation(equation);
+        //System.out.println(Arrays.deepToString(components));
+    }
+
+    private String[][][] parseEquation(String eq){
+        String[] plus_c = eq.split("\\+");
+        String[][][] comps = new String[plus_c.length][][];
+
+        //TODO: Implement sin and cos and stuff
+        for (int i = 0; i < plus_c.length; i++){
+            String p = plus_c[i];
+            String[] times_c = p.split("\\*");
+            comps[i] = new String[times_c.length][];
+            for (int j = 0; j < times_c.length; j++){
+                String t = times_c[j];
+                String[] power_c = t.split("\\^");
+                comps[i][j] = power_c;
+            }
+        }
+        return comps;
     }
 
     public String getEquation(){
