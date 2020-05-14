@@ -184,16 +184,16 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
 		diryText.setSize(100, 30);
 		stage.addActor(diryText);
-		TextArea speedText = new TextArea("speed:", skin1);
-		speedText.setDisabled(true);
-		speedText.setPosition(0, ScreenSpace.HEIGHT - 90);
-		speedText.setSize(100, 30);
-		stage.addActor(speedText);
+//		TextArea speedText = new TextArea("speed:", skin1);
+//		speedText.setDisabled(true);
+//		speedText.setPosition(0, ScreenSpace.HEIGHT - 90);
+//		speedText.setSize(100, 30);
+//		stage.addActor(speedText);
 
 
 		shoot = new TextButton("Shoot", skin1);
 		shoot.setDisabled(true);
-		shoot.setPosition(0, ScreenSpace.HEIGHT - 120);
+		shoot.setPosition(0, ScreenSpace.HEIGHT - 90);
 		shoot.setSize(150, 30);
 
 		shoot.addListener(new ClickListener() {
@@ -207,19 +207,18 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		});
 		stage.addActor(shoot);
 
-
-		dirX = new TextField("0", skin1);
+		dirX = new TextField(String.valueOf(Variables.shootX), skin1);
 		dirX.setPosition(100, ScreenSpace.HEIGHT - 30);
 		dirX.setSize(50, 30);
 		stage.addActor(dirX);
-		dirY = new TextField("0", skin1);
+		dirY = new TextField(String.valueOf(Variables.shootY), skin1);
 		dirY.setPosition(100, ScreenSpace.HEIGHT - 60);
 		dirY.setSize(50, 30);
 		stage.addActor(dirY);
-		speed = new TextField("12", skin1);
-		speed.setPosition(100, ScreenSpace.HEIGHT - 90);
-		speed.setSize(50, 30);
-		stage.addActor(speed);
+//		speed = new TextField("12", skin1);
+//		speed.setPosition(100, ScreenSpace.HEIGHT - 90);
+//		speed.setSize(50, 30);
+//		stage.addActor(speed);
 	}
 
 	public float myDelta = 0;

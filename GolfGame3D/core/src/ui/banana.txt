@@ -1,8 +1,10 @@
-Gravity = 200
-Mass = 300
-tolerence for the goal = 600
+Gravity = 9.81
+Mass = 4
+tolerence for the goal = 6
 Function= 0.02*x^2+0.02*y^2
 Start position X = 0.0
 Start position Y = 0.0
 Goal position X = 0.0
 Goal position Y = 10
+Shoot X = 0.0
+Shoot y = 10

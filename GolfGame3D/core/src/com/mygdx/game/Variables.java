@@ -11,6 +11,8 @@ public class Variables {
     public static float goalY;
     public static float startX;
     public static float startY;
+    public static float shootX;
+    public static float shootY;
     public static boolean euler;
     public static boolean rungeKutta;
     public static boolean ai;

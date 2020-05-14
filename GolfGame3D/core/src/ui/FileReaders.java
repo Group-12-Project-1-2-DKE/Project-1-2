@@ -67,6 +67,8 @@ public class FileReaders{
             Variables.startY = num.pop();
             Variables.goalX = num.pop();
             Variables.goalY = num.pop();
+            Variables.shootX = num.pop();
+            Variables.shootY = num.pop();
 
             // Exeptions.
         } catch (FileNotFoundException e){
