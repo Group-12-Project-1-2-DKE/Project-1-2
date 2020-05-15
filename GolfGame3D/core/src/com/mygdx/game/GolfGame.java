@@ -121,6 +121,26 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		camera.update();
 		cameraInputController = new CameraInputController(camera);
 
+		Pixmap pixmap200 = new Pixmap(Gdx.files.internal("groundTexture.jpg"));
+		Pixmap pixmap100 = new Pixmap(5000, 5000, pixmap200.getFormat());
+		pixmap100.drawPixmap(pixmap200,
+				12, 12, pixmap200.getWidth(), pixmap200.getHeight(),
+				0, 0, pixmap100.getWidth(), pixmap100.getHeight()
+		);
+		Texture fieldTex = new Texture(pixmap100);
+		pixmap200.dispose();
+		pixmap100.dispose();
+
+		Pixmap pixmap2001 = new Pixmap(Gdx.files.internal("ball.jpg"));
+		Pixmap pixmap1001 = new Pixmap(7000, 7000, pixmap2001.getFormat());
+		pixmap1001.drawPixmap(pixmap2001,
+				0, 0, pixmap2001.getWidth(), pixmap2001.getHeight(),
+				0, 0, pixmap1001.getWidth(), pixmap1001.getHeight()
+		);
+		Texture ballTex = new Texture(pixmap1001);
+		pixmap2001.dispose();
+		pixmap1001.dispose();
+
 		modelBatch = new ModelBatch();
 		ModelBuilder modelBuilder = new ModelBuilder();
 		modelBuilder.begin();
@@ -131,7 +151,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "flagPole";
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.3f, 2f, 0.5f, 10);
+				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.2f, 2f, 0.2f, 10);
 
 		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
@@ -139,24 +159,26 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "flag";
 		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.YELLOW)))
-				.box(0.25f, 1f, 1f);
+				.box(0.5f, 0.4f, 0.1f);
 
 
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
 		ground = new ModelInstance(model, "ground");
 		flag = new ModelInstance(model, "flagPole");
+		ModelInstance flagg = new ModelInstance(model,"flag");
 
-
+        flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1.5f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
+		instances.add(flagg);
 
 
-		for (float j = -50f; j <= 99; j = j + 0.3f) {
-			for (float i = -50f; i <= 99; i = i + 0.3f) {
+		for (float j = -40f; j <= 10; j = j + 0.3f) {
+			for (float i = -40f; i <= 10; i = i + 0.3f) {
 				Vector3 pos = new Vector3(i, (float) course.evaluate(new Vector2D(i, j)), j);
 				groundPieces = new ModelInstance(model, "groundPieces");
 				if (pos.equals(new Vector3((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 4f, (float) course.getFlag().getY()))) {
@@ -184,11 +206,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
 		diryText.setSize(100, 30);
 		stage.addActor(diryText);
-//		TextArea speedText = new TextArea("speed:", skin1);
-//		speedText.setDisabled(true);
-//		speedText.setPosition(0, ScreenSpace.HEIGHT - 90);
-//		speedText.setSize(100, 30);
-//		stage.addActor(speedText);
 
 
 		shoot = new TextButton("Shoot", skin1);
@@ -215,10 +232,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		dirY.setPosition(100, ScreenSpace.HEIGHT - 60);
 		dirY.setSize(50, 30);
 		stage.addActor(dirY);
-//		speed = new TextField("12", skin1);
-//		speed.setPosition(100, ScreenSpace.HEIGHT - 90);
-//		speed.setSize(50, 30);
-//		stage.addActor(speed);
+
 	}
 
 	public float myDelta = 0;
