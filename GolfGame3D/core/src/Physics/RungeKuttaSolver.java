@@ -22,15 +22,15 @@ public class RungeKuttaSolver implements PhysicsEngine{
 
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
 
-        if (ball.getLocation().getX() < Variables.lowerBound.x ||ball.getLocation().getX() > Variables.upperBound.x || ball.getLocation().getX() < 0) {
+        if (ball.getLocation().getX() < Variables.lowerBound.getX() || ball.getLocation().getX() > Variables.upperBound.getX()) {
             final_v.setX(- 1 * final_v.getX()) ;
         }
 
-        if (ball.getLocation().getY() > Variables.upperBound.y ||ball.getLocation().getY() < Variables.lowerBound.y || ball.getLocation().getY() < 0) {
+        if (ball.getLocation().getY() > Variables.upperBound.getY() || ball.getLocation().getY() < Variables.lowerBound.getY()) {
             final_v.setY(- 1 * final_v.getY());
         }
 
-        if (final_v.length() < max_error && k.length() < max_error) {
+        if (final_v.length() < max_error && /*k.length()*/initial_v.add(final_v.multiply(-1)).length() < max_error) {
             ball.putAtRest();
             //System.out.println("l: " + ball.getLocation());
             //System.out.println("v: " + final_v);

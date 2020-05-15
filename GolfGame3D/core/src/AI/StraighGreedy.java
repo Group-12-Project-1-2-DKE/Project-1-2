@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class StraighGreedy implements AI{
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.02*x^2+0.02*y^2", new Vector2D(5,6), new Vector2D(1,1),
+        PuttingCourse h = new PuttingCourse("0.02*x^2+0.02*y^2", new Vector2D(58,94), new Vector2D(37,9),
                 new Ball(new Vector2D(0,0), 1.3, (float)0.5), 0.1, 4, 4);
         StraighGreedy s = new StraighGreedy();
         h.getBall().setLocation(h.getStart());
@@ -19,7 +19,7 @@ public class StraighGreedy implements AI{
         //Vector2D[] gradients = s.getGradients(h, h.getBall().getLocation(), h.getFlag(), steps);
         //System.out.println(Arrays.toString(gradients));
 
-        PhysicsEngine r = new EulerSolver();
+        PhysicsEngine r = new RungeKuttaSolver();
         r.set_fric_coefficient(h.getFrictionCoefficient());
         r.set_grav_constant(9.81);
 

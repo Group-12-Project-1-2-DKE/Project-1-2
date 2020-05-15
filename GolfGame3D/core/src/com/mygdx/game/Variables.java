@@ -1,9 +1,9 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.math.Vector3;
+import Physics.Vector2D;
 
 public class Variables {
-    public static float gravity;
+    public static float gravity = (float) 9.81;
     //public static float ballDiameter;
     public static float ballMass;
     public static float coefficientOfFriction;
@@ -25,7 +25,7 @@ public class Variables {
     public static boolean singlePlayer = true;  // Set the single player a the default value.
    
          
-    public static Vector3 lowerBound;
-    public static Vector3 upperBound;
+    public static Vector2D lowerBound;
+    public static Vector2D upperBound;
 
 }

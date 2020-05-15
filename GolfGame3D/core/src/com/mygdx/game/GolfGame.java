@@ -198,8 +198,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 			}
 		}
-		Variables.lowerBound = new Vector3(-40,(float)course.evaluate(new Vector2D(-40,-40)), -40);
-		Variables.upperBound = new Vector3(10,(float)course.evaluate(new Vector2D(10,10)),10);
+		Variables.lowerBound = new Vector2D(-40, -40);
+		Variables.upperBound = new Vector2D(10,10);
 
 		System.out.println( "1 : " + course.evaluate(new Vector2D(-40,40)));
 		System.out.println("2 : " + course.evaluate(new Vector2D(10,10)));
@@ -405,11 +405,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	}
 
 	public void setLowerBound(){
-		Variables.lowerBound = new Vector3(-40,(float)course.evaluate(new Vector2D(-40,-40)), -40);
+		Variables.lowerBound = new Vector2D(-40, -40);
 	}
 
 	public void setUpperBound(){
-		Variables.upperBound = new Vector3(10,(float)course.evaluate(new Vector2D(10,10)),10);
+		Variables.upperBound = new Vector2D(10,10);
 	}
 
 	public Vector3 getUpperBound(){
