@@ -250,18 +250,18 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 
 		if (true && ballReachedFlag) {
-			/*if(Variables.ai == true){
+			if(Variables.ai == true){
 				try{
 					long start = System.currentTimeMillis();
 					if (myVector==null) {
-						myVector=simulator.take_shotSlowly(ai.calculate_turn(course,,)50);
+						myVector=simulator.take_shotSlowly(ai.calculate_turn(course,500),50);
 					}else {
 						myVector=simulator.take_shotSlowly(myVector, 50);
 					}
 				} catch (StackOverflowError s){
 
 				}
-			}else*/
+			}else
 			try {
 				long start = System.currentTimeMillis();
 				if (myVector == null) {
