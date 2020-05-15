@@ -186,8 +186,12 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				}
 				groundPieces.transform.setTranslation(i, (float) course.evaluate(new Vector2D(i, j)) - 0.25f, j);
 				instances.add(groundPieces);
+
 			}
 		}
+
+		System.out.println( "1 : " + course.evaluate(new Vector2D(-40,40)));
+		System.out.println("2 : " + course.evaluate(new Vector2D(10,10)));
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
@@ -325,6 +329,10 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		label.setText(stringBuilder);
 		stage.draw();
 
+
+
+		System.out.println(course.evaluate(new Vector2D(-40,10)));
+
 	}
 
 	@Override
@@ -389,4 +397,17 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			System.out.println(s);
 		}
 	}
+
+	public void setLowerBound(){
+		Variables.lowerBound = new Vector3(-40,(float)course.evaluate(new Vector2D(-40,-40)), -40);
+	}
+
+	public void setUpperBound(){
+		Variables.upperBound = new Vector3(10,(float)course.evaluate(new Vector2D(10,10)),10);
+	}
+
+	public Vector3 getUpperBound(){
+		return new Vector3(10,(float)course.evaluate(new Vector2D(10,10)),10);
+	}
+
 }

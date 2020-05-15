@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.math.Vector3;
+
 public class Variables {
     public static float gravity;
     //public static float ballDiameter;
@@ -17,4 +19,6 @@ public class Variables {
     public static boolean rungeKutta;
     public static boolean ai;
     public static boolean singlePlayer;
+    public static Vector3 lowerBound;
+    public static Vector3 upperBound;
 }

@@ -8,6 +8,7 @@ public class EulerSolver implements PhysicsEngine{
     private double grav_constant = Variables.gravity;
     private double max_error = 0.1;
 
+
     public EulerSolver(){
 
     }
@@ -21,11 +22,11 @@ public class EulerSolver implements PhysicsEngine{
         Vector2D final_v = initial_v.add(acc);//acc * step_size);
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
 
-        if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
+        if (ball.getLocation().getX() > Variables.upperBound.x||ball.getLocation().getX() < Variables.lowerBound.x || ball.getLocation().getX() < 0) {
             final_v.setX(- 1 * final_v.getX()) ;
         }
 
-        if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
+        if (ball.getLocation().getY() > Variables.upperBound.y||ball.getLocation().getY() < Variables.lowerBound.y || ball.getLocation().getY() < 0) {
             final_v.setY(- 1 * final_v.getY());
         }
 

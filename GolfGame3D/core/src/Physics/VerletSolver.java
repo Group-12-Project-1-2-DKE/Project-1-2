@@ -1,6 +1,7 @@
 package Physics;
 
 import Objects.*;
+import com.mygdx.game.Variables;
 
 public class VerletSolver implements PhysicsEngine{
     private double step_size = 0.1;
@@ -23,11 +24,11 @@ public class VerletSolver implements PhysicsEngine{
         final_v = initial_v.add((initial_acc.add(acc).multiply(step_size).multiply(0.5)));//v+= 0.5*timeStep*(newA+acceleration)
         initial_acc = acc;
 
-        if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
+        if (ball.getLocation().getX() > Variables.upperBound.x ||ball.getLocation().getX() < Variables.lowerBound.x || ball.getLocation().getX() < 0) {
             final_v.setX(- 1 * final_v.getX()) ;
         }
 
-        if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
+        if (ball.getLocation().getY() > Variables.upperBound.y|| ball.getLocation().getY() < Variables.lowerBound.y|| ball.getLocation().getY() < 0) {
             final_v.setY(- 1 * final_v.getY());
         }
 
