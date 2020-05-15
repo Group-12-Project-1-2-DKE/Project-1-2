@@ -38,6 +38,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private EulerSolver eulerSolver;
 	private RungeKuttaSolver rungeKuttaSolver;
 	private PhysicsEngine engine;
+	private VerletSolver verletSolver;
 	private StraighGreedy ai;
 
 	private Environment environment;
@@ -83,7 +84,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
 
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
-
+		ai = new StraighGreedy();
 
 		if (Variables.euler == true) {
 			eulerSolver = new EulerSolver();
@@ -99,6 +100,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			rungeKuttaSolver.set_grav_constant(9.81);
 			engine = rungeKuttaSolver;
 			System.out.println("runge kutta solver is selected");
+		}
+		else if (Variables.verlet == true) {
+			verletSolver = new VerletSolver();
+			verletSolver.set_step_size(0.01);
+			verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
+			verletSolver.set_grav_constant(9.81);
+			engine = verletSolver;
+			System.out.println("verlet solver is selected");
 		}
 
 		simulator = new PuttingSimulator(course, engine);
@@ -222,6 +231,10 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		shoot.addListener(new ClickListener() {
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+				if(Variables.ai== true){
+					shoot.setDisabled(true);
+					shoot.setVisible(false);
+				}
 				ballReachedFlag = true;
 				shoot.setVisible(false);
 				course.getBall().hit();
@@ -270,21 +283,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 
 		if (true && ballReachedFlag) {
-			if(Variables.ai == true){
-				try{
-					long start = System.currentTimeMillis();
-					if (myVector==null) {
-						myVector=simulator.take_shotSlowly(ai.calculate_turn(course,500),50);
-					}else {
-						myVector=simulator.take_shotSlowly(myVector, 50);
-					}
-				} catch (StackOverflowError s){
-
-				}
-			}else
 			try {
 				long start = System.currentTimeMillis();
 				if (myVector == null) {
+					if(Variables.ai == true){
+						Vector2D aiVec = ai.calculate_turn(course,500);
+						myVector = simulator.take_shotSlowly(aiVec,50);
+						System.out.println("ai worksss");
+					}
 					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
 				} else {
 					myVector = simulator.take_shotSlowly(myVector, 50);
@@ -331,9 +337,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		label.setText(stringBuilder);
 		stage.draw();
 
-
-
-		System.out.println(course.evaluate(new Vector2D(-40,10)));
+		
 
 	}
 
