@@ -53,7 +53,7 @@ public class OptionScreen implements Screen {
 
         // Create a reader object and make it read a certain file with the default values on it.
         reader = new FileReaders();
-        reader.read("banana.txt");
+        //reader.read("banana.txt");
 
         // Give to the variables a value (picture from assets folder).
         playButtonActive = new Texture("play_button_active.png");

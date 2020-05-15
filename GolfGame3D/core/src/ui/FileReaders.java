@@ -1,7 +1,7 @@
 package ui;
 
 import com.mygdx.game.Variables;
-import org.graalvm.compiler.lir.Variable;
+//import org.graalvm.compiler.lir.Variable;
 
 import java.util.*;
 import java.io.*;
