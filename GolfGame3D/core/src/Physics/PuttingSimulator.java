@@ -56,12 +56,17 @@ public class PuttingSimulator{
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
-        shot_counter++;
+        shot_counter++;//NaN zwik
         Vector2D next_velocity = initial_ball_velocity;
         course.getBall().hit();
+
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
 
+            if (Double.isNaN(next_velocity.getX()) || Double.isNaN(next_velocity.getY())){
+                System.out.println("Something went wrong! NaN");
+                break;
+            }
         }
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
