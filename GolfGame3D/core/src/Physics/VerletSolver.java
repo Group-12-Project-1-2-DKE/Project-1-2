@@ -1,16 +1,14 @@
 package Physics;
 
 import Objects.*;
-import com.mygdx.game.Variables
+import com.mygdx.game.Variables;
 
 public class VerletSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typically 0.065<=mu<=0.196
     private double grav_constant = 9.81;
-    private double max_error = 0.1
+    private double max_error = 0.1;
     private Vector2D initial_acc = new Vector2D(0,0);
-
-    int cnt = 0;
 
     public VerletSolver(){
 
@@ -35,12 +33,6 @@ public class VerletSolver implements PhysicsEngine{
             final_v.setY(- 1 * final_v.getY());
         }
 
-        if(cnt%100000 == 0||cnt%100001==0){
-            System.out.println("a:"+acc);
-        }
-        cnt++;
-
-        //calculateShot(final_v, ball, course);
         if (final_v.length() < max_error && initial_v.add(final_v.multiply(-1)).length() < max_error){
             ball.putAtRest();
             return new Vector2D(0, 0);
