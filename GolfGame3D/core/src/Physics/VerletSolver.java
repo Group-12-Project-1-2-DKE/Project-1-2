@@ -1,16 +1,12 @@
 package Physics;
 
 import Objects.*;
-import com.mygdx.game.Variables;
 
 public class VerletSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typically 0.065<=mu<=0.196
     private double grav_constant = 9.81;
-    private double max_error = 0.1;
     private Vector2D initial_acc = new Vector2D(0,0);
-
-    int cnt = 0;
 
     public VerletSolver(){
 
@@ -20,28 +16,23 @@ public class VerletSolver implements PhysicsEngine{
         Vector2D acc = calculate_acc(course, initial_v, ball);
 
         //newPosition+=timeStep*(velocity+acceleration*timeStep*0.5);
-        ball.setLocation(ball.getLocation().add(initial_v.add(initial_acc.multiply(step_size).multiply(0.5)).multiply(0.5)));
+        ball.setLocation(ball.getLocation().add(initial_v.add(initial_acc.multiply(step_size).multiply(0.5)).multiply(step_size)));
 
         //v+= 0.5*timeStep*(newA+acceleration)
         Vector2D final_v = new Vector2D(0, 0);
-        final_v = initial_v.add((initial_acc.add(acc).multiply(step_size).multiply(0.5)));//v+= 0.5*timeStep*(newA+acceleration)
+        final_v = initial_v.add((initial_acc.add(acc).multiply(step_size).multiply(0.5)));
         initial_acc = acc;
 
-        if (ball.getLocation().getX() > Variables.upperBound.getX() || ball.getLocation().getX() < Variables.lowerBound.getX()) {
+        if (ball.getLocation().getX() > 900 || ball.getLocation().getX() < 0) {
             final_v.setX(- 1 * final_v.getX()) ;
         }
 
-        if (ball.getLocation().getY() > Variables.upperBound.getY() || ball.getLocation().getY() < Variables.lowerBound.getY()) {
+        if (ball.getLocation().getY() > 700 || ball.getLocation().getY() < 0) {
             final_v.setY(- 1 * final_v.getY());
         }
 
-        if (cnt%100000 == 0||cnt%100001==0){
-            System.out.println("a:"+acc);
-        }
-        cnt++;
-
         //calculateShot(final_v, ball, course);
-        if (final_v.length() < max_error && initial_v.add(final_v.multiply(-1)).length() < max_error){// || course.gradient(ball.getLocation()).length() < max_error)) {
+        if ((int)(final_v.length() * 10) == 0 && (int)(initial_acc.length() * 10) == 0) {
             ball.putAtRest();
             return new Vector2D(0, 0);
 
@@ -62,7 +53,7 @@ public class VerletSolver implements PhysicsEngine{
     }
 
     public void set_max_error(double error) {
-        max_error = error;
+
     }
 
     public Vector2D calculate_acc(Function2D height, Vector2D initial_v, Ball ball){
