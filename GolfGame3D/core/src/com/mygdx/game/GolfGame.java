@@ -34,7 +34,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private PuttingSimulator simulator;
 	private Ball gameBall;
 	private Boolean ballReachedFlag = false;
-	private Vector2D ballPos;
 	private EulerSolver eulerSolver;
 	private RungeKuttaSolver rungeKuttaSolver;
 	private PhysicsEngine engine;
@@ -48,13 +47,10 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private Model model;
 	public static ModelInstance ball;
-	private ModelInstance ground;
 	private ModelInstance flag;
 	private ModelInstance groundPieces;
-	private ModelInstance fl;
 	private ModelBatch modelBatch;
 	private ArrayList<ModelInstance> instances;
-
 
 	private Stage stage;
 	private Label label;
@@ -66,7 +62,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private TextButton shoot;
 	private TextField dirX;
 	private TextField dirY;
-	private TextField speed;
 
 	private Vector3 position = new Vector3();
 	private boolean gameOver = false;
@@ -112,7 +107,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		simulator = new PuttingSimulator(course, engine);
 
-		ballPos = course.getStart();
 		position = new Vector3((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) course.getStart().getY());
 
 		stage = new Stage();
@@ -156,7 +150,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "ball";
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.WHITE))).sphere(0.5f, 0.5f, 0.5f, 10, 10);
+				new Material(TextureAttribute.createDiffuse(ballTex))).sphere(0.5f, 0.5f, 0.5f, 10, 10);
 
 		modelBuilder.node().id = "flagPole";
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
@@ -164,7 +158,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.FOREST))).sphere(0.5f, 0.5f, 0.5f, 5, 5);
+				new Material(TextureAttribute.createDiffuse(fieldTex))).sphere(0.5f, 0.5f, 0.5f, 5, 5);
 
 		modelBuilder.node().id = "flag";
 		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.YELLOW)))
@@ -173,7 +167,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
-		ground = new ModelInstance(model, "ground");
 		flag = new ModelInstance(model, "flagPole");
 		ModelInstance flagg = new ModelInstance(model,"flag");
 
@@ -198,11 +191,9 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 			}
 		}
-		Variables.lowerBound = new Vector2D(-40, -40);
-		Variables.upperBound = new Vector2D(10,10);
+		Variables.lowerBound = new Vector2D(-40, course.evaluate(new Vector2D(-40, -40)));
+		Variables.upperBound = new Vector2D(10,course.evaluate(new Vector2D(10,10)));
 
-		System.out.println( "1 : " + course.evaluate(new Vector2D(-40,40)));
-		System.out.println("2 : " + course.evaluate(new Vector2D(10,10)));
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
@@ -332,13 +323,9 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 
 		stringBuilder.setLength(0);
-		stringBuilder.append("FPS : ").append(Gdx.graphics.getFramesPerSecond());
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
-
-		
-
 	}
 
 	@Override
@@ -402,18 +389,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		} catch (StackOverflowError s) {
 			System.out.println(s);
 		}
-	}
-
-	public void setLowerBound(){
-		Variables.lowerBound = new Vector2D(-40, -40);
-	}
-
-	public void setUpperBound(){
-		Variables.upperBound = new Vector2D(10,10);
-	}
-
-	public Vector3 getUpperBound(){
-		return new Vector3(10,(float)course.evaluate(new Vector2D(10,10)),10);
 	}
 
 }
