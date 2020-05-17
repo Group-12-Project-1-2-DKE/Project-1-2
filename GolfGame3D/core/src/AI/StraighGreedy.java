@@ -14,10 +14,6 @@ public class StraighGreedy implements AI{
         h.getBall().setLocation(h.getStart());
 
         int steps = 500;
-        //double[] heights = s.getHeights(h, h.getBall().getLocation(), h.getFlag(), steps);
-        //System.out.println(Arrays.toString(heights));
-        //Vector2D[] gradients = s.getGradients(h, h.getBall().getLocation(), h.getFlag(), steps);
-        //System.out.println(Arrays.toString(gradients));
 
         PhysicsEngine r = new RungeKuttaSolver();
         r.set_fric_coefficient(h.getFrictionCoefficient());
@@ -33,14 +29,9 @@ public class StraighGreedy implements AI{
         shot = s.calculate_turn(h, steps);
         System.out.println(shot);
 
-        p.take_shot(shot);//test this shit
+        p.take_shot(shot);
 
         h.getBall().setLocation(h.getStart());
-
-        //shot = s.calculate_turn(h, steps);
-        //System.out.println(shot);
-
-        //p.take_shot(shot);
     }
 
     /**
@@ -65,12 +56,8 @@ public class StraighGreedy implements AI{
         Ffric = Ffric.multiply(1/(direction.length()*steps));
 
         Vector2D[] gradients = getGradients(course, begin, end, steps);
-        //double[] heights = getHeights(course, begin, end, steps);
         Vector2D returnvec = new Vector2D(0, 0);
         for (int i = 0; i < gradients.length - 1; i++){
-            //double h = heights[i];
-            //double h2 = heights[i+1];
-            //double difference = h2 - h;
             Vector2D gradient = gradients[i];//new Vector2D(difference/scaled_direction.getX(), difference/scaled_direction.getY());
             Vector2D Fgrav = gradient.multiply(-ball.getMass() * grav_constant);
 
@@ -81,7 +68,6 @@ public class StraighGreedy implements AI{
                     -Math.signum(Fresist.getX())*Math.sqrt(Math.abs(-2*scaled_direction.getX()*Fresist.getX()/course.getBall().getMass())),
                     -Math.signum(Fresist.getY())*Math.sqrt(Math.abs(-2*scaled_direction.getY()*Fresist.getY()/course.getBall().getMass()))
             );
-
             //check if sub_v0 is in the same direction as direction. if it's opposite, make it 0
             if (sub_v0.getX() * direction.getX() < 0){
                 sub_v0.setX(0);
@@ -89,7 +75,6 @@ public class StraighGreedy implements AI{
             if (sub_v0.getY() * direction.getY() < 0){
                 sub_v0.setY(0);
             }
-
             returnvec = returnvec.add(sub_v0);
         }
         return returnvec;
@@ -107,7 +92,6 @@ public class StraighGreedy implements AI{
         Vector2D begin = ball.getLocation();
         Vector2D end = course.getFlag();
         Vector2D direction = end.add(begin.multiply(-1));
-        double step_size = direction.length()/steps;
         Vector2D scaled_direction = direction.multiply(1/(double)steps);
         Vector2D Ffric = direction.multiply(-ball.getMass() * grav_constant * course.getFrictionCoefficient());
         Vector2D Fresist = new Vector2D(0,0);
@@ -137,9 +121,7 @@ public class StraighGreedy implements AI{
             accY -= acc.getY();
             accY *= 2;
         }
-
         returnvec = acc.multiply((2*direction.length()));
-        // returnvec = returnvec.sqrt();
 
         if(accX == acc.getX()){
             returnvec.setY(returnvec.getY()+acc.getY());
@@ -147,18 +129,7 @@ public class StraighGreedy implements AI{
         else if(accY == acc.getY()){
             returnvec.setX(returnvec.getX()+acc.getX());
         }
-
         return returnvec;
-            /*
-            if (acc.getX() * scaled_direction.getX() < 0){
-                returnvec.setX(returnvec.getX() - acc.getX());
-            }
-            if (acc.getY() * scaled_direction.getY() < 0){
-                returnvec.setY(returnvec.getY() - acc.getY());
-            }
-             */
-
-
     }
 
     /**
@@ -169,8 +140,8 @@ public class StraighGreedy implements AI{
         double[] heights = new double[steps + 1];
         Vector2D difference = end.add(begin.multiply(-1));
         Vector2D step = difference.multiply(1/(double)steps);
-
         Vector2D current_step = begin.clone();
+
         for (int i = 0; i < heights.length; i++){
             heights[i] = course.evaluate(current_step);
             current_step = current_step.add(step);

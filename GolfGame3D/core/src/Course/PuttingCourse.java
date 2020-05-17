@@ -27,9 +27,6 @@ public class PuttingCourse implements Function2D{
     private String equation;
     private String[][][] components;
     private double limstep = 0.0000000001;
-    private final int xUpBoundary = 200;
-    private final int yUpBoundary = 200;
-
 
     /**
      * Main method for testing
@@ -37,9 +34,6 @@ public class PuttingCourse implements Function2D{
     public static void main(String[] args){
         PuttingCourse h = new PuttingCourse("2*x^0.5 + -1*y^-3", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
-
-        //Color[][] c = h.calculate_colors();
-        //System.out.println(c[0][0] + " " + c[0][1]);
     }
 
     /**
@@ -62,29 +56,6 @@ public class PuttingCourse implements Function2D{
         setEquation(equation);
     }
 
-    //This method is not really used
-    /*
-    public Color[][] calculate_colors(){
-        double height;
-        float g;
-        Color[][] colors = new Color[xUpBoundary][yUpBoundary];
-        for (int i = 0; i < xUpBoundary; i++){
-            for (int j = 0; j < yUpBoundary; j++){
-                height = evaluate(new Vector2D(i, j));
-                if (height >= 10){
-                    height = 10;
-                }
-                if (height <= -5){
-                    height = -5;
-                }
-                g = (float)((height + 5) * (255/15.0));
-                Color c = new Color(0, g, 0, 1);
-                colors[(int)(i)][(int)(j)] = c;
-            }
-        }
-        return colors;
-    }
-     */
 
     public ArrayList<ModelInstance> getCourseShape(Model model){
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -112,7 +83,6 @@ public class PuttingCourse implements Function2D{
      * @return gradient
      */
     public Vector2D gradient(Vector2D p){
-        //TODO: Maybe we need to change this to a method from NM to make it more accurate
         double x_derivative = (evaluate(new Vector2D(p.getX() + limstep, p.getY())) - evaluate(p)) / limstep;
         double y_derivative = (evaluate(new Vector2D(p.getX(), p.getY() + limstep)) - evaluate(p)) / limstep;
 
@@ -157,7 +127,7 @@ public class PuttingCourse implements Function2D{
         try{
             return Double.parseDouble(s);
         } catch (Exception e){ //Didn't know the right exception, so I just put Exception here
-            //System.out.println("oof");
+
             if ("x".equals(s)){
                 return p.getX();
             } else if ("y".equals(s)){
@@ -175,14 +145,12 @@ public class PuttingCourse implements Function2D{
         equation = equation.replaceAll(" ","");
 
         components = parseEquation(equation);
-        //System.out.println(Arrays.deepToString(components));
     }
 
     private String[][][] parseEquation(String eq){
         String[] plus_c = eq.split("\\+");
         String[][][] comps = new String[plus_c.length][][];
 
-        //TODO: Implement sin and cos and stuff
         for (int i = 0; i < plus_c.length; i++){
             String p = plus_c[i];
             String[] times_c = p.split("\\*");

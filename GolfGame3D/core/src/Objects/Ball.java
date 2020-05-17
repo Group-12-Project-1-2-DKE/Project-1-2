@@ -120,8 +120,8 @@ public class Ball {
      * method that applies a given force to move a ball
      *
      */
-    public void hit() {//Vector2D force){
-        //this.velocity = force;
+    public void hit() {
+
         atRest = false;
         isHit = true;
     }
