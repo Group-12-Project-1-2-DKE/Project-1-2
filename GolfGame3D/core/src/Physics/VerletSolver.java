@@ -17,12 +17,9 @@ public class VerletSolver implements PhysicsEngine{
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course){
         Vector2D acc = calculate_acc(course, initial_v, ball);
 
-        //newPosition+=timeStep*(velocity+acceleration*timeStep*0.5);
         ball.setLocation(ball.getLocation().add(initial_v.add(initial_acc.multiply(step_size).multiply(0.5)).multiply(step_size)));
 
-        //v+= 0.5*timeStep*(newA+acceleration)
-        Vector2D final_v = new Vector2D(0, 0);
-        final_v = initial_v.add((initial_acc.add(acc).multiply(step_size).multiply(0.5)));
+        Vector2D final_v = initial_v.add((initial_acc.add(acc).multiply(step_size).multiply(0.5)));
         initial_acc = acc;
 
         if (ball.getLocation().getX() > Variables.upperBound.getX() || ball.getLocation().getX() < Variables.lowerBound.getX()) {

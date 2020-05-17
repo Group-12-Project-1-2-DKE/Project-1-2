@@ -32,9 +32,6 @@ public class RungeKuttaSolver implements PhysicsEngine{
 
         if (final_v.length() < max_error && /*k.length()*/initial_v.add(final_v.multiply(-1)).length() < max_error) {
             ball.putAtRest();
-            //System.out.println("l: " + ball.getLocation());
-            //System.out.println("v: " + final_v);
-            //System.out.println("a: " + k);
             return new Vector2D(0, 0);
         }
         return final_v;

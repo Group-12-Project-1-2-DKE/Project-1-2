@@ -3,8 +3,6 @@ package Physics;
 import com.mygdx.game.GolfGame;
 
 import Course.PuttingCourse;
-import Objects.*;
-import com.mygdx.game.Variables;
 
 import static com.mygdx.game.GolfGame.ball;
 
