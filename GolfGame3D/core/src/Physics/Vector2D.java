@@ -29,6 +29,13 @@ public class Vector2D{
         return new Vector2D(this.getX() + vector.getX(), this.getY()+ vector.getY());
     }
 
+    public Vector2D sqrt() {
+        double length = Math.sqrt(this.length());
+        double x = length * this.x/this.y;
+        double y = length * this.y/this.x;
+        return new Vector2D(x, y);
+    }
+
     public Vector2D multiply(double factor){
         return new Vector2D(x * factor, y * factor);
     }
@@ -39,9 +46,5 @@ public class Vector2D{
 
     public String toString(){
         return "(" + x + ", " + y + ")";
-    }
-
-    public Vector2D clone(){
-        return new Vector2D(x, y);
     }
 }
