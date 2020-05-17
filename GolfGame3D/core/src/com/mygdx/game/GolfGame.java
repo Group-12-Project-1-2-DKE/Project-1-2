@@ -64,7 +64,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 	private TextField dirY;
 
 	private Vector3 position = new Vector3();
-	private boolean gameOver = false;
 	public int attempt = 0;
 
 
@@ -87,22 +86,18 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			eulerSolver.set_grav_constant(9.81);
 			engine = eulerSolver;
-			System.out.println("euler solver is selected");
 		} else if (Variables.rungeKutta == true) {
 			rungeKuttaSolver = new RungeKuttaSolver();
 			rungeKuttaSolver.set_step_size(0.01);
 			rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			rungeKuttaSolver.set_grav_constant(9.81);
 			engine = rungeKuttaSolver;
-			System.out.println("runge kutta solver is selected");
-		}
-		else if (Variables.verlet == true) {
+		} else if (Variables.verlet == true) {
 			verletSolver = new VerletSolver();
 			verletSolver.set_step_size(0.01);
 			verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			verletSolver.set_grav_constant(9.81);
 			engine = verletSolver;
-			System.out.println("verlet solver is selected");
 		}
 
 		simulator = new PuttingSimulator(course, engine);
@@ -179,8 +174,8 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		instances.add(flagg);
 
 
-		for (float j = -40f; j <= 10; j = j + 0.3f) {
-			for (float i = -40f; i <= 10; i = i + 0.3f) {
+		for (float j = -10f; j <= 40; j = j + 0.3f) {
+			for (float i = -10f; i <= 40; i = i + 0.3f) {
 				Vector3 pos = new Vector3(i, (float) course.evaluate(new Vector2D(i, j)), j);
 				groundPieces = new ModelInstance(model, "groundPieces");
 				if (pos.equals(new Vector3((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 4f, (float) course.getFlag().getY()))) {
@@ -262,7 +257,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 			this.dispose();
 			game.setScreen(new Congrat(game, attempt));
-			gameOver = true;
 			System.out.println("Ball reached to the flag");
 		} else {
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
@@ -297,7 +291,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 
 		if (myVector != null) {
-			camera.translate((float) myVector.getX() / 100, 0, 0);
+			camera.translate((float) myVector.getX() / 100,0, (float) myVector.getY()/100);
 		}
 
 		camera.lookAt((float) course.getBall().getLocation().getX(), -(float) course.getBall().getLocation().getY(), 0.0f);
@@ -315,16 +309,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		}
 		modelBatch.end();
 
-		if (gameOver) {
-			this.dispose();
-
-			game.setScreen(new Congrat(game, attempt));
-		}
-
 		stringBuilder.setLength(0);
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
+
 	}
 
 	@Override
