@@ -8,11 +8,6 @@ public class EulerSolver implements PhysicsEngine{
     private double grav_constant = Variables.gravity;
     private double max_error = 0.1;
 
-
-    public EulerSolver(){
-
-    }
-
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course){
         Vector2D acc = calculate_acc(course, initial_v, ball).multiply(step_size);
 
