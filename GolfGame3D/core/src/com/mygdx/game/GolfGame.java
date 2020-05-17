@@ -191,7 +191,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 			}
 		}
-		Variables.lowerBound = new Vector2D(-100,100);
+		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
 
 		environment = new Environment();
