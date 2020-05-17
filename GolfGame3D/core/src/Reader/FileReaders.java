@@ -1,4 +1,4 @@
-package ui;
+package Reader;
 
 import com.mygdx.game.Variables;
 //import org.graalvm.compiler.lir.Variable;
@@ -7,21 +7,7 @@ import java.util.*;
 import java.io.*;
 
 public class FileReaders{
-    //private double gravity;
-            //private double diameter;
-    //private double mass;
-            //private double coeficientOfFriction;
-            //private double initialSpeed;
-    //private double tolerance;
-    //private double xStart;
-    //private double yStart;
-    //private double xGoal;
-    //private double yGoal;
-    //private String function;
-    //private double maxVelocity;
 
-    //private double xVelocity;
-    //private double yVelocity;
 
     public FileReaders(){
     }
@@ -30,7 +16,7 @@ public class FileReaders{
         // Get the path of the project on the computer
         String path = System.getProperty("user.dir");
         // Specify he path to be the path of the file
-        path = path + "\\core\\src\\ui\\" + fileName;
+        path = path + "\\core\\src\\Reader\\" + fileName;
         File file = new File(path);//path + "\\core\\src\\ui\\" + fileName);
 
         // If the file doesn't exist print error.
