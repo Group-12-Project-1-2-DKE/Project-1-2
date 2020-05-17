@@ -3,15 +3,19 @@ package AI;
 import Course.PuttingCourse;
 import Objects.Ball;
 import Physics.*;
+import com.mygdx.game.Variables;
 
 import java.util.Arrays;
 
 public class StraighGreedy implements AI{
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.02*x^2+0.02*y^2", new Vector2D(58,94), new Vector2D(37,9),
+        PuttingCourse h = new PuttingCourse("0.001*x + -0.002*y+2.5+ 0.0001*x^2", new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 1.3, (float)0.5), 0.1, 4, 4);
         StraighGreedy s = new StraighGreedy();
         h.getBall().setLocation(h.getStart());
+
+        Variables.lowerBound = new Vector2D(-100, -100);
+        Variables.upperBound = new Vector2D(100, 100);
 
         int steps = 500;
 
@@ -97,13 +101,10 @@ public class StraighGreedy implements AI{
         Vector2D Fresist = new Vector2D(0,0);
         Vector2D Ftotal = new Vector2D(0,0);
         Vector2D returnvec = new Vector2D(direction.getX(), direction.getY());
-        double[] heights = getHeights(course, begin, end, steps);
+        Vector2D[] gradients = getGradients(course, begin, end, steps);
 
-        for (int i = 0; i < heights.length - 1; i++) {
-            double h = heights[i];
-            double h2 = heights[i + 1];
-            double difference = h2 - h;
-            Vector2D gradient = new Vector2D(difference / scaled_direction.getX(), difference / scaled_direction.getY());
+        for (int i = 0; i < gradients.length - 1; i++) {
+            Vector2D gradient = gradients[i];//new Vector2D(difference / scaled_direction.getX(), difference / scaled_direction.getY());
             Vector2D Fgrav = gradient.multiply(-ball.getMass() * grav_constant);
             Fresist = Ffric.add(Fgrav);
             Ftotal = Ftotal.add(Fresist);
@@ -122,6 +123,7 @@ public class StraighGreedy implements AI{
             accY *= 2;
         }
         returnvec = acc.multiply((2*direction.length()));
+        returnvec = returnvec.sqrt();
 
         if(accX == acc.getX()){
             returnvec.setY(returnvec.getY()+acc.getY());
