@@ -191,16 +191,14 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 			}
 		}
-		Variables.lowerBound = new Vector2D(-40, course.evaluate(new Vector2D(-40, -40)));
-		Variables.upperBound = new Vector2D(10,course.evaluate(new Vector2D(10,10)));
-
+		Variables.lowerBound = new Vector2D(-100,100);
+		Variables.upperBound = new Vector2D(100,100);
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
-
 
 		TextArea dirxText = new TextArea("Direction x:", skin1);
 		dirxText.setDisabled(true);
@@ -212,7 +210,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
 		diryText.setSize(100, 30);
 		stage.addActor(diryText);
-
 
 		shoot = new TextButton("Shoot", skin1);
 		shoot.setDisabled(true);
@@ -279,7 +276,9 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				if (myVector == null) {
 					if(Variables.ai == true){
 						Vector2D aiVec = ai.calculate_turn(course,500);
-						myVector = simulator.take_shotSlowly(aiVec,50);
+						dirX.setText("" + aiVec.getX());
+						dirY.setText("" + aiVec.getY());
+						myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
 						System.out.println("ai worksss");
 					}
 					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
