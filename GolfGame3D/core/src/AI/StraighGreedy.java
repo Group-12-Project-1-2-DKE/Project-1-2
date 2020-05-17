@@ -8,36 +8,6 @@ import com.mygdx.game.Variables;
 import java.util.Arrays;
 
 public class StraighGreedy implements AI{
-    public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.001*x + -0.002*y+2.5+ 0.0001*x^2", new Vector2D(0,0), new Vector2D(10,10),
-                new Ball(new Vector2D(0,0), 1.3, (float)0.5), 0.1, 4, 4);
-        StraighGreedy s = new StraighGreedy();
-        h.getBall().setLocation(h.getStart());
-
-        Variables.lowerBound = new Vector2D(-100, -100);
-        Variables.upperBound = new Vector2D(100, 100);
-
-        int steps = 500;
-
-        PhysicsEngine r = new RungeKuttaSolver();
-        r.set_fric_coefficient(h.getFrictionCoefficient());
-        r.set_grav_constant(9.81);
-
-        PuttingSimulator p = new PuttingSimulator(h, r);
-
-        Vector2D shot = s.calculate_turn(h, steps);
-        System.out.println(shot);
-
-        p.take_shot(shot);
-
-        shot = s.calculate_turn(h, steps);
-        System.out.println(shot);
-
-        p.take_shot(shot);
-
-        h.getBall().setLocation(h.getStart());
-    }
-
     /**
      * Calculates the approximate initial velocity to calculate a hole-in-one.
      * Algorithm is greedy, so probably inaccurate.
@@ -62,7 +32,7 @@ public class StraighGreedy implements AI{
         Vector2D[] gradients = getGradients(course, begin, end, steps);
         Vector2D returnvec = new Vector2D(0, 0);
         for (int i = 0; i < gradients.length - 1; i++){
-            Vector2D gradient = gradients[i];//new Vector2D(difference/scaled_direction.getX(), difference/scaled_direction.getY());
+            Vector2D gradient = gradients[i];
             Vector2D Fgrav = gradient.multiply(-ball.getMass() * grav_constant);
 
             Vector2D Fresist = Ffric.add(Fgrav.multiply(1/(double)steps));
@@ -82,23 +52,6 @@ public class StraighGreedy implements AI{
             returnvec = returnvec.add(sub_v0);
         }
         return returnvec;
-    }
-
-    /**
-     * method to get the heights to provide in calculate_turn method in ai
-     * @return an array of heights of the map
-     */
-    private double[] getHeights(Function2D course, Vector2D begin, Vector2D end, int steps) {
-        double[] heights = new double[steps + 1];
-        Vector2D difference = end.add(begin.multiply(-1));
-        Vector2D step = difference.multiply(1/(double)steps);
-        Vector2D current_step = begin.clone();
-
-        for (int i = 0; i < heights.length; i++){
-            heights[i] = course.evaluate(current_step);
-            current_step = current_step.add(step);
-        }
-        return heights;
     }
 
     /**
