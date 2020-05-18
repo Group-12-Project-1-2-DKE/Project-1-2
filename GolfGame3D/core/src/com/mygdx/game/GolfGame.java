@@ -63,13 +63,12 @@ public class GolfGame implements Screen {
 
 	private Vector3 position = new Vector3();
 	public int attempt = 0;
-	private boolean gameOver = false;
 
 
 	public GolfGame(ScreenSpace game) {
 		this.game = game;
 
-		gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5); //i entered some random values
+		gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
 		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
 
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
@@ -272,8 +271,6 @@ public class GolfGame implements Screen {
 				(course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
-			gameOver = true;
-			//this.dispose();
 			game.setScreen(new Congrat(game,attempt));
 
 		} else {
