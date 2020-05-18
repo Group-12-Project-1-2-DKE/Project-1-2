@@ -37,6 +37,12 @@ public class Congrat implements Screen {
         exitButtonInactive = new Texture("exit_logo_inactive.png");
         replayButtonActive = new Texture("replay_button_active.png");
         replayButtonInactive = new Texture ("replay_button_inactive.png");
+
+        FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter1.size = 80;
+        font = font1.generateFont(parameter1);
+        font.setColor(Color.WHITE);
     }
 
     @Override
@@ -49,14 +55,9 @@ public class Congrat implements Screen {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
+        
         game.batch.draw(gameOverPicture, ScreenSpace.WIDTH / 2 - OVER_IMAGE_WIDTH / 2, 450, OVER_IMAGE_WIDTH, OVER_IMAGE_HEIGHT);
 
-        FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter1.size = 80;
-        font = font1.generateFont(parameter1);
-        font.setColor(Color.WHITE);
-        font1.dispose();
         font.draw(game.batch,"You shot :", 170,450);
         font.draw(game.batch, Integer.toString(attempt) , ScreenSpace.WIDTH / 2,350);
         font.draw(game.batch,"times !!", 200,250);
