@@ -148,7 +148,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 		modelBuilder.node().id = "flagPole";
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(0.2f, 2f, 0.2f, 10);
+				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(Variables.tolerance, 0.1f, Variables.tolerance, 10);
 
 		modelBuilder.node().id = "groundPieces";
 		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
@@ -166,11 +166,11 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
         flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
-		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1.5f, (float) course.getFlag().getY());
+		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
 		instances.add(ball);
 		instances.add(flag);
-		instances.add(flagg);
+
 
 		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
 		int chunkSize = 5;
@@ -279,8 +279,6 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
 
-			this.dispose();
-			game.setScreen(new Congrat(game, attempt));
 			System.out.println("Ball reached to the flag");
 		} else {
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
@@ -318,7 +316,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			camera.translate((float) myVector.getX() / 100,0, (float) myVector.getY()/100);
 		}
 
-		camera.lookAt((float) course.getBall().getLocation().getX(), -(float) course.getBall().getLocation().getY(), 0.0f);
+		camera.lookAt((float) course.getBall().getLocation().getX(),-(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())), (float)course.getBall().getLocation().getY());
 		camera.update();
 		cameraInputController.update();
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
