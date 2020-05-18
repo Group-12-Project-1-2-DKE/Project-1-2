@@ -150,11 +150,13 @@ public class OptionScreen implements Screen {
             if (Gdx.input.isTouched()){
                 Variables.gravity = Float.parseFloat(gravity.getText());
                 Variables.ballMass = Float.parseFloat(ballMass.getText());
+                Variables.tolerance = Float.parseFloat(tolerance.getText());
                 Variables.function = function.getText();
                 Variables.goalX = Float.parseFloat(goalX.getText());
                 Variables.goalY = Float.parseFloat(goalY.getText());
                 Variables.startX = Float.parseFloat(startX.getText());
                 Variables.startY = Float.parseFloat(startY.getText());
+
 
                 this.dispose();
                 hold.create();

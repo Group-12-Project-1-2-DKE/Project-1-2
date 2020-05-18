@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * class that contains the main game graphics
  */
-public class GolfGame extends Game implements ApplicationListener, Screen {
+public class GolfGame extends Game implements Screen {
 
 	private PuttingCourse course;
 	private PuttingSimulator simulator;
@@ -64,6 +64,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 
 	private Vector3 position = new Vector3();
 	public int attempt = 0;
+	private boolean gameOver = false;
 
 
 	public GolfGame() {
@@ -273,18 +274,22 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 		} else {
 			Gdx.input.setInputProcessor(cameraInputController);
 		}
-
 		if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
 				(course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
+			gameOver = true;
+			this.dispose();
+			Congrat cg = new Congrat(this.game,attempt);
+			cg.render(delta);
+			this.game.setScreen(cg);
 
-			System.out.println("Ball reached to the flag");
 		} else {
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
 					(float) course.getBall().getLocation().getY() + 2);
 
 		}
+
 
 		if (true && ballReachedFlag) {
 			try {
@@ -316,6 +321,7 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 			camera.translate((float) myVector.getX() / 100,0, (float) myVector.getY()/100);
 		}
 
+
 		camera.lookAt((float) course.getBall().getLocation().getX(),-(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())), (float)course.getBall().getLocation().getY());
 		camera.update();
 		cameraInputController.update();
@@ -329,7 +335,16 @@ public class GolfGame extends Game implements ApplicationListener, Screen {
 				modelBatch.render(instance, environment);
 			}
 		}
+
 		modelBatch.end();
+
+
+
+
+
+
+
+
 
 		stringBuilder.setLength(0);
 		stringBuilder.append("Equation : ").append(course.getEquation());
