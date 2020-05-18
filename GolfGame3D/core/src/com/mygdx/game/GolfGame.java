@@ -220,12 +220,12 @@ public class GolfGame extends Game implements Screen {
 
 		Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
 
-		TextArea dirxText = new TextArea("Direction x:", skin1);
+		TextArea dirxText = new TextArea("Vector x:", skin1);
 		dirxText.setDisabled(true);
 		dirxText.setPosition(0, ScreenSpace.HEIGHT - 30);
 		dirxText.setSize(100, 30);
 		stage.addActor(dirxText);
-		TextArea diryText = new TextArea("Direction y:", skin1);
+		TextArea diryText = new TextArea("Vector y:", skin1);
 		diryText.setDisabled(true);
 		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
 		diryText.setSize(100, 30);
