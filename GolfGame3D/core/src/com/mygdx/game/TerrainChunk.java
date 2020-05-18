@@ -38,8 +38,8 @@ public class TerrainChunk {
 
 
     private ModelInstance modelInstance;
-    private PuttingCourse course = new PuttingCourse(Variables.function,new Vector2D(Variables.startX,Variables.startY),new Vector2D(Variables.goalX,Variables.goalY), new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5),Variables.tolerance,100,Variables.tolerance );;
-
+    //private PuttingCourse course = new PuttingCourse(Variables.function,new Vector2D(Variables.startX,Variables.startY),new Vector2D(Variables.goalX,Variables.goalY), new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5),Variables.tolerance,100,Variables.tolerance );;
+    private PuttingCourse course;
 
     boolean sand;
 
@@ -49,7 +49,8 @@ public class TerrainChunk {
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
      */
-    public TerrainChunk(Vector2D position, int size) {
+    public TerrainChunk(Vector2D position, int size, PuttingCourse course) {
+        this.course = course;
 
         if ((size + 1) * (size + 1) > Short.MAX_VALUE) {
             throw new IllegalArgumentException(

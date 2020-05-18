@@ -33,7 +33,6 @@ public class PuttingSimulator{
         if (initial_ball_velocity.length() == 0){
             next_velocity = new Vector2D(0.00000001, 0.00000001);
         }
-        int cnt = 0;
         while (course.getBall().isHit()){
             next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
 
@@ -48,6 +47,9 @@ public class PuttingSimulator{
     public Vector2D take_shotSlowly(Vector2D initial_ball_velocity,int fifty) {
         Vector2D next_velocity = initial_ball_velocity;
 
+        if (initial_ball_velocity.length() == 0){
+            next_velocity = new Vector2D(0.00000001, 0.00000001);
+        }
         if (course.getBall().isHit() && counter <= fifty){
             counter++;
             if (counter <= 10){

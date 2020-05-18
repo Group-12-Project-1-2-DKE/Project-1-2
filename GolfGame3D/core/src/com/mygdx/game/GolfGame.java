@@ -69,7 +69,6 @@ public class GolfGame implements Screen {
 		this.game = game;
 
 		gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
-		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
 
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
 		ai = new StraighGreedy();
@@ -182,7 +181,7 @@ public class GolfGame implements Screen {
 		for(int x = 0; x < numberX; x++){
 			for(int y = 0; y < numberY; y++){
 				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
-				chunk = new TerrainChunk(currentPos, chunkSize);
+				chunk = new TerrainChunk(currentPos, chunkSize, course);
 				chunk.setLocation((float)course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
 				terrainChunks[x][y] = chunk;
 

@@ -17,7 +17,7 @@ public class StraighGreedy implements AI{
      */
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps){
-        double grav_constant = 9.81;
+        double grav_constant = Variables.gravity;
         Ball ball = course.getBall();
         Vector2D begin = ball.getLocation();//startlocation of the ball
         Vector2D end = course.getFlag();//location of the flag
