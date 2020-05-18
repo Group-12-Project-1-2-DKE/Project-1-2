@@ -1,16 +1,12 @@
 # Project-1-2
 Repository for Project 1-2 of DKE
 
-Work in progress. File does not run as one complete simulation.
+This is the Project 1-2, phase 2 of the group 12.
 
-Program can run in seperate parts.
-
-To launch the UI with working buttons and filereaders, do the following:
-1. Open the files, and search for the file SelectScreen.java (golf\core\src\ui\selectscreen.java)
-2. Run the main method in the SelectScreen.java file.
-
-// Mode 1 works fine including the filereader, Mode 2 shows a good working UI, but does not work due to small errors.
-
-To run the LibGDX, do the following.
-1. Open the files, and search for the file DesktopLauncher.java (golf\desktop\src\com\mygdx\game\desktop\DesktopLauncher.java)
-2. Execute the file.
+To run that project:
+  Run the main method in the DesktopLauncher
+  GolfGame3D/desktop/src/com/mygdx/game/desktop/DesktopLauncher.java
+  
+To choose the game mode and the physic engine:
+  There is an option button on the first screen that will appear when running the project.
+  Click on that button (picture of gearwheel) and choose the physic engine and the game mode.
