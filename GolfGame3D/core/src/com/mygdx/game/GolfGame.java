@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * class that contains the main game graphics
  */
-public class GolfGame extends Game implements Screen {
+public class GolfGame implements Screen {
 
 	private PuttingCourse course;
 	private PuttingSimulator simulator;
@@ -47,7 +47,6 @@ public class GolfGame extends Game implements Screen {
 	private Model model;
 	public static ModelInstance ball;
 	private ModelInstance flag;
-	private ModelInstance groundPieces;
 	private ModelBatch modelBatch;
 	private ArrayList<ModelInstance> instances;
 
@@ -67,13 +66,9 @@ public class GolfGame extends Game implements Screen {
 	private boolean gameOver = false;
 
 
-	public GolfGame() {
-	}
+	public GolfGame(ScreenSpace game) {
+		this.game = game;
 
-	@Override
-	public void create() {
-		game = new ScreenSpace();
-		game.setScreen(new MainMenu(game));
 		gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5); //i entered some random values
 		gameBall = new Ball(new Vector2D(4, 0), 0.9, 1);
 
@@ -165,7 +160,7 @@ public class GolfGame extends Game implements Screen {
 		flag = new ModelInstance(model, "flagPole");
 		ModelInstance flagg = new ModelInstance(model,"flag");
 
-        flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
+		flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
@@ -184,7 +179,7 @@ public class GolfGame extends Game implements Screen {
 		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
 
 
-        int count = 0;
+		int count = 0;
 		for(int x = 0; x < numberX; x++){
 			for(int y = 0; y < numberY; y++){
 				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
@@ -210,7 +205,7 @@ public class GolfGame extends Game implements Screen {
 				count++;
 			}
 		}
-		
+
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
 
@@ -267,7 +262,6 @@ public class GolfGame extends Game implements Screen {
 
 	@Override
 	public void render(float delta) {
-		super.render();
 		myDelta += delta;
 		if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > (ScreenSpace.HEIGHT) - 150) {
 			Gdx.input.setInputProcessor(stage);
@@ -279,10 +273,8 @@ public class GolfGame extends Game implements Screen {
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
 			gameOver = true;
-			this.dispose();
-			Congrat cg = new Congrat(this.game,attempt);
-			cg.render(delta);
-			this.game.setScreen(cg);
+			//this.dispose();
+			game.setScreen(new Congrat(game,attempt));
 
 		} else {
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
@@ -300,8 +292,8 @@ public class GolfGame extends Game implements Screen {
 						dirX.setText("" + aiVec.getX());
 						dirY.setText("" + aiVec.getY());
 						myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
-						System.out.println("ai worksss");
 					}
+					attempt++;
 					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
 				} else {
 					myVector = simulator.take_shotSlowly(myVector, 50);
@@ -338,18 +330,15 @@ public class GolfGame extends Game implements Screen {
 
 		modelBatch.end();
 
-
-
-
-
-
-
-
-
 		stringBuilder.setLength(0);
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage.draw();
+
+	}
+
+	@Override
+	public void resize(int i, int i1) {
 
 	}
 

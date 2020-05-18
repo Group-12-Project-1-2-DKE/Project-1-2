@@ -18,7 +18,6 @@ public class FileReaders{
         // Specify he path to be the path of the file
         path = path + "\\core\\src\\Reader\\" + fileName;
         File file = new File(path);//path + "\\core\\src\\ui\\" + fileName);
-        System.out.println(path);
 
         // If the file doesn't exist print error.
         if (!file.exists()) {

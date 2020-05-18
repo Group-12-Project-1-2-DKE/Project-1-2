@@ -11,12 +11,10 @@ public class PuttingSimulator{
     PhysicsEngine engine;
     int shot_counter = 0;
     int counter = 0;
-    private GolfGame game;
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){
         this.course = course;
         this.engine = engine;
-        game = new GolfGame();
     }
 
     public void setBallPosition(Vector2D vector){

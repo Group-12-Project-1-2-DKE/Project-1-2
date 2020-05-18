@@ -49,8 +49,6 @@ public class OptionScreen implements Screen {
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
-        hold = new GolfGame();
-
         // Create a reader object and make it read a certain file with the default values on it.
         reader = new FileReaders();
         reader.read("banana.txt");
@@ -159,8 +157,7 @@ public class OptionScreen implements Screen {
 
 
                 this.dispose();
-                hold.create();
-                game.setScreen(hold);
+                game.setScreen(new GolfGame(game));
 
             }
         } else {
