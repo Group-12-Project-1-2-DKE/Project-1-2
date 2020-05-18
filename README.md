@@ -7,6 +7,6 @@ To run that project:
   Run the main method in the DesktopLauncher
   GolfGame3D/desktop/src/com/mygdx/game/desktop/DesktopLauncher.java
   
-To choose the game mode and the physic engine:
+To choose the game mode and the physics engine:
   There is an option button on the first screen that will appear when running the project.
-  Click on that button (picture of gearwheel) and choose the physic engine and the game mode.
+  Click on that button (picture of gearwheel) and choose the physics engine and the game mode.
