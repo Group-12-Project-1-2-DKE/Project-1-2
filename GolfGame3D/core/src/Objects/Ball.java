@@ -4,7 +4,6 @@ import Physics.Vector2D;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.GolfGame;
 
 
@@ -157,17 +156,6 @@ public class Ball {
 
     public ModelInstance getModel() {
         return model;
-    }
-
-
-    public Vector2D getTopLeftEdge(){
-        Vector2D topLeft = new Vector2D((float)location.getX() - diameter /2, (float)location.getY() + diameter/2);
-        return topLeft;
-    }
-
-    public Vector2D getBottomRightEdge(){
-        Vector2D bottomRight = new Vector2D((float) location.getX() + diameter /2,(float)location.getY() - diameter/2);
-        return bottomRight;
     }
 }
 
