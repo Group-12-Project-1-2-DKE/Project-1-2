@@ -26,13 +26,13 @@ public class PuttingCourse implements Function2D{
     private double maxVelocity;
     private String equation;
     private String[][][] components;
-    private double limstep = 0.0000000001;
+    private double limstep = 0.0001;//Larger than 10^-4 or smaller than 10^-5 probably gives more error
 
     /**
      * Main method for testing
      */
     public static void main(String[] args){
-        PuttingCourse h = new PuttingCourse("2*x^0.5 + -1*y^-3", new Vector2D(0,0), new Vector2D(10,0),
+        PuttingCourse h = new PuttingCourse("2*x^2 + -1*y^-3", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
     }
 
@@ -83,10 +83,19 @@ public class PuttingCourse implements Function2D{
      * @return gradient
      */
     public Vector2D gradient(Vector2D p){
-        double x_derivative = (evaluate(new Vector2D(p.getX() + limstep, p.getY())) - evaluate(p)) / limstep;
-        double y_derivative = (evaluate(new Vector2D(p.getX(), p.getY() + limstep)) - evaluate(p)) / limstep;
+        double x = p.getX();
+        double y = p.getY();
+        //Five-point centred difference
+        double x_derivative = (evaluate(x - 2*limstep, y) - 8*evaluate(x - limstep, y) +
+                8*evaluate(x + limstep, y) - evaluate(x + 2*limstep, y))/(12*limstep);
+        double y_derivative = (evaluate(x, y - 2*limstep) - 8*evaluate(x, y - limstep) +
+                8*evaluate(x, y + limstep) - evaluate(x, y + 2*limstep))/(12*limstep);
 
         return new Vector2D(x_derivative, y_derivative);
+    }
+
+    public double evaluate(double x, double y){
+        return evaluate(new Vector2D(x, y));
     }
 
     /**
