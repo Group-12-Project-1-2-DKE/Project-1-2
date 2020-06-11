@@ -2,9 +2,10 @@ package Objects;
 
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.GolfGame;
 
 
 /**
@@ -157,6 +158,34 @@ public class Ball {
     public ModelInstance getModel() {
         return model;
     }
+
+    /**
+     * might be useful for collision
+     * @return the top-left 'corner' of the ball
+     */
+    public Vector2D getTopLeftEdge(){
+        Vector2D topLeft = new Vector2D((float)location.getX() - diameter /2, (float)location.getY() + diameter/2);
+        return topLeft;
+    }
+
+    /**
+     *
+     * @return bottom-right 'corner' of the ball
+     */
+    public Vector2D getBottomRightEdge(){
+        Vector2D bottomRight = new Vector2D((float) location.getX() + diameter /2,(float)location.getY() - diameter/2);
+        return bottomRight;
+    }
+
+
+
+    /**public void createModel(){
+        Model model;
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+
+
+    }*/
 }
 
 
