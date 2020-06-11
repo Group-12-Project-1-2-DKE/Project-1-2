@@ -177,6 +177,13 @@ public class Ball {
         return bottomRight;
     }
 
+    public boolean isInWater(){
+        if(location.getY() < 0){
+            return true;
+        }
+        return false; 
+    }
+
 
 
     /**public void createModel(){

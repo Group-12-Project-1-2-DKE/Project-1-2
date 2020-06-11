@@ -129,8 +129,11 @@ public class GolfGame implements Screen {
 				0, 0, pixmap1001.getWidth(), pixmap1001.getHeight()
 		);
 		Texture ballTex = new Texture(pixmap1001);
+		Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
 		pixmap2001.dispose();
 		pixmap1001.dispose();
+
+
 
 		modelBatch = new ModelBatch();
 		ModelBuilder modelBuilder = new ModelBuilder();
@@ -174,8 +177,7 @@ public class GolfGame implements Screen {
 		Vector2D currentPos;
 		TerrainChunk.setFunction(Variables.function);
 		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
-		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
-
+		Material material;
 
 		int count = 0;
 		for(int x = 0; x < numberX; x++){
@@ -192,7 +194,12 @@ public class GolfGame implements Screen {
 						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
 				mesh.setVertices(chunk.vertices);
 				mesh.setIndices(chunk.indices);
-
+				if(course.evaluate(currentPos) <= 0){
+					material = new Material(TextureAttribute.createDiffuse(waterTex));
+				}else{
+					material = new Material(TextureAttribute.createDiffuse(fieldTex));;
+					ball.transform.setTranslation((float)course.getBall().getLocation().getX(), (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) - 1f,(float)course.getBall().getLocation().getY());
+				}
 				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
 				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
 
@@ -467,5 +474,7 @@ public class GolfGame implements Screen {
 		finalModel.manageDisposable(mesh);
 		return finalModel;
 	}
+
+
 
 }
