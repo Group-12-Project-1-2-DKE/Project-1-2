@@ -36,15 +36,15 @@ public class TerrainChunk {
     private float positionY;
     private float positionZ;
 
-
     private ModelInstance modelInstance;
     //private PuttingCourse course = new PuttingCourse(Variables.function,new Vector2D(Variables.startX,Variables.startY),new Vector2D(Variables.goalX,Variables.goalY), new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5),Variables.tolerance,100,Variables.tolerance );;
     private PuttingCourse course;
 
     boolean sand;
+    boolean water;
 
-    public int [][] sandInfo;
-    // * @param function represents what the actual function will look like and is determined in settings by the user
+    private int [][] sandInfo;
+    private int[][] waterInfo;
 
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
@@ -289,5 +289,13 @@ public class TerrainChunk {
 
     public float getPositionZ() {
         return positionZ;
+    }
+
+    public int[][] getSandInfo(){
+        return sandInfo;
+    }
+
+    public int[][] getWaterInfo(){
+        return waterInfo;
     }
 }
