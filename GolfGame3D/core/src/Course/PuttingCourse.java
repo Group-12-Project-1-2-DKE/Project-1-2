@@ -100,7 +100,7 @@ public class PuttingCourse implements Function2D{
 
     /**
      * Calculates the height at current coordinates (aka your vector)
-     * @param p
+     * @param p coordinate vector
      * @return height
      */
     public double evaluate(Vector2D p){
