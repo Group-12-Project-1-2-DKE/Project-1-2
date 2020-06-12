@@ -50,7 +50,8 @@ public class GolfGame implements Screen {
 	private ModelBatch modelBatch;
 	private ArrayList<ModelInstance> instances;
 
-	private Stage stage;
+	private Stage stage1;
+	private Stage stage2;
 	private Label label;
 	BitmapFont font;
 	private StringBuilder stringBuilder;
@@ -60,6 +61,9 @@ public class GolfGame implements Screen {
 	private TextButton shoot;
 	private TextField dirX;
 	private TextField dirY;
+
+	private TextButton lastLocation;
+	private TextButton startLocation;
 
 	private Vector3 position = new Vector3();
 	public int attempt = 0;
@@ -73,19 +77,19 @@ public class GolfGame implements Screen {
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
 		ai = new StraighGreedy();
 
-		if (Variables.euler == true) {
+		if (Variables.euler) {
 			eulerSolver = new EulerSolver();
 			eulerSolver.set_step_size(0.01);
 			eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			eulerSolver.set_grav_constant(9.81);
 			engine = eulerSolver;
-		} else if (Variables.rungeKutta == true) {
+		} else if (Variables.rungeKutta) {
 			rungeKuttaSolver = new RungeKuttaSolver();
 			rungeKuttaSolver.set_step_size(0.01);
 			rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			rungeKuttaSolver.set_grav_constant(9.81);
 			engine = rungeKuttaSolver;
-		} else if (Variables.verlet == true) {
+		} else if (Variables.verlet) {
 			verletSolver = new VerletSolver();
 			verletSolver.set_step_size(0.01);
 			verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
@@ -97,10 +101,11 @@ public class GolfGame implements Screen {
 
 		position = new Vector3((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) course.getStart().getY());
 
-		stage = new Stage();
+		stage1 = new Stage();
+		stage2 = new Stage();
 		font = new BitmapFont();
 		label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
-		stage.addActor(label);
+		stage1.addActor(label);
 		stringBuilder = new StringBuilder();
 
 
@@ -166,43 +171,7 @@ public class GolfGame implements Screen {
 		instances.add(flag);
 
 
-		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
-		int chunkSize = 5;
-		int numberX =(int)(coverVectors[1].getX()-coverVectors[0].getX())/chunkSize;
-		int numberY=(int)(coverVectors[1].getY()-coverVectors[0].getY())/chunkSize;
-		TerrainChunk chunk;
-		Vector2D currentPos;
-		TerrainChunk.setFunction(Variables.function);
-		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
-		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
-
-
-		int count = 0;
-		for(int x = 0; x < numberX; x++){
-			for(int y = 0; y < numberY; y++){
-				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
-				chunk = new TerrainChunk(currentPos, chunkSize, course);
-				chunk.setLocation((float)course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
-				terrainChunks[x][y] = chunk;
-
-				Mesh mesh = new Mesh(true, chunk.vertices.length/9 , chunk.indices.length,
-						new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
-				mesh.setVertices(chunk.vertices);
-				mesh.setIndices(chunk.indices);
-
-				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
-				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
-
-				chunk.setModelInstance(terrainInstance);
-				instances.add(terrainInstance);
-
-				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
-				count++;
-			}
-		}
+		createMash(fieldTex);
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -213,45 +182,8 @@ public class GolfGame implements Screen {
 
 		Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
 
-		TextArea dirxText = new TextArea("Vector x:", skin1);
-		dirxText.setDisabled(true);
-		dirxText.setPosition(0, ScreenSpace.HEIGHT - 30);
-		dirxText.setSize(100, 30);
-		stage.addActor(dirxText);
-		TextArea diryText = new TextArea("Vector y:", skin1);
-		diryText.setDisabled(true);
-		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
-		diryText.setSize(100, 30);
-		stage.addActor(diryText);
-
-		shoot = new TextButton("Shoot", skin1);
-		shoot.setDisabled(true);
-		shoot.setPosition(0, ScreenSpace.HEIGHT - 90);
-		shoot.setSize(150, 30);
-
-		shoot.addListener(new ClickListener() {
-			@Override
-			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				if(Variables.ai== true){
-					shoot.setDisabled(true);
-					shoot.setVisible(false);
-				}
-				ballReachedFlag = true;
-				shoot.setVisible(false);
-				course.getBall().hit();
-
-			}
-		});
-		stage.addActor(shoot);
-
-		dirX = new TextField(String.valueOf(Variables.shootX), skin1);
-		dirX.setPosition(100, ScreenSpace.HEIGHT - 30);
-		dirX.setSize(50, 30);
-		stage.addActor(dirX);
-		dirY = new TextField(String.valueOf(Variables.shootY), skin1);
-		dirY.setPosition(100, ScreenSpace.HEIGHT - 60);
-		dirY.setSize(50, 30);
-		stage.addActor(dirY);
+		shootStage(skin1);
+		changeBallPositionStage(skin1);
 
 	}
 
@@ -261,8 +193,8 @@ public class GolfGame implements Screen {
 	@Override
 	public void render(float delta) {
 		myDelta += delta;
-		if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > (ScreenSpace.HEIGHT) - 150) {
-			Gdx.input.setInputProcessor(stage);
+		if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > ScreenSpace.HEIGHT - 150) {
+			Gdx.input.setInputProcessor(stage1);
 		} else {
 			Gdx.input.setInputProcessor(cameraInputController);
 		}
@@ -278,6 +210,12 @@ public class GolfGame implements Screen {
 
 		}
 
+		//if (ball is in water){
+			stage2.draw();
+			if (Gdx.input.getX() > ScreenSpace.WIDTH-175 && Gdx.input.getX() < ScreenSpace.WIDTH  && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
+				Gdx.input.setInputProcessor(stage2);
+			}
+		//}
 
 		if (true && ballReachedFlag) {
 			try {
@@ -329,8 +267,7 @@ public class GolfGame implements Screen {
 		stringBuilder.setLength(0);
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
-		stage.draw();
-
+		stage1.draw();
 	}
 
 	@Override
@@ -468,4 +405,124 @@ public class GolfGame implements Screen {
 		return finalModel;
 	}
 
+	public void changeBallPositionStage(Skin skin1){
+		TextArea lastLoc1 = new TextArea("Set the new position", skin1);
+		lastLoc1.setDisabled(true);
+		lastLoc1.setPosition(ScreenSpace.WIDTH-175, 90);
+		lastLoc1.setSize(175, 30);
+		stage2.addActor(lastLoc1);
+		TextArea lastLoc2 = new TextArea("of the ball: ", skin1);
+		lastLoc2.setDisabled(true);
+		lastLoc2.setPosition(ScreenSpace.WIDTH-175, 60);
+		lastLoc2.setSize(175, 30);
+		stage2.addActor(lastLoc2);
+
+		lastLocation = new TextButton("Last Location", skin1);
+		lastLocation.setDisabled(true);
+		lastLocation.setPosition(ScreenSpace.WIDTH-175, 30);
+		lastLocation.setSize(175, 30);
+		stage2.addActor(lastLocation);
+
+		lastLocation.addListener(new ClickListener() {
+			@Override
+			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+				// TODO Implement the change of location of the ball.
+				System.out.println("last");
+			}
+		});
+
+		startLocation = new TextButton("Start Location", skin1);
+		startLocation.setDisabled(true);
+		startLocation.setPosition(ScreenSpace.WIDTH-175, 0);
+		startLocation.setSize(175, 30);
+		stage2.addActor(startLocation);
+
+		startLocation.addListener(new ClickListener() {
+			@Override
+			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+				// TODO Implement the change of location of the ball.
+				System.out.println("hi");
+			}
+		});
+	}
+
+	public void shootStage(Skin skin1){
+		TextArea dirxText = new TextArea("Vector x:", skin1);
+		dirxText.setDisabled(true);
+		dirxText.setPosition(0, ScreenSpace.HEIGHT - 30);
+		dirxText.setSize(100, 30);
+		stage1.addActor(dirxText);
+		TextArea diryText = new TextArea("Vector y:", skin1);
+		diryText.setDisabled(true);
+		diryText.setPosition(0, ScreenSpace.HEIGHT - 60);
+		diryText.setSize(100, 30);
+		stage1.addActor(diryText);
+
+		shoot = new TextButton("Shoot", skin1);
+		shoot.setDisabled(true);
+		shoot.setPosition(0, ScreenSpace.HEIGHT - 90);
+		shoot.setSize(150, 30);
+
+		shoot.addListener(new ClickListener() {
+			@Override
+			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+				if(Variables.ai){
+					shoot.setDisabled(true);
+					shoot.setVisible(false);
+				}
+				ballReachedFlag = true;
+				shoot.setVisible(false);
+				course.getBall().hit();
+
+			}
+		});
+		stage1.addActor(shoot);
+
+		dirX = new TextField(String.valueOf(Variables.shootX), skin1);
+		dirX.setPosition(100, ScreenSpace.HEIGHT - 30);
+		dirX.setSize(50, 30);
+		stage1.addActor(dirX);
+		dirY = new TextField(String.valueOf(Variables.shootY), skin1);
+		dirY.setPosition(100, ScreenSpace.HEIGHT - 60);
+		dirY.setSize(50, 30);
+		stage1.addActor(dirY);
+	}
+
+	public void createMash(Texture fieldTex){
+		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
+		int chunkSize = 5;
+		int numberX =(int)(coverVectors[1].getX()-coverVectors[0].getX())/chunkSize;
+		int numberY=(int)(coverVectors[1].getY()-coverVectors[0].getY())/chunkSize;
+		TerrainChunk chunk;
+		Vector2D currentPos;
+		TerrainChunk.setFunction(Variables.function);
+		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
+		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
+
+
+		for(int x = 0; x < numberX; x++){
+			for(int y = 0; y < numberY; y++){
+				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
+				chunk = new TerrainChunk(currentPos, chunkSize, course);
+				chunk.setLocation((float)course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
+				terrainChunks[x][y] = chunk;
+
+				Mesh mesh = new Mesh(true, chunk.vertices.length/9 , chunk.indices.length,
+						new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
+						new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
+						new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
+				mesh.setVertices(chunk.vertices);
+				mesh.setIndices(chunk.indices);
+
+				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
+				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
+
+				chunk.setModelInstance(terrainInstance);
+				instances.add(terrainInstance);
+
+				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
+			}
+		}
+	}
 }
