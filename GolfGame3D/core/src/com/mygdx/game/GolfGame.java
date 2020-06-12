@@ -117,16 +117,6 @@ public class GolfGame implements Screen {
 		camera.update();
 		cameraInputController = new CameraInputController(camera);
 
-		Pixmap pixmap200 = new Pixmap(Gdx.files.internal("groundTexture.jpg"));
-		Pixmap pixmap100 = new Pixmap(5000, 5000, pixmap200.getFormat());
-		pixmap100.drawPixmap(pixmap200,
-				12, 12, pixmap200.getWidth(), pixmap200.getHeight(),
-				0, 0, pixmap100.getWidth(), pixmap100.getHeight()
-		);
-		Texture fieldTex = new Texture(pixmap100);
-		pixmap200.dispose();
-		pixmap100.dispose();
-
 		Pixmap pixmap2001 = new Pixmap(Gdx.files.internal("ball.jpg"));
 		Pixmap pixmap1001 = new Pixmap(7000, 7000, pixmap2001.getFormat());
 		pixmap1001.drawPixmap(pixmap2001,
@@ -134,7 +124,6 @@ public class GolfGame implements Screen {
 				0, 0, pixmap1001.getWidth(), pixmap1001.getHeight()
 		);
 		Texture ballTex = new Texture(pixmap1001);
-		Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
 		pixmap2001.dispose();
 		pixmap1001.dispose();
 
@@ -152,14 +141,6 @@ public class GolfGame implements Screen {
 		modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
 				new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(Variables.tolerance, 0.1f, Variables.tolerance, 10);
 
-		modelBuilder.node().id = "groundPieces";
-		modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-				new Material(TextureAttribute.createDiffuse(fieldTex))).sphere(0.5f, 0.5f, 0.5f, 5, 5);
-
-		modelBuilder.node().id = "flag";
-		modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.YELLOW)))
-				.box(0.5f, 0.4f, 0.1f);
-
 
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
@@ -173,48 +154,7 @@ public class GolfGame implements Screen {
 		instances.add(ball);
 		instances.add(flag);
 
-
-		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
-		int chunkSize = 5;
-		int numberX =(int)(coverVectors[1].getX()-coverVectors[0].getX())/chunkSize;
-		int numberY=(int)(coverVectors[1].getY()-coverVectors[0].getY())/chunkSize;
-		TerrainChunk chunk;
-		Vector2D currentPos;
-		TerrainChunk.setFunction(Variables.function);
-		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
-		Material material;
-
-		int count = 0;
-		for(int x = 0; x < numberX; x++){
-			for(int y = 0; y < numberY; y++){
-				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
-				chunk = new TerrainChunk(currentPos, chunkSize, course);
-				chunk.setLocation((float)course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
-				terrainChunks[x][y] = chunk;
-
-				Mesh mesh = new Mesh(true, chunk.vertices.length/9 , chunk.indices.length,
-						new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
-				mesh.setVertices(chunk.vertices);
-				mesh.setIndices(chunk.indices);
-				if(course.evaluate(currentPos) <= 0){
-					material = new Material(TextureAttribute.createDiffuse(waterTex));
-				}else{
-					material = new Material(TextureAttribute.createDiffuse(fieldTex));;
-					ball.transform.setTranslation((float)course.getBall().getLocation().getX(), (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) - 1f,(float)course.getBall().getLocation().getY());
-				}
-				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
-				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
-
-				chunk.setModelInstance(terrainInstance);
-				instances.add(terrainInstance);
-
-				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
-				count++;
-			}
-		}
+		createMesh();
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -532,7 +472,9 @@ public class GolfGame implements Screen {
 		stage1.addActor(dirY);
 	}
 
-	public void createMash(Texture fieldTex){
+	public void createMesh(){
+		Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
+		Texture fieldTex = new Texture("groundTexture.jpg");
 		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
 		int chunkSize = 5;
 		int numberX =(int)(coverVectors[1].getX()-coverVectors[0].getX())/chunkSize;
@@ -544,6 +486,7 @@ public class GolfGame implements Screen {
 		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
 
 
+		int count = 0;
 		for(int x = 0; x < numberX; x++){
 			for(int y = 0; y < numberY; y++){
 				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
@@ -558,7 +501,12 @@ public class GolfGame implements Screen {
 						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
 				mesh.setVertices(chunk.vertices);
 				mesh.setIndices(chunk.indices);
-
+				if(course.evaluate(currentPos) <= 0){
+					material = new Material(TextureAttribute.createDiffuse(waterTex));
+				}else{
+					material = new Material(TextureAttribute.createDiffuse(fieldTex));;
+					ball.transform.setTranslation((float)course.getBall().getLocation().getX(), (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) - 1f,(float)course.getBall().getLocation().getY());
+				}
 				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
 				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
 
@@ -566,6 +514,7 @@ public class GolfGame implements Screen {
 				instances.add(terrainInstance);
 
 				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
+				count++;
 			}
 		}
 	}
