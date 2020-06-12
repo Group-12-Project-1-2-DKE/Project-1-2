@@ -14,18 +14,15 @@ import java.util.ArrayList;
     public class Obstacle {
 
         private Vector2D location;
-        private double width;
-        private double height;
-        private double depth;
+        private final float width = 0.5f;
+        private final float height = 0.5f;
+        private final float depth = 0.5f;
         private Vector2D p1,p2,p3,p4,p5,p6,p7,p8;//corners of the obstacle
         private ArrayList<Vector2D> edges;
 
 
-        public Obstacle(Vector2D location, double width, double height, double depth){
+        public Obstacle(Vector2D location){
             this.location = location;
-            this.width = width;
-            this.height = height;
-            this.depth = depth;
             p1 = new Vector2D(location.getX(),location.getY());
             p2 = new Vector2D(location.getX() + width, location.getY());
             p3 = new Vector2D(location.getX() , location.getY() + height);
