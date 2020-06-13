@@ -184,6 +184,7 @@ public class Ball {
     }
 
     public boolean isInWater(){
+        //add evaluate
         if(location.getY() < 0 - diameter){
             return true;
         }
