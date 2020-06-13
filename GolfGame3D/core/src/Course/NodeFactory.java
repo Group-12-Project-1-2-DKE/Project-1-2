@@ -1,14 +1,22 @@
 package Course;
 
-import Course.Nodes.Plus;
+import Course.Nodes.*;
+import Course.Nodes.Number;
 
 import java.util.ArrayList;
 
 public class NodeFactory {
     private static final ArrayList<EquationNode> prototypes = new ArrayList<>();
 
-    {
-        prototypes.add(new Plus());
+    static {
+        prototypes.add(new Plus("+"));
+        prototypes.add(new Minus("-"));
+        prototypes.add(new Multiply("*"));
+        prototypes.add(new Divide("/"));
+        prototypes.add(new Power("^"));
+        prototypes.add(new Number("num"));
+        prototypes.add(new Variable("var"));
+        prototypes.add(new EquationRoot("("));
     }
 
     public static ArrayList<EquationNode> getPrototypes(){
@@ -16,6 +24,12 @@ public class NodeFactory {
     }
 
     public static EquationNode makeNode(String label){
+        for (EquationNode prototype : prototypes){
+            if (prototype.label().equals(label)){
+                return prototype.newInstance();
+            }
+        }
+
         return null;
     }
 }

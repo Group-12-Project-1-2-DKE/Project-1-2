@@ -6,4 +6,10 @@ public interface EquationNode {
     public String label();
     public EquationNode parent();
     public ArrayList<EquationNode> children();
+    public boolean increaseDepth();
+    public void add(EquationNode node);
+    public void setParent(EquationNode parent);
+    public double solve();
+    public int getPriority();
+    public EquationNode newInstance();
 }

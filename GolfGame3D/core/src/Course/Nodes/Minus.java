@@ -3,13 +3,13 @@ package Course.Nodes;
 import Course.BaseEquationNode;
 import Course.EquationNode;
 
-public class Plus extends BaseEquationNode {
-    public Plus(String label){
+public class Minus extends BaseEquationNode {
+    public Minus(String label){
         super(label, 1);
     }
 
     @Override
     public EquationNode newInstance() {
-        return new Plus("+");
+        return new Minus("-");
     }
 }
