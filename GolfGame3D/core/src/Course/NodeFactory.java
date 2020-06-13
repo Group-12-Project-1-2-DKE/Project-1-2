@@ -19,6 +19,10 @@ public class NodeFactory {
         prototypes.add(new EquationRoot("("));
         prototypes.add(new PiConstant("pi"));
         prototypes.add(new EConstant("e"));
+        prototypes.add(new Sine("sin"));
+        prototypes.add(new Cosine("cos"));
+        prototypes.add(new Logarithm("log"));
+        prototypes.add(new NatLog("ln"));
     }
 
     public static ArrayList<EquationNode> getPrototypes(){
