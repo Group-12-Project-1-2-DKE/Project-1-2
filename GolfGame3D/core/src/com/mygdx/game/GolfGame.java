@@ -3,6 +3,8 @@ package com.mygdx.game;
 import AI.StraighGreedy;
 import Course.PuttingCourse;
 import Objects.Ball;
+import Objects.Obstacle;
+import Objects.TreeObstacle;
 import Physics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
@@ -142,6 +144,12 @@ public class GolfGame implements Screen {
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
+		Obstacle obstacle = new TreeObstacle();
+		ArrayList<Obstacle> obstacles = obstacle.createInstance(5);
+
+		for(int i = 0; i < obstacles.size(); i++ ){
+			instances.add(obstacles.get(i).createModel());
+		}
 		instances.add(ball);
 		instances.add(flag);
 
