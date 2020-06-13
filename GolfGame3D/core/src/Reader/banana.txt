@@ -1,7 +1,7 @@
 Gravity = 9.81
 Mass = 4
 tolerence for the goal = 0.65
-Function= 1
+Function= 0.02*x^2+0.02*y^2
 Start position X = 0.0
 Start position Y = 0.0
 Goal position X = 10.0
