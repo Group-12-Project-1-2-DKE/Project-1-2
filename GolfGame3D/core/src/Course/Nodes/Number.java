@@ -3,6 +3,8 @@ package Course.Nodes;
 import Course.BaseEquationNode;
 import Course.EquationNode;
 
+import java.util.ArrayList;
+
 public class Number extends BaseEquationNode{
     private double value;
 
@@ -26,5 +28,13 @@ public class Number extends BaseEquationNode{
                 ", label='" + label + '\'' +
                 ", children=" + children +
                 '}';
+    }
+
+    @Override
+    public double solve(ArrayList<String> variables, double[] parameters) {
+        if (children.size() > 0){
+            System.out.println("whoops something probably went wrong\nchildren: " + children);
+        }
+        return value;
     }
 }

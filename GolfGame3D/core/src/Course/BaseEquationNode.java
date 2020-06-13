@@ -60,7 +60,7 @@ public abstract class BaseEquationNode implements EquationNode{
     }
 
     @Override
-    public double solve() {
+    public double solve(ArrayList<String> variables, double[] parameters) {
         return 0;
     }
 }

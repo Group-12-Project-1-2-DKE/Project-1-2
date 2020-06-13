@@ -9,7 +9,7 @@ public interface EquationNode {
     public boolean increaseDepth();
     public void add(EquationNode node);
     public void setParent(EquationNode parent);
-    public double solve();
+    public double solve(ArrayList<String> variables, double[] parameters);
     public int getPriority();
     public EquationNode newInstance();
 }
