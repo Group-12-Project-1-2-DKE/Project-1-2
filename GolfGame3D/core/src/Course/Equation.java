@@ -1,6 +1,7 @@
 package Course;
 
 import Course.Nodes.EquationRoot;
+import Course.Nodes.Multiply;
 import Course.Nodes.Number;
 import Course.Nodes.Variable;
 
@@ -12,7 +13,7 @@ public class Equation {
     private final EquationNode root = new EquationRoot("root");
 
     public static void main(String[] args) {
-        Equation eq = new Equation("0.2x^2 - ((sin(33y)))3 + e - pi");
+        Equation eq = new Equation("0.2x^2 - sin(33y)3x + e - pi");
         System.out.println(eq);
     }
 
@@ -77,25 +78,32 @@ public class Equation {
             }//hmmm?*/
 
             //insert * at e.g 2y
-
-            if (node.getPriority() <= currentNode.getPriority() && node.getPriority() > 0){
-                EquationNode p = currentNode.parent();
-                while (node.getPriority() != 0 && node.getPriority() <= p.getPriority()){
-                    currentNode = p;
-                    p = p.parent();
-                    System.out.println("p: " + p);
-                }
-                p.children().remove(p.children().size() - 1);
-                p.add(node);
-                node.add(currentNode);
-            } else{
-                currentNode.add(node);
+            if (node.getPriority() == 4 && currentNode.getPriority() == 4){
+                currentNode = addNode(new Multiply("*"), currentNode);
             }
-            currentNode = node;
+
+            currentNode = addNode(node, currentNode);
 
             System.out.println(this);
 
         }
+    }
+
+    private EquationNode addNode(EquationNode node, EquationNode currentNode){
+        if (node.getPriority() <= currentNode.getPriority() && node.getPriority() > 0){
+            EquationNode p = currentNode.parent();
+            while (node.getPriority() != 0 && node.getPriority() <= p.getPriority()){
+                currentNode = p;
+                p = p.parent();
+                System.out.println("p: " + p);
+            }
+            p.children().remove(p.children().size() - 1);
+            p.add(node);
+            node.add(currentNode);
+        } else{
+            currentNode.add(node);
+        }
+        return node;
     }
 
     private String parseLetters(int index){

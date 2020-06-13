@@ -17,6 +17,8 @@ public class NodeFactory {
         prototypes.add(new Number("num"));
         prototypes.add(new Variable("var"));
         prototypes.add(new EquationRoot("("));
+        prototypes.add(new PiConstant("pi"));
+        prototypes.add(new EConstant("e"));
     }
 
     public static ArrayList<EquationNode> getPrototypes(){
