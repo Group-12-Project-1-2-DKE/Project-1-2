@@ -25,6 +25,8 @@ public class Ball {
     private TextureRegion ballTexture;
     private ModelInstance model;
 
+    private Vector2D lastPosition;
+
     /**
      * constructor for a ball
      *
@@ -79,6 +81,10 @@ public class Ball {
      */
     public void setLocation(Vector2D newLocation) {
         location = newLocation;
+        if (this.isInWater()){
+            location = newLocation;
+
+        }
     }
 
     /**
@@ -178,13 +184,23 @@ public class Ball {
     }
 
     public boolean isInWater(){
-        if(location.getY() < 0){
+        if(location.getY() < 0 - diameter){
             return true;
         }
-        return false; 
+        return false;
     }
 
+    public void setLastPosition(){
+        this.lastPosition = location;
+    }
 
+    /**
+     *
+     * @return the last position of the ball
+     */
+    public Vector2D getLastPosition() {
+        return lastPosition;
+    }
 
     /**public void createModel(){
         Model model;
@@ -194,7 +210,3 @@ public class Ball {
 
     }*/
 }
-
-
-
-

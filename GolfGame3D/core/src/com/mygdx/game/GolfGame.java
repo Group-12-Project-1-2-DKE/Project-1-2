@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-
 import java.util.ArrayList;
 
 /**
@@ -31,12 +30,8 @@ public class GolfGame implements Screen {
 
 	private PuttingCourse course;
 	private PuttingSimulator simulator;
-	private Ball gameBall;
 	private Boolean ballReachedFlag = false;
-	private EulerSolver eulerSolver;
-	private RungeKuttaSolver rungeKuttaSolver;
 	private PhysicsEngine engine;
-	private VerletSolver verletSolver;
 	private StraighGreedy ai;
 
 	private Environment environment;
@@ -46,7 +41,6 @@ public class GolfGame implements Screen {
 
 	private Model model;
 	public static ModelInstance ball;
-	private ModelInstance flag;
 	private ModelBatch modelBatch;
 	private ArrayList<ModelInstance> instances;
 
@@ -62,35 +56,32 @@ public class GolfGame implements Screen {
 	private TextField dirX;
 	private TextField dirY;
 
-	private TextButton lastLocation;
-	private TextButton startLocation;
-
-	private Vector3 position = new Vector3();
+	private Vector3 position;
 	public int attempt = 0;
 
 
 	public GolfGame(ScreenSpace game) {
 		this.game = game;
 
-		gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
+		Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
 
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
 		ai = new StraighGreedy();
 
 		if (Variables.euler) {
-			eulerSolver = new EulerSolver();
+			EulerSolver eulerSolver = new EulerSolver();
 			eulerSolver.set_step_size(0.01);
 			eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			eulerSolver.set_grav_constant(9.81);
 			engine = eulerSolver;
 		} else if (Variables.rungeKutta) {
-			rungeKuttaSolver = new RungeKuttaSolver();
+			RungeKuttaSolver rungeKuttaSolver = new RungeKuttaSolver();
 			rungeKuttaSolver.set_step_size(0.01);
 			rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			rungeKuttaSolver.set_grav_constant(9.81);
 			engine = rungeKuttaSolver;
 		} else if (Variables.verlet) {
-			verletSolver = new VerletSolver();
+			VerletSolver verletSolver = new VerletSolver();
 			verletSolver.set_step_size(0.01);
 			verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
 			verletSolver.set_grav_constant(9.81);
@@ -144,7 +135,7 @@ public class GolfGame implements Screen {
 
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
-		flag = new ModelInstance(model, "flagPole");
+		ModelInstance flag = new ModelInstance(model, "flagPole");
 		ModelInstance flagg = new ModelInstance(model,"flag");
 
 		flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
@@ -193,18 +184,17 @@ public class GolfGame implements Screen {
 
 		}
 
-		//if (ball is in water){
+		if (course.getBall().isInWater()){
 			stage2.draw();
 			if (Gdx.input.getX() > ScreenSpace.WIDTH-175 && Gdx.input.getX() < ScreenSpace.WIDTH  && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
 				Gdx.input.setInputProcessor(stage2);
 			}
-		//}
+		}
 
-		if (true && ballReachedFlag) {
+		if (ballReachedFlag) {
 			try {
-				long start = System.currentTimeMillis();
 				if (myVector == null) {
-					if(Variables.ai == true){
+					if(Variables.ai){
 						Vector2D aiVec = ai.calculate_turn(course,500);
 						dirX.setText("" + aiVec.getX());
 						dirY.setText("" + aiVec.getY());
@@ -240,7 +230,7 @@ public class GolfGame implements Screen {
 
 		modelBatch.begin(camera);
 		for (ModelInstance instance : instances) {
-			if (isVisible(camera, instance)) {
+			if (isVisible(camera)) {
 				modelBatch.render(instance, environment);
 			}
 		}
@@ -287,10 +277,9 @@ public class GolfGame implements Screen {
 	 * this method determines if the given instance is visible on the screen
 	 *
 	 * @param camera   the game camera that makes the instances visible
-	 * @param instance an object that is to be rendered on the screen
 	 * @return true if the instance is visible
 	 */
-	private boolean isVisible(final Camera camera, final ModelInstance instance) {
+	private boolean isVisible(final Camera camera) {
 		ball.transform.getTranslation(position);
 		return camera.frustum.pointInFrustum(position);
 	}
@@ -401,7 +390,7 @@ public class GolfGame implements Screen {
 		lastLoc2.setSize(175, 30);
 		stage2.addActor(lastLoc2);
 
-		lastLocation = new TextButton("Last Location", skin1);
+		TextButton lastLocation = new TextButton("Last Location", skin1);
 		lastLocation.setDisabled(true);
 		lastLocation.setPosition(ScreenSpace.WIDTH-175, 30);
 		lastLocation.setSize(175, 30);
@@ -411,11 +400,11 @@ public class GolfGame implements Screen {
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				// TODO Implement the change of location of the ball.
-				System.out.println("last");
+				course.getBall().setLocation(course.getBall().getLastPosition());
 			}
 		});
 
-		startLocation = new TextButton("Start Location", skin1);
+		TextButton startLocation = new TextButton("Start Location", skin1);
 		startLocation.setDisabled(true);
 		startLocation.setPosition(ScreenSpace.WIDTH-175, 0);
 		startLocation.setSize(175, 30);
@@ -425,7 +414,7 @@ public class GolfGame implements Screen {
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
 				// TODO Implement the change of location of the ball.
-				System.out.println("hi");
+				course.getBall().setLocation(new Vector2D(Variables.startX, Variables.startY));
 			}
 		});
 	}
@@ -455,6 +444,7 @@ public class GolfGame implements Screen {
 					shoot.setVisible(false);
 				}
 				ballReachedFlag = true;
+				course.getBall().setLastPosition();
 				shoot.setVisible(false);
 				course.getBall().hit();
 
@@ -485,8 +475,6 @@ public class GolfGame implements Screen {
 		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
 		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
 
-
-		int count = 0;
 		for(int x = 0; x < numberX; x++){
 			for(int y = 0; y < numberY; y++){
 				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
@@ -504,7 +492,7 @@ public class GolfGame implements Screen {
 				if(course.evaluate(currentPos) <= 0){
 					material = new Material(TextureAttribute.createDiffuse(waterTex));
 				}else{
-					material = new Material(TextureAttribute.createDiffuse(fieldTex));;
+					material = new Material(TextureAttribute.createDiffuse(fieldTex));
 					ball.transform.setTranslation((float)course.getBall().getLocation().getX(), (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) - 1f,(float)course.getBall().getLocation().getY());
 				}
 				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
@@ -514,7 +502,6 @@ public class GolfGame implements Screen {
 				instances.add(terrainInstance);
 
 				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
-				count++;
 			}
 		}
 	}
