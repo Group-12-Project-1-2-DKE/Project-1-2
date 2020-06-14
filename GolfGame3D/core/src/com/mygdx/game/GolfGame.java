@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.Bullet;
+import com.badlogic.gdx.physics.bullet.collision.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,13 +26,14 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * class that contains the main game graphics
  */
 public class GolfGame implements Screen {
 
-	private PuttingCourse course;
+	private static PuttingCourse course;
 	private PuttingSimulator simulator;
 	private Boolean ballReachedFlag = false;
 	private PhysicsEngine engine;
@@ -44,7 +47,22 @@ public class GolfGame implements Screen {
 	private Model model;
 	public static ModelInstance ball;
 	private ModelBatch modelBatch;
+	private static ModelBuilder modelBuilder;
 	private ArrayList<ModelInstance> instances;
+
+	private btCollisionShape ballShape;
+	private btCollisionShape treeShape;
+	private btCollisionShape branchShape;
+
+	private btCollisionObject ballObject;
+	private btCollisionObject treeObject;
+	private btCollisionObject branchObject;
+
+	private btCollisionConfiguration collisionConfig;
+	private btDispatcher dispatcher;
+
+	private ArrayList<btCollisionObject> obstacleObjects = new ArrayList<>();
+	private boolean collision = false;
 
 	private Stage stage1;
 	private Stage stage2;
@@ -94,6 +112,7 @@ public class GolfGame implements Screen {
 
 		position = new Vector3((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) course.getStart().getY());
 
+		Bullet.init();
 		stage1 = new Stage();
 		stage2 = new Stage();
 		font = new BitmapFont();
@@ -123,7 +142,9 @@ public class GolfGame implements Screen {
 
 
 		modelBatch = new ModelBatch();
-		ModelBuilder modelBuilder = new ModelBuilder();
+
+
+		modelBuilder = new ModelBuilder();
 		modelBuilder.begin();
 
 		modelBuilder.node().id = "ball";
@@ -138,18 +159,14 @@ public class GolfGame implements Screen {
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
 		ModelInstance flag = new ModelInstance(model, "flagPole");
-		ModelInstance flagg = new ModelInstance(model,"flag");
 
-		flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
+		//flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
 		Obstacle obstacle = new TreeObstacle();
 		ArrayList<Obstacle> obstacles = obstacle.createInstance(5);
 
-		for(int i = 0; i < obstacles.size(); i++ ){
-			instances.add(obstacles.get(i).createModel());
-		}
 		instances.add(ball);
 		instances.add(flag);
 
@@ -249,6 +266,12 @@ public class GolfGame implements Screen {
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage1.draw();
+
+		createObstacles();
+		checkCollision();
+		if(checkCollision()){
+			System.out.println("collision");
+		}
 	}
 
 	@Override
@@ -274,6 +297,14 @@ public class GolfGame implements Screen {
 	@Override
 	public void dispose() {
 		model.dispose();
+		treeObject.dispose();
+		treeShape.dispose();
+		branchObject.dispose();
+		branchShape.dispose();
+		ballObject.dispose();
+		ballShape.dispose();
+		dispatcher.dispose();
+		collisionConfig.dispose();
 	}
 
 	@Override
@@ -512,5 +543,70 @@ public class GolfGame implements Screen {
 				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
 			}
 		}
+
+
+	}
+
+	public void createObstacles() {
+		TreeObstacle treeObstacle = new TreeObstacle();
+		Random random = new Random();
+		for (int i = 0; i < 2; i++) {
+			float randomX = 5 + random.nextFloat() * -(20);
+			float randomY = 5 + random.nextFloat() * -(20);
+
+			while ((Math.abs(randomX - Variables.goalX) < 5) && (Math.abs(randomY - Variables.goalY) < 5) || course.evaluate(new Vector2D(randomX, randomY)) < 0) {
+				randomX = 5 + random.nextFloat() * (45 - 5);
+				randomY = 5 + random.nextFloat() * (45 - 5);
+			}
+
+			ModelInstance[] treeinstances = treeObstacle.createModel(randomX,randomY);
+			instances.add(treeinstances[0]);
+			instances.add(treeinstances[1]);
+
+			treeShape = new btCylinderShape(new Vector3(0.25f,3,0.25f));
+			treeObject = new btCollisionObject();
+			treeObject.setCollisionShape(treeShape);
+			treeObject.setWorldTransform(treeinstances[0].transform);
+			obstacleObjects.add(treeObject);
+
+			branchShape = new btConeShape(2,3);
+			branchObject =new  btCollisionObject();
+			branchObject.setCollisionShape(branchShape);
+			branchObject.setWorldTransform(treeinstances[1].transform);
+			obstacleObjects.add(branchObject);
+
+			ballShape = new btSphereShape(0.5f);
+			ballObject = new btCollisionObject();
+			ballObject.setCollisionShape(ballShape);
+			ballObject.setWorldTransform(ball.transform);
+
+
+
+		}
+	}
+
+	public boolean checkCollision(){
+		collisionConfig = new btDefaultCollisionConfiguration();
+		dispatcher = new btCollisionDispatcher(collisionConfig);
+		CollisionObjectWrapper c0 = new CollisionObjectWrapper(ballObject);
+		CollisionObjectWrapper c1 = new CollisionObjectWrapper(treeObject);
+		CollisionObjectWrapper c2 = new CollisionObjectWrapper(branchObject);
+
+		btCollisionAlgorithmConstructionInfo ci = new btCollisionAlgorithmConstructionInfo();
+		ci.setDispatcher1(dispatcher);
+		btCollisionAlgorithm algorithm = new btSphereBoxCollisionAlgorithm(null,ci,c0.wrapper,c1.wrapper,false);
+		btDispatcherInfo info = new btDispatcherInfo();
+		btManifoldResult result = new btManifoldResult(c0.wrapper,c1.wrapper);
+
+		algorithm.processCollision(c0.wrapper,c1.wrapper,info,result);
+		return result.getPersistentManifold().getNumContacts() > 0;
+	}
+
+	public static ModelBuilder getModelBuilder(){
+		return modelBuilder;
+	}
+
+	public static PuttingCourse getCourse(){
+		return course;
 	}
 }

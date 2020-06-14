@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.mygdx.game.GolfGame;
 import com.mygdx.game.Variables;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ import java.util.Vector;
 
 public class TreeObstacle implements Obstacle{
 
-    private final double width = 0.3f;
-    private final double height= 0.7f;
+    private final double width = 0.5f;
+    private final double height= 6f;
     private final double diameter = 0.5f;
 
     private Vector2D location;
+
+
 
     /**
      * constructor
@@ -35,14 +38,17 @@ public class TreeObstacle implements Obstacle{
      * @return model instance
      */
     @Override
-    public ModelInstance createModel() {
-        Model model = new Model();
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.node().id = "tree";
-        modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
-                new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder((float)width, (float)height,(float) diameter, 10);
-        model = modelBuilder.end();
-        ModelInstance instance = new ModelInstance(model);
+    public ModelInstance[] createModel(float x , float z) {
+        Model tree = GolfGame.getModelBuilder().createCylinder(0.5f, 6, 0.5f, 20,
+                new Material(ColorAttribute.createDiffuse(Color.BROWN)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        ModelInstance treeInstance = new ModelInstance(tree, x, (float)GolfGame.getCourse().evaluate(x,z), z);
+
+        Model branch = GolfGame.getModelBuilder().createCone(2,3,2,20,
+                new Material(ColorAttribute.createDiffuse(Color.GREEN)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+        ModelInstance branchInstance = new ModelInstance(branch, x, (float)GolfGame.getCourse().evaluate(x,z) + 3.5f,z);
+        ModelInstance[] instance = new ModelInstance[2];
+        instance[0] = treeInstance;
+        instance[1] = branchInstance;
         return instance;
     }
 
