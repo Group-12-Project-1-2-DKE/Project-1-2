@@ -2,19 +2,16 @@ package Objects;
 
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.mygdx.game.GolfGame;
-import com.mygdx.game.Variables;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
+
 
 
 public class TreeObstacle implements Obstacle{
@@ -49,6 +46,7 @@ public class TreeObstacle implements Obstacle{
         ModelInstance[] instance = new ModelInstance[2];
         instance[0] = treeInstance;
         instance[1] = branchInstance;
+        this.setLocation(new Vector2D(x,z));
         return instance;
     }
 
@@ -74,16 +72,9 @@ public class TreeObstacle implements Obstacle{
     public void setLocation(Vector2D location){
         this.location = location;
     }
-    public double getWidth() {
-        return width;
-    }
 
     public double getHeight() {
         return height;
-    }
-
-    public double getDiameter() {
-        return diameter;
     }
 
     public Vector2D getLocation() {

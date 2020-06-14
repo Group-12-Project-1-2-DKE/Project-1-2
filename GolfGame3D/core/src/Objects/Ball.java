@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.GolfGame;
 
 
 /**
@@ -185,7 +186,7 @@ public class Ball {
 
     public boolean isInWater(){
         //add evaluate
-        if(location.getY() < 0 - diameter){
+        if(GolfGame.getCourse().evaluate(location) < 0){
             return true;
         }
         return false;
