@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Menus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.game.ScreenSpace;
 
 public class MainMenu implements Screen{
     // Different position and size of the pictures

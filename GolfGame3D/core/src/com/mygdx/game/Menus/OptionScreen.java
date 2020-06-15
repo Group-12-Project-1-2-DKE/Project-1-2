@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Menus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import Reader.FileReaders;
+import com.mygdx.game.GolfGame;
+import com.mygdx.game.Menus.MainMenu;
+import com.mygdx.game.ScreenSpace;
+import com.mygdx.game.Variables;
 
 
 public class OptionScreen implements Screen {

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Menus;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.game.ScreenSpace;
 
 public class Congrat implements Screen {
     private static final int OVER_IMAGE_WIDTH = 500;
