@@ -6,9 +6,8 @@ public abstract class BaseEquationNode implements EquationNode{
     protected String label;
     protected EquationNode parent;
     protected ArrayList<EquationNode> children = new ArrayList<>();
-    protected boolean increaseDepth;
-    protected boolean depthIncreased;//Only for numbers, vars?
     protected final int priority;
+    protected boolean isFunction = false;
 
     public BaseEquationNode(String label, int priority){
         this.label = label;
@@ -31,11 +30,6 @@ public abstract class BaseEquationNode implements EquationNode{
     }
 
     @Override
-    public boolean increaseDepth() {
-        return increaseDepth;
-    }
-
-    @Override
     public void add(EquationNode node) {
         children.add(node);
         node.setParent(this);
@@ -51,16 +45,15 @@ public abstract class BaseEquationNode implements EquationNode{
         return priority;
     }
 
+    public boolean isFunction() {
+        return isFunction;
+    }
+
     @Override
     public String toString() {
         return "BaseEquationNode{" +
                 "label='" + label + '\'' +
                 ", children=" + children +
                 '}';
-    }
-
-    @Override
-    public double solve(ArrayList<String> variables, double[] parameters) {
-        return 0;
     }
 }
