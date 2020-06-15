@@ -21,7 +21,6 @@ public class Minus extends BaseEquationNode {
         for (int i = 2; i < children.size(); i++){
             value *= children.get(i).solve(variables, parameters);
         }
-        System.out.println(label + ": " + value);
         return value;
     }
 }

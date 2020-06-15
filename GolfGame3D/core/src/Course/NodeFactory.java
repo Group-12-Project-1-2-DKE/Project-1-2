@@ -25,10 +25,6 @@ public class NodeFactory {
         prototypes.add(new NatLog("ln"));
     }
 
-    public static ArrayList<EquationNode> getPrototypes(){
-        return prototypes;
-    }
-
     public static EquationNode makeNode(String label){
         for (EquationNode prototype : prototypes){
             if (prototype.label().equals(label)){

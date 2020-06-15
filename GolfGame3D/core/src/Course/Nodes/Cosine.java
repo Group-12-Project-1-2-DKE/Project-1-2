@@ -1,15 +1,19 @@
 package Course.Nodes;
 
-import Course.BaseEquationNode;
 import Course.EquationNode;
 
-public class Cosine extends BaseEquationNode {
+public class Cosine extends Function {
     public Cosine(String label){
-        super(label, 4);
+        super(label);
     }
 
     @Override
     public EquationNode newInstance() {
         return new Cosine("cos");
+    }
+
+    @Override
+    public double solveFunction(double input) {
+        return Math.cos(input);
     }
 }

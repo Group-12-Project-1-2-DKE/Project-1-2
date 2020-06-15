@@ -1,33 +1,29 @@
 package Course;
 
-import Course.Nodes.EquationRoot;
-import Course.Nodes.Multiply;
+import Course.Nodes.*;
 import Course.Nodes.Number;
-import Course.Nodes.Variable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Equation {
     private String equation;
-    private ArrayList<String> variables = new ArrayList<>();
+    private final ArrayList<String> variables = new ArrayList<>();
     private final EquationNode root = new EquationRoot("root");
 
     public static void main(String[] args) {
-        Equation eq = new Equation("3x^(0.5y)");//"0.2x^2 - sin(33y)3x + e - pi");
+        Equation eq = new Equation("-0.2x^2 - log(33y)x3 + e +- pi");
         ArrayList<String> v = new ArrayList<>();
         v.add("x"); v.add("y");
         eq.setVariables(v);
         System.out.println(eq);
-        System.out.println(eq.solve(new double[]{3, 2}));
+        System.out.println(eq.solve(new double[]{-3, 4}));
         //eq.test(eq.root);
-        //lukt shit zoals -1*-x*-4*-e  ? - Nopeee ff fixen dus
-        // 3x^(0.5y)  ? - Yess. Zorg dat dit blijft werken
     }
 
     //Method goes through the whole node tree
-    public void test(EquationNode node){
-        if (node.getPriority() == 4 || node.children().size() == 0){
+    private void test(EquationNode node){
+        if (node.getPriority() == 4 || node.children().size() == 0){//Put here stuff you want to test
             System.out.println(node);
         }
         for (int i = 0; i < node.children().size(); i++){
@@ -41,61 +37,58 @@ public class Equation {
         try {
             parseEquation();
         } catch (IllegalArgumentException e){
-            System.out.println("Something went wrong: " + e);
+            System.out.println("Something went wrong when parsing: " + e);
         }
     }
 
     public void parseEquation() throws IllegalArgumentException{
-        int depth = 0;
         EquationNode currentNode = root;
         for (int i = 0; i < equation.length(); i++){
             char c = equation.charAt(i);
-            EquationNode node = null;
+            EquationNode node;
             if (c >= 'a' && c <= 'z'){
                 String subtext = parseLetters(i);
                 node = NodeFactory.makeNode(subtext);
                 if (node == null){
-                    if (!variables.contains(subtext)) {
-                        variables.add(subtext);
-                    }
+                    addVariable(subtext);
                     node = NodeFactory.makeNode("var");
                     ((Variable)node).setVar(subtext);
-                }//Add Variables node
+                }
                 System.out.println(subtext);
 
                 i += subtext.length() - 1;
-            } else if ((c >= '0' && c <= '9') || c == '.'){
+
+                if (((BaseEquationNode)node).isFunction()){
+                    if (equation.charAt(i+1) != '('){
+                        throw new IllegalArgumentException("Expected '(' after " + subtext);
+                    }
+                    int end = getCloseParenthesis(i+2);
+                    makeSubEquation(equation.substring(i + 2, end), (SubEquation)node);
+                    i = end;
+                }
+            } else if ((c >= '0' && c <= '9') || c == '.' || (currentNode.getPriority() != 4 && c == '-')){
                 String subtext = parseNumbers(i);
+                i += subtext.length() - 1;
+                if (subtext.equals("-")){
+                     subtext = "-1";
+                }
                 double number = Double.parseDouble(subtext);
                 System.out.println(number);
-
-                i += subtext.length() - 1;
-                //number/constant node
                 node = NodeFactory.makeNode("num");
                 ((Number)node).setValue(number);
+            }else if (c == '('){
+                node = new SubEquation("()");
+                int end = getCloseParenthesis(i+1);
+                makeSubEquation(equation.substring(i + 1, end), (SubEquation)node);
+                i = end;
             }else{
-                 if (c == '('){
-                    depth++;
-                 }
                  System.out.println(c);
-                 if (c == ')'){
-                     depth--;
-                     while (currentNode.getPriority() != 0){
-                         currentNode = currentNode.parent();
-                     }
-                     currentNode = currentNode.parent();
-                     continue;
-                 }
                  node = NodeFactory.makeNode(Character.toString(c));
             }
 
             if (node == null){
                 throw new IllegalArgumentException("Some part of the equation can't be recognized: " + c);
             }
-
-            /*if (node.getPriority() < 3 && currentNode.getPriority() < 3){
-                throw new IllegalArgumentException("Syntax error");
-            }//hmmm?*/
 
             //insert * at e.g 2y
             if (node.getPriority() == 4 && currentNode.getPriority() == 4){
@@ -125,6 +118,22 @@ public class Equation {
         return node;
     }
 
+    private int getCloseParenthesis(int index){
+        int depth = 1;
+        for (int i = index; i < equation.length(); i++){
+            if (equation.charAt(i) == '('){
+                depth++;
+            }
+            if (equation.charAt(i) == ')'){
+                depth--;
+            }
+            if (depth == 0){
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Wrong syntax");
+    }
+
     private String parseLetters(int index){
         String subString = "";
         for (int i = index; i < equation.length(); i++){
@@ -142,7 +151,7 @@ public class Equation {
         String subString = "";
         for (int i = index; i < equation.length(); i++){
             char c = equation.charAt(i);
-            if ((c >= '0' && c <= '9') || c == '.'){
+            if ((c >= '0' && c <= '9') || c == '.' || (i == index && c == '-')){
                 subString += c;
             } else{
                 break;
@@ -154,6 +163,7 @@ public class Equation {
     public void setEquation(String equation){
         equation = equation.replaceAll(" ","").toLowerCase();
         this.equation = equation;
+        root.children().clear();
         parseEquation();
     }
 
@@ -174,7 +184,31 @@ public class Equation {
             throw new IllegalArgumentException("More variables found than given parameters\nfound vars: " + this.variables +
                     "\ngives parameters: " + Arrays.toString(parameters));
         }
-        return root.solve(variables, parameters);
+        try {
+            double value = root.solve(variables, parameters);
+            if (Double.isNaN(value)){
+                throw new Exception("Result was Not a Number.");
+            }
+            return value;
+        } catch (Exception e){
+            System.out.println("Something went wrong when solving: " + e);
+            return 0;
+        }
+    }
+
+    private void makeSubEquation(String partInParentheses, SubEquation node){
+        Equation subEquation = new Equation(partInParentheses);
+        for (String var : subEquation.variables){
+            addVariable(var);
+        }
+        subEquation.setVariables(variables);
+        node.setSubEquation(subEquation);
+    }
+
+    private void addVariable(String var){
+        if (!variables.contains(var)) {
+            variables.add(var);
+        }
     }
 
     public void setVariables(ArrayList<String> variables) throws IllegalArgumentException{
@@ -188,7 +222,8 @@ public class Equation {
                 + this.variables + "\ngiven vars: " + variables);
             }
         }
-        this.variables = variables;
+        this.variables.clear();
+        this.variables.addAll(variables);
     }
 
     public String toString(){
