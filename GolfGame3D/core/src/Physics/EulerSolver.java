@@ -1,6 +1,7 @@
 package Physics;
 import Objects.*;
 import com.mygdx.game.Variables;
+import java.lang.Math;
 
 public class EulerSolver implements PhysicsEngine{
     private double step_size = 0.1;
@@ -70,5 +71,34 @@ public class EulerSolver implements PhysicsEngine{
                 -grav_constant * gradient.getX() - fric_coefficient * grav_constant * initial_v.getX() / initial_v.length(),
                 -grav_constant * gradient.getY() - fric_coefficient * grav_constant * initial_v.getY() / initial_v.length()
         );
+    }
+
+    public Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
+        if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
+            final_v.setY(final_v.getY() * -1);
+        }
+        double rc = (ball.getLocation().getY() - tree.getLocation().getY())/(ball.getLocation().getX() - tree.getLocation.getX());
+        if (rc > Math.tan(0.375 * Math.PI) || rc <= Math.tan(0.625 * Math.PI)) {
+            final_v.setY(final_v.getY() * -1);
+        } else if (Math.tan(0.125 * Math.PI) < rc <= Math.tan(0.375 * Math.PI())) {
+            double temp = final_v.getX();
+            final_v.setX(final_v.getY());
+            final_v.setY(temp);
+            if ((final_v.getX() < 0 && final_v.getY() < 0) || (final_v.getX() > 0 && final_v.getY() > 0) || final_v.getX() == 0 || final_v.getY() == 0) {
+                final_v.setX(final_v.getX() * -1);
+                final_v.setY(final_v.getY() * -1);
+            }
+        } else if (Math.tan(0.875 * Math.PI()) < rc <= Math.tan(0.125 * Math.PI())) {
+            final_v.setX(final_v.getX * -1);
+        } else if (Math.tan(0.625 * Math.PI()) < rc <= Math.tan(0.875 * Math.PI())) {
+            double temp = final_v.getX();
+            final_v.setX(final_v.getY());
+            final_v.setY(temp);
+            if((final_v.getX() < 0 && final_v.getY() > 0) || (final_v.getX() > 0 && final_v.getY() < 0)) {
+                final_v.setX(final_v.getX() * -1);
+                final_v.setY(final_v.getY() * -1);
+            }
+        }
+
     }
 }
