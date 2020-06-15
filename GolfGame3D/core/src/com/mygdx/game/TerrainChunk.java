@@ -25,8 +25,8 @@ import static com.mygdx.game.GolfGame.ball;
  */
 public class TerrainChunk {
 
-    float[] vertices; 
-    short[] indices; 
+    public float[] vertices;
+    public short[] indices;
 
     int vertexSize;
     int positionSize = 3;
