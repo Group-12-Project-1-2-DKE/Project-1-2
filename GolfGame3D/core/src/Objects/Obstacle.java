@@ -9,5 +9,6 @@ public interface Obstacle{
 
     ModelInstance[] createModel(float x, float y);
     ArrayList<Obstacle> createInstance(int n);
+    Vector2D getLocation(); 
 
 }

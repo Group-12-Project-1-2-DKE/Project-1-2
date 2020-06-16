@@ -41,7 +41,7 @@ public class TreeObstacle implements Obstacle{
         ModelInstance treeInstance = new ModelInstance(tree, x, (float)GolfGame.getCourse().evaluate(x,z), z);
 
         Model branch = GolfGame.getModelBuilder().createCone(2,3,2,20,
-                new Material(ColorAttribute.createDiffuse(Color.GREEN)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+                new Material(ColorAttribute.createDiffuse(Color.FOREST)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         ModelInstance branchInstance = new ModelInstance(branch, x, (float)GolfGame.getCourse().evaluate(x,z) + 3.5f,z);
         ModelInstance[] instance = new ModelInstance[2];
         instance[0] = treeInstance;

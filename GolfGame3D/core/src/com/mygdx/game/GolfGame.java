@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.mygdx.game.Menus.Congrat;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -65,7 +64,7 @@ public class GolfGame implements Screen {
 	private btCollisionConfiguration collisionConfig;
 	private btDispatcher dispatcher;
 
-	private ArrayList<btCollisionObject> obstacleObjects = new ArrayList<>();
+	private ArrayList<TreeObstacle> obstacles;
 	private boolean collision = false;
 
 	private Stage stage1;
@@ -82,6 +81,9 @@ public class GolfGame implements Screen {
 
 	private Vector3 position;
 	public int attempt = 0;
+
+	private TreeObstacle obstacle ;
+	private ModelInstance[] obs;
 
 
 	public GolfGame(ScreenSpace game) {
@@ -164,17 +166,20 @@ public class GolfGame implements Screen {
 		ball = new ModelInstance(model, "ball");
 		ModelInstance flag = new ModelInstance(model, "flagPole");
 
-		//flagg.transform.setTranslation((float) Variables.goalX + 0.15f, (float) course.evaluate(new Vector2D((float)Variables.goalX * 0.1f, (float)Variables.goalY))  + 2.62f, (float)Variables.goalY);
-		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) Variables.startY);
+		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) + 1f, (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
 		instances = new ArrayList<>();
-		Obstacle obstacle = new TreeObstacle();
-		ArrayList<Obstacle> obstacles = obstacle.createInstance(5);
 
+		//obstacle = new TreeObstacle();
+		//obs = obstacle.createModel(10,6);
+		//instances.add(obs[0]);
+		//instances.add(obs[1]);
 		instances.add(ball);
 		instances.add(flag);
 
+
 		createMesh();
+		createObstacles();
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -211,7 +216,7 @@ public class GolfGame implements Screen {
 
 		} else {
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
-					(float) course.getBall().getLocation().getY() + 2);
+					(float) course.getBall().getLocation().getY() + 1f);
 
 		}
 
@@ -273,12 +278,16 @@ public class GolfGame implements Screen {
 		label.setText(stringBuilder);
 		stage1.draw();
 
-
 		//createObstacles();
 //		checkCollision();
 //		if(checkCollision()){
 //			System.out.println("collision");
 //		}
+
+		collides(obstacles);
+		if(collides(obstacles)){
+			System.out.println("collision");
+		}
 	}
 
 	@Override
@@ -330,31 +339,7 @@ public class GolfGame implements Screen {
 		return camera.frustum.pointInFrustum(position);
 	}
 
-	/**
-	 * this method determines if all of the given instances RE visible on the screen
-	 *
-	 * @param camera   the game camera that makes the instances visible
-	 * @param instance an object that is to be rendered on the screen
-	 * @return true if all instances are visible
-	 */
-	private boolean isVisibleAll(final Camera camera, final ModelInstance instance) {
-		instance.transform.getTranslation(position);
-		return camera.frustum.pointInFrustum(position);
-	}
 
-	/**
-	 * This method will be called when the user will click on the shoot button
-	 * It will recalculate the position of the ball and display it.
-	 */
-	private void takeShot() {
-		try {
-			long start = System.currentTimeMillis();
-			simulator.take_shot(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
-			System.out.println(System.currentTimeMillis() - start);
-		} catch (StackOverflowError s) {
-			System.out.println(s);
-		}
-	}
 	/**
 	 * method that builds a surface from Vector2Ds
 	 * @param start is the start coordinate
@@ -553,12 +538,11 @@ public class GolfGame implements Screen {
 
 
 	}
-
 	public void createObstacles() {
 		int numberOfTree = 0;
 		TreeObstacle treeObstacle = new TreeObstacle();
 		Random random = new Random();
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 1; i++) {
 			float randomX = 5 + random.nextFloat() * -(20);
 			float randomY = 5 + random.nextFloat() * -(20);
 
@@ -567,34 +551,32 @@ public class GolfGame implements Screen {
 				randomY = 5 + random.nextFloat() * (45 - 5);
 				numberOfTree ++;
 			}
+			obs = treeObstacle.createModel(10,10);
+			obstacles = new ArrayList<>();
+			obstacles.add(treeObstacle);
 
-			ModelInstance[] treeinstances = treeObstacle.createModel(randomX,randomY);
-			instances.add(treeinstances[0]);
-			instances.add(treeinstances[1]);
-
-			treeShape = new btCylinderShape(new Vector3(0.25f,3,0.25f));
-			treeObject = new btCollisionObject();
-			treeObject.setCollisionShape(treeShape);
-			treeObject.setWorldTransform(treeinstances[0].transform);
-			obstacleObjects.add(treeObject);
-
-			branchShape = new btConeShape(2,3);
-			branchObject =new  btCollisionObject();
-			branchObject.setCollisionShape(branchShape);
-			branchObject.setWorldTransform(treeinstances[1].transform);
-			obstacleObjects.add(branchObject);
-
-			ballShape = new btSphereShape(0.5f);
-			ballObject = new btCollisionObject();
-			ballObject.setCollisionShape(ballShape);
-			ballObject.setWorldTransform(ball.transform);
-
-
+			instances.add(obs[0]);
+			instances.add(obs[1]);
 
 		}
+		treeShape = new btCylinderShape(new Vector3(0.25f,3,0.25f));
+		treeObject = new btCollisionObject();
+		treeObject.setCollisionShape(treeShape);
+		treeObject.setWorldTransform(obs[0].transform);
+
+		branchShape = new btConeShape(2,3);
+		branchObject =new  btCollisionObject();
+		branchObject.setCollisionShape(branchShape);
+		branchObject.setWorldTransform(obs[1].transform);
+
+		ballShape = new btSphereShape(0.5f);
+		ballObject = new btCollisionObject();
+		ballObject.setCollisionShape(ballShape);
+		ballObject.setWorldTransform(ball.transform);
 	}
 
 	public boolean checkCollision(){
+
 		collisionConfig = new btDefaultCollisionConfiguration();
 		dispatcher = new btCollisionDispatcher(collisionConfig);
 		CollisionObjectWrapper c0 = new CollisionObjectWrapper(ballObject);
@@ -608,6 +590,15 @@ public class GolfGame implements Screen {
 		btManifoldResult result = new btManifoldResult(c0.wrapper,c1.wrapper);
 
 		algorithm.processCollision(c0.wrapper,c1.wrapper,info,result);
+
+		result.dispose();
+		info.dispose();
+		algorithm.dispose();
+		ci.dispose();
+		c0.dispose();
+		c1.dispose();
+		c2.dispose();
+
 		return result.getPersistentManifold().getNumContacts() > 0;
 	}
 
@@ -618,6 +609,7 @@ public class GolfGame implements Screen {
 	public static PuttingCourse getCourse(){
 		return course;
 	}
+
 
 	public void createWalls(){
 		MazeGenerator maze = new MazeGenerator(2,2);
@@ -633,5 +625,26 @@ public class GolfGame implements Screen {
 				}
 			}
 		}
+	}
+
+	public boolean collides(ArrayList<TreeObstacle> obstacles) {
+		ArrayList<TreeObstacle> collidedObs = new ArrayList<>();
+		for (int i = 0; i < obstacles.size(); i++) {
+
+			double x = Math.max(obstacles.get(i).getLocation().getX(), Math.min(course.getBall().getLocation().getX(), obstacles.get(i).getLocation().getX() + 0.5f));
+			double y = Math.max(course.evaluate(obstacles.get(i).getLocation().getX(), obstacles.get(i).getLocation().getY()), Math.min(course.evaluate(course.getBall().getLocation().getX(), course.getBall().getLocation().getY()),
+					course.evaluate(obstacles.get(i).getLocation().getX(), obstacles.get(i).getLocation().getY()) + 6f));
+			double z = Math.max(obstacles.get(i).getLocation().getY(), Math.min(course.getBall().getLocation().getY(), obstacles.get(i).getLocation().getY() + 0.5f));
+
+			double distance = Math.sqrt((course.getBall().getLocation().getX() - obstacles.get(i).getLocation().getX()) * (course.getBall().getLocation().getX() - obstacles.get(i).getLocation().getX()) +
+					(course.evaluate(course.getBall().getLocation().getX(), course.getBall().getLocation().getY()) - course.evaluate(obstacles.get(i).getLocation().getX(), obstacles.get(i).getLocation().getY())) * (course.evaluate(course.getBall().getLocation().getX(), course.getBall().getLocation().getY()) - course.evaluate(obstacles.get(i).getLocation().getX(), obstacles.get(i).getLocation().getY())) +
+					(course.getBall().getLocation().getY() - obstacles.get(i).getLocation().getY()) * (course.getBall().getLocation().getY() - obstacles.get(i).getLocation().getY()));
+			if (distance < 0.5) {
+				System.out.println("collision occurred with object with index" + i);
+				collidedObs.add(obstacles.get(i));
+				return true;
+			}
+		}
+		return false;
 	}
 }
