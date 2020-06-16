@@ -47,14 +47,13 @@ public class OptionScreen implements Screen {
     private Stage stage;
 
     public GolfGame hold;
-    private FileReaders reader;
 
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
         // Create a reader object and make it read a certain file with the default values on it.
-        reader = new FileReaders();
+        FileReaders reader = new FileReaders();
         reader.read("banana.txt");
 
         // Give to the variables a value (picture from assets folder).

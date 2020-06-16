@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import AI.StraighGreedy;
 import Course.PuttingCourse;
+import Maze.MazeGenerator;
+import Maze.Wall;
 import Objects.Ball;
 import Objects.Obstacle;
 import Objects.TreeObstacle;
@@ -25,6 +27,8 @@ import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.game.Menus.Congrat;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -184,6 +188,8 @@ public class GolfGame implements Screen {
 		shootStage(skin1);
 		changeBallPositionStage(skin1);
 
+		createWalls();
+
 	}
 
 	public float myDelta = 0;
@@ -267,11 +273,12 @@ public class GolfGame implements Screen {
 		label.setText(stringBuilder);
 		stage1.draw();
 
-		createObstacles();
-		checkCollision();
-		if(checkCollision()){
-			System.out.println("collision");
-		}
+
+		//createObstacles();
+//		checkCollision();
+//		if(checkCollision()){
+//			System.out.println("collision");
+//		}
 	}
 
 	@Override
@@ -548,15 +555,17 @@ public class GolfGame implements Screen {
 	}
 
 	public void createObstacles() {
+		int numberOfTree = 0;
 		TreeObstacle treeObstacle = new TreeObstacle();
 		Random random = new Random();
 		for (int i = 0; i < 2; i++) {
 			float randomX = 5 + random.nextFloat() * -(20);
 			float randomY = 5 + random.nextFloat() * -(20);
 
-			while ((Math.abs(randomX - Variables.goalX) < 5) && (Math.abs(randomY - Variables.goalY) < 5) || course.evaluate(new Vector2D(randomX, randomY)) < 0) {
+			while ((Math.abs(randomX - Variables.goalX) < 5) && (Math.abs(randomY - Variables.goalY) < 5) || course.evaluate(new Vector2D(randomX, randomY)) < 0 && numberOfTree < 30) {
 				randomX = 5 + random.nextFloat() * (45 - 5);
 				randomY = 5 + random.nextFloat() * (45 - 5);
+				numberOfTree ++;
 			}
 
 			ModelInstance[] treeinstances = treeObstacle.createModel(randomX,randomY);
@@ -608,5 +617,21 @@ public class GolfGame implements Screen {
 
 	public static PuttingCourse getCourse(){
 		return course;
+	}
+
+	public void createWalls(){
+		MazeGenerator maze = new MazeGenerator(2,2);
+		maze.updateGrid();
+		System.out.print(maze);
+		Wall wallGenerator = new Wall();
+
+		for (int i=0; i< maze.getGrid().length; i++){
+			for(int j=0; j<maze.getGrid()[i].length; j++){
+				if (maze.getGrid()[i][j] == 1){
+					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*1.5));
+					instances.add(wallInstances[0]);
+				}
+			}
+		}
 	}
 }

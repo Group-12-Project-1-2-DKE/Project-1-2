@@ -8,9 +8,9 @@ import java.util.Random;
 // https://stackoverflow.com/questions/21815839/simple-java-2d-array-maze-sample
 
 public class MazeGenerator {
-    private int dimensionX, dimensionY; // dimension of maze
-    private int gridDimensionX, gridDimensionY; // dimension of output grid
-    private char[][] grid; // output grid
+    private int dimensionX;
+    int dimensionY; // dimension of maze
+    private int[][] grid; // output grid
     private Cell[][] cells; // 2d array of Cells
     private Random random = new Random(); // The random object
 
@@ -18,9 +18,7 @@ public class MazeGenerator {
     public MazeGenerator(int xDimension, int yDimension) {
         dimensionX = xDimension;
         dimensionY = yDimension;
-        gridDimensionX = xDimension * 4 + 1;
-        gridDimensionY = yDimension * 2 + 1;
-        grid = new char[gridDimensionX][gridDimensionY];
+        grid = new int[xDimension * 4 + 1][yDimension * 2 + 1];
         init();
         generateMaze(cells[0][0]);
     }
@@ -28,8 +26,8 @@ public class MazeGenerator {
     private void init() {
         // create cells array and filled it with cells
         cells = new Cell[dimensionX][dimensionY];
-        for (int x = 0; x < dimensionX; x++) {
-            for (int y = 0; y < dimensionY; y++) {
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells[x].length; y++) {
                 cells[x][y] = new Cell(x, y, false); // Create the cell not as a wall
             }
         }
@@ -96,111 +94,107 @@ public class MazeGenerator {
         }
     }
 
-    // solve the maze starting from the start state (A-star algorithm)
-    public void solve(int startX, int startY, int endX, int endY) {
-        // re initialize cells for path finding
-        for (Cell[] cellrow : cells) {
-            for (Cell cell : cellrow) {
-                cell.parent = null;
-                cell.visited = false;
-                cell.inPath = false;
-                cell.travelled = 0;
-                cell.projectedDist = -1;
-            }
-        }
-        // cells still being considered
-        ArrayList<Cell> openCells = new ArrayList<>();
-        // cell being considered
-        Cell endCell = getCell(endX, endY);
-        if (endCell == null){
-            return;
-        }
-        // anonymous block to delete start, because not used later
-        Cell start = getCell(startX, startY);
-        if (start == null){
-            return;
-        }
-        start.projectedDist = getProjectedDistance(start, 0, endCell);
-        start.visited = true;       // Mark the cell as visited
-        openCells.add(start);       // add the cell the the list so that it can be considered.
-
-        // boolean solving = true;
-        while (true) {
-            if (openCells.isEmpty()) return; // quit, no path
-            // sort openCells according to least projected distance
-            Collections.sort(openCells, new Comparator<Cell>(){
-                @Override
-                public int compare(Cell cell1, Cell cell2) {
-                    double diff = cell1.projectedDist - cell2.projectedDist;
-                    if (diff > 0) return 1;
-                    else if (diff < 0) return -1;
-                    else return 0;
-                }
-            });
-            Cell current = openCells.remove(0); // pop cell least projectedDist
-            if (current == endCell) break; // at end
-            for (Cell neighbor : current.neighbors) {
-                double projDist = getProjectedDistance(neighbor,
-                        current.travelled + 1, endCell);
-                if (!neighbor.visited || // not visited yet
-                        projDist < neighbor.projectedDist) { // better path
-                    neighbor.parent = current;
-                    neighbor.visited = true;
-                    neighbor.projectedDist = projDist;
-                    neighbor.travelled = current.travelled + 1;
-                    if (!openCells.contains(neighbor))
-                        openCells.add(neighbor);
-                }
-            }
-        }
-        // create path from end to beginning
-        Cell backtracking = endCell;
-        backtracking.inPath = true;
-        while (backtracking.parent != null) {
-            backtracking = backtracking.parent;
-            backtracking.inPath = true;
-        }
-    }
-
-    // get the projected distance
-    // Calculate the distance between the current cell and the end cell.
-    public double getProjectedDistance(Cell current, double travelled, Cell end) {
-        return travelled + Math.abs(current.x - end.x) +
-                Math.abs(current.y - current.x);
-    }
+//    // solve the maze starting from the start state (A-star algorithm)
+//    public void solve(int startX, int startY, int endX, int endY) {
+//        // re initialize cells for path finding
+//        for (Cell[] cellrow : cells) {
+//            for (Cell cell : cellrow) {
+//                cell.parent = null;
+//                cell.visited = false;
+//                cell.inPath = false;
+//                cell.travelled = 0;
+//                cell.projectedDist = -1;
+//            }
+//        }
+//        // cells still being considered
+//        ArrayList<Cell> openCells = new ArrayList<>();
+//        // cell being considered
+//        Cell endCell = getCell(endX, endY);
+//        if (endCell == null){
+//            return;
+//        }
+//        // anonymous block to delete start, because not used later
+//        Cell start = getCell(startX, startY);
+//        if (start == null){
+//            return;
+//        }
+//        start.projectedDist = getProjectedDistance(start, 0, endCell);
+//        start.visited = true;       // Mark the cell as visited
+//        openCells.add(start);       // add the cell the the list so that it can be considered.
+//
+//        // boolean solving = true;
+//        while (true) {
+//            if (openCells.isEmpty()) return; // quit, no path
+//            // sort openCells according to least projected distance
+//            Collections.sort(openCells, new Comparator<Cell>(){
+//                @Override
+//                public int compare(Cell cell1, Cell cell2) {
+//                    double diff = cell1.projectedDist - cell2.projectedDist;
+//                    if (diff > 0) return 1;
+//                    else if (diff < 0) return -1;
+//                    else return 0;
+//                }
+//            });
+//            Cell current = openCells.remove(0); // pop cell least projectedDist
+//            if (current == endCell) break; // at end
+//            for (Cell neighbor : current.neighbors) {
+//                double projDist = getProjectedDistance(neighbor,
+//                        current.travelled + 1, endCell);
+//                if (!neighbor.visited || // not visited yet
+//                        projDist < neighbor.projectedDist) { // better path
+//                    neighbor.parent = current;
+//                    neighbor.visited = true;
+//                    neighbor.projectedDist = projDist;
+//                    neighbor.travelled = current.travelled + 1;
+//                    if (!openCells.contains(neighbor))
+//                        openCells.add(neighbor);
+//                }
+//            }
+//        }
+//        // create path from end to beginning
+//        Cell backtracking = endCell;
+//        backtracking.inPath = true;
+//        while (backtracking.parent != null) {
+//            backtracking = backtracking.parent;
+//            backtracking.inPath = true;
+//        }
+//    }
 
     // draw the maze
     public void updateGrid() {
-        char backChar = ' ', wallChar = 'X', cellChar = ' ', pathChar = '*';
+        int open = 0;
+        int wall = 1;
+        int pathChar = 2;
         // fill background
-        for (int x = 0; x < gridDimensionX; x ++) {
-            for (int y = 0; y < gridDimensionY; y ++) {
-                grid[x][y] = backChar;
+        for (int x = 0; x < grid.length; x ++) {
+            for (int y = 0; y < grid[x].length; y ++) {
+                grid[x][y] = open;
             }
         }
         // build walls
-        for (int x = 0; x < gridDimensionX; x ++) {
-            for (int y = 0; y < gridDimensionY; y ++) {
+        for (int x = 0; x < grid.length; x ++) {
+            for (int y = 0; y < grid[x].length; y ++) {
                 if (x % 4 == 0 || y % 2 == 0)
-                    grid[x][y] = wallChar;
+                    grid[x][y] = wall;
             }
         }
         // make meaningful representation
         for (int x = 0; x < dimensionX; x++) {
             for (int y = 0; y < dimensionY; y++) {
                 Cell current = getCell(x, y);
-                int gridX = x * 4 + 2, gridY = y * 2 + 1;
+                int gridX = x * 4 + 2;
+                int gridY = y * 2 + 1;
                 if (current.inPath) {
                     grid[gridX][gridY] = pathChar;
                     if (current.hasBelowNeighbor())
                         if (getCell(x, y + 1).inPath) {
                             grid[gridX][gridY + 1] = pathChar;
-                            grid[gridX + 1][gridY + 1] = backChar;
-                            grid[gridX - 1][gridY + 1] = backChar;
+                            grid[gridX + 1][gridY + 1] = open;
+                            grid[gridX - 1][gridY + 1] = open;
                         } else {
-                            grid[gridX][gridY + 1] = cellChar;
-                            grid[gridX + 1][gridY + 1] = backChar;
-                            grid[gridX - 1][gridY + 1] = backChar;
+                            grid[gridX][gridY + 1] = open;
+                            grid[gridX + 1][gridY + 1] = open;
+                            grid[gridX - 1][gridY + 1] = open;
                         }
                     if (current.hasRightNeighbor())
                         if (getCell(x + 1, y).inPath) {
@@ -208,21 +202,21 @@ public class MazeGenerator {
                             grid[gridX + 1][gridY] = pathChar;
                             grid[gridX + 3][gridY] = pathChar;
                         } else {
-                            grid[gridX + 2][gridY] = cellChar;
-                            grid[gridX + 1][gridY] = cellChar;
-                            grid[gridX + 3][gridY] = cellChar;
+                            grid[gridX + 2][gridY] = open;
+                            grid[gridX + 1][gridY] = open;
+                            grid[gridX + 3][gridY] = open;
                         }
                 } else {
-                    grid[gridX][gridY] = cellChar;
+                    grid[gridX][gridY] = open;
                     if (current.hasBelowNeighbor()) {
-                        grid[gridX][gridY + 1] = cellChar;
-                        grid[gridX + 1][gridY + 1] = backChar;
-                        grid[gridX - 1][gridY + 1] = backChar;
+                        grid[gridX][gridY + 1] = open;
+                        grid[gridX + 1][gridY + 1] = open;
+                        grid[gridX - 1][gridY + 1] = open;
                     }
                     if (current.hasRightNeighbor()) {
-                        grid[gridX + 2][gridY] = cellChar;
-                        grid[gridX + 1][gridY] = cellChar;
-                        grid[gridX + 3][gridY] = cellChar;
+                        grid[gridX + 2][gridY] = open;
+                        grid[gridX + 1][gridY] = open;
+                        grid[gridX + 3][gridY] = open;
                     }
                 }
             }
@@ -238,8 +232,8 @@ public class MazeGenerator {
     public String toString() {
         updateGrid();
         StringBuilder output = new StringBuilder();
-        for (int y = 0; y < gridDimensionY; y++) {
-            for (int x = 0; x < gridDimensionX; x++) {
+        for (int y = 0; y < grid[0].length; y++) {
+            for (int x = 0; x < grid.length; x++) {
                 output.append(grid[x][y]);
             }
             output.append("\n");
@@ -253,5 +247,13 @@ public class MazeGenerator {
         }
         System.out.println("");
         return output.toString();
+    }
+
+    public int[][] getGrid(){
+        return grid;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
     }
 }

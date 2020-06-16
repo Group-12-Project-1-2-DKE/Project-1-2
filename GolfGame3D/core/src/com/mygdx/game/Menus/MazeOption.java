@@ -1,6 +1,6 @@
 package com.mygdx.game.Menus;
 
-import Maze.GolfGameMaze;
+import Reader.FileReaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.mygdx.game.GolfGame;
 import com.mygdx.game.ScreenSpace;
+import com.mygdx.game.Variables;
 
 public class MazeOption implements Screen {
     private ScreenSpace game;
@@ -37,6 +39,10 @@ public class MazeOption implements Screen {
 
     public MazeOption(ScreenSpace game) {
         this.game = game;
+
+        FileReaders reader = new FileReaders();
+        reader.read("banana.txt");
+        Variables.function = "1";
 
         // Create a new stage, where the buttons will be drawn.
         this.stage = new Stage();
@@ -96,7 +102,8 @@ public class MazeOption implements Screen {
             if (Gdx.input.isTouched()){
                 // TODO implement the creation of the maze.
                 this.dispose();
-                game.setScreen(new GolfGameMaze(game));
+                Variables.function = "1";
+                game.setScreen(new GolfGame(game));
 
             }
         } else {
