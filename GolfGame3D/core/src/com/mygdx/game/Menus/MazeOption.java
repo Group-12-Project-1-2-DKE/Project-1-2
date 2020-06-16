@@ -1,5 +1,6 @@
 package com.mygdx.game.Menus;
 
+import Course.Nodes.Variable;
 import Reader.FileReaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -39,6 +40,8 @@ public class MazeOption implements Screen {
 
     public MazeOption(ScreenSpace game) {
         this.game = game;
+
+        Variables.maze = true;
 
         FileReaders reader = new FileReaders();
         reader.read("banana.txt");

@@ -64,7 +64,7 @@ public class MazeGenerator {
 
             for (Cell potentialNeighbor : potentialNeighbors) {
                 // skip if outside, is a wall or is not opened
-                if (potentialNeighbor == null || potentialNeighbor.wall || !potentialNeighbor.open) {
+                if (potentialNeighbor == null || !potentialNeighbor.open) { //  || potentialNeighbor.wall
                     continue;
                 }
                 // If the neighbor exist --> add it to the list of neighbor.

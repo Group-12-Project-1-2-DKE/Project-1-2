@@ -40,4 +40,9 @@ public class Wall implements Obstacle {
     public ArrayList<Obstacle> createInstance(int n) {
         return null;
     }
+
+    @Override
+    public Vector2D getLocation() {
+        return null;
+    }
 }

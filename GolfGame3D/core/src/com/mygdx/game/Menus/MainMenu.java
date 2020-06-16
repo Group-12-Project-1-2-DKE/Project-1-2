@@ -12,18 +12,21 @@ import com.mygdx.game.ScreenSpace;
 
 public class MainMenu implements Screen{
     // Different position and size of the pictures
-    private static final int EXIT_WIDTH = 250;
-    private static final int EXIT_HEIGHT = 120;
-    private static final int PLAY_WIDTH = 300;
-    private static final int PLAY_HEIGHT = 120;
-    private static final int EXIT_Y = 325;
-    private static final int PLAY_Y = 475;
-    private static final int GOLF_IMAGE_WIDTH = 500;
-    private static final int GOLF_IMAGE_HEIGHT = 250;
-    private static final int GOLF_IMAGE_Y = 50;
-    private static final int OPTION_WIDTH =200;
-    private static final int OPTION_HEIGHT = 175;
-    private static final int OPTION_Y = 600;
+    private final int EXIT_WIDTH = 250;
+    private final int EXIT_HEIGHT = 120;
+    private final int PLAY_WIDTH = 300;
+    private final int PLAY_HEIGHT = 120;
+    private final int EXIT_Y = 300;
+    private final int PLAY_Y = 400;
+    private final int GOLF_IMAGE_WIDTH = 500;
+    private final int GOLF_IMAGE_HEIGHT = 250;
+    private final int GOLF_IMAGE_Y = 25;
+    private final int OPTION_WIDTH =200;
+    private final int OPTION_HEIGHT = 175;
+    private final int OPTION_Y = 600;
+    private final int MAZE_WIDTH = 250;
+    private final int MAZE_HEIGHT = 90;
+    private final int MAZE_Y = 540;
 
     final ScreenSpace game;
 
@@ -35,6 +38,8 @@ public class MainMenu implements Screen{
     private Texture golfImage;
     private Texture optionButtonInactive;
     private Texture optionButtonActive;
+    private Texture mazeButtonActive;
+    private Texture mazeButtonInactive;
 
     private BitmapFont font;
 
@@ -63,6 +68,8 @@ public class MainMenu implements Screen{
         golfImage = new Texture ("golf_logo.png");
         optionButtonInactive = new Texture("gearwheelInActive.png");
         optionButtonActive = new Texture("gearwheelActive.png");
+        mazeButtonActive = new Texture("mazeButtonActive.png");
+        mazeButtonInactive = new Texture("mazeButtonInactive.png");
 
     }
 
@@ -110,7 +117,7 @@ public class MainMenu implements Screen{
                     // If the button is pushed, dispose this window and create an OptionScreen.
                     this.dispose();
                     //game.setScreen(new OptionScreen(game));
-                    game.setScreen(new MazeOption(game));
+                    game.setScreen(new OptionScreen(game));
                 }
             } else {
                 // If the cursor is not around the button, draw the inactivated button.
@@ -140,6 +147,28 @@ public class MainMenu implements Screen{
         } else {
             // If the cursor is not around the button, draw the inactivated button.
             game.batch.draw(optionButtonInactive, z, OPTION_Y, OPTION_WIDTH, OPTION_HEIGHT);
+        }
+
+        // Add the maze button.
+        int w = (ScreenSpace.WIDTH / 2 - MAZE_WIDTH / 2) -5;
+        if (Gdx.input.getX() < w + MAZE_WIDTH && Gdx.input.getX() > w){
+            if ( ScreenSpace.HEIGHT - Gdx.input.getY() < MAZE_Y + MAZE_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > MAZE_Y){
+                // If the cursor is close to the button, draw the same button with a different color
+                game.batch.draw(mazeButtonActive, w, MAZE_Y, MAZE_WIDTH, MAZE_HEIGHT);
+                // If the play button is clicked, create an option screen.
+                if (Gdx.input.isTouched()){
+                    // If the button is pushed, dispose this window and create an OptionScreen.
+                    this.dispose();
+                    //game.setScreen(new OptionScreen(game));
+                    game.setScreen(new MazeOption(game));
+                }
+            } else {
+                // If the cursor is not around the button, draw the inactivated button.
+                game.batch.draw(mazeButtonInactive, w, MAZE_Y, MAZE_WIDTH, MAZE_HEIGHT);
+            }
+        } else {
+            // If the cursor is not around the button, draw the inactivated button.
+            game.batch.draw(mazeButtonInactive, w, MAZE_Y, MAZE_WIDTH, MAZE_HEIGHT);
         }
 
         game.batch.end();

@@ -11,7 +11,7 @@ public class Cell {
     boolean inPath = false;                         // solver: if used in last attempt to solve path
     double travelled;                               // solver: distance travelled this far
     double projectedDist;                           // solver: projected distance to end
-    boolean wall;                                   // impassable cell or not
+    //boolean wall;                                   // impassable cell or not
     boolean open = true;                            // if true, has not been used yet in generation
 
     // constructor Cell at x, y
@@ -23,7 +23,7 @@ public class Cell {
     Cell(int x, int y, boolean isWall) {
         this.x = x;
         this.y = y;
-        this.wall = isWall;
+        //this.wall = isWall;
     }
 
     // add a neighbor to this cell, and this cell as a neighbor to the other

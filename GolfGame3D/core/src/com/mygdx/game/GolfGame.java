@@ -179,7 +179,11 @@ public class GolfGame implements Screen {
 
 
 		createMesh();
-		createObstacles();
+		if(Variables.maze){
+			createWalls();
+		}else{
+			createObstacles();
+		}
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -192,9 +196,6 @@ public class GolfGame implements Screen {
 
 		shootStage(skin1);
 		changeBallPositionStage(skin1);
-
-		createWalls();
-
 	}
 
 	public float myDelta = 0;
@@ -284,10 +285,6 @@ public class GolfGame implements Screen {
 //			System.out.println("collision");
 //		}
 
-		collides(obstacles);
-		if(collides(obstacles)){
-			System.out.println("collision");
-		}
 	}
 
 	@Override
@@ -612,7 +609,7 @@ public class GolfGame implements Screen {
 
 
 	public void createWalls(){
-		MazeGenerator maze = new MazeGenerator(2,2);
+		MazeGenerator maze = new MazeGenerator(5,5);
 		maze.updateGrid();
 		System.out.print(maze);
 		Wall wallGenerator = new Wall();

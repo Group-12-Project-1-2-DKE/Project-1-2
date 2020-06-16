@@ -28,4 +28,5 @@ public class Variables {
     public static Vector2D lowerBound;
     public static Vector2D upperBound;
 
+    public static boolean maze = false;
 }
