@@ -2,6 +2,8 @@ package Course;
 
 import Objects.Ball;
 import Physics.Function2D;
+import Physics.PuttingSimulator;
+import Physics.RungeKuttaSolver;
 import Physics.Vector2D;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.mygdx.game.Variables;
 
 public class PuttingCourse implements Function2D{
 
@@ -25,15 +28,21 @@ public class PuttingCourse implements Function2D{
     private double tolerance; //hole tolerance
     private double maxVelocity;
     private String equation;
-    private String[][][] components;
     private double limstep = 0.0001;//Larger than 10^-4 or smaller than 10^-5 probably gives more error
+    private Equation eq;
 
     /**
      * Main method for testing
      */
     public static void main(String[] args){
-        PuttingCourse h = new PuttingCourse("2*x^2 + -1*y^-3", new Vector2D(0,0), new Vector2D(10,0),
+        PuttingCourse h = new PuttingCourse("0.2sin(x0.5)^2 + ln(1+0.1y^2)", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
+        RungeKuttaSolver r = new RungeKuttaSolver();
+        PuttingSimulator p = new PuttingSimulator(h, r);
+        Variables.lowerBound = new Vector2D(-100, -100);
+        Variables.upperBound = new Vector2D(100, 100);
+        p.take_shot(new Vector2D(3, 2));
+        System.out.println(p.get_ball_position());
     }
 
     /**
@@ -104,73 +113,15 @@ public class PuttingCourse implements Function2D{
      * @return height
      */
     public double evaluate(Vector2D p){
-        double total = 0;
-
-        for (int i = 0; i < components.length; i++){
-            double subtotal = 1;
-            for (int j = 0; j < components[i].length; j++){
-                double subbtotal = getNumber(components[i][j][components[i][j].length - 1], p);
-
-                for (int k = components[i][j].length - 2; k >= 0 ; k--){
-                    subbtotal = Math.pow(getNumber(components[i][j][k], p), subbtotal);
-                }
-
-                subtotal *= subbtotal;
-            }
-            total += subtotal;
-        }
-
-        return total;
-    }
-
-    /**
-     * Some code so I don't have to copy and paste everything:
-     * If s equals "x" or "y", it returns the x or y value of the given vector.
-     * If s equals a double, it returns the double.
-     * If s equals neither (which it shouldn't), it returns 0 and prints an error message.
-     * @param s
-     * @param p
-     * @return double in String s
-     */
-    public double getNumber(String s, Vector2D p){
-        try{
-            return Double.parseDouble(s);
-        } catch (Exception e){ //Didn't know the right exception, so I just put Exception here
-
-            if ("x".equals(s)){
-                return p.getX();
-            } else if ("y".equals(s)){
-                return p.getY();
-            } else{
-                System.out.println("Part of the equation cannot be recognized.");
-            }
-        }
-        return 0;
+        return eq.solve(new double[]{p.getX(), p.getY()});
     }
 
     public void setEquation(String equation){
         this.equation = equation;
-
-        equation = equation.replaceAll(" ","");
-
-        components = parseEquation(equation);
-    }
-
-    private String[][][] parseEquation(String eq){
-        String[] plus_c = eq.split("\\+");
-        String[][][] comps = new String[plus_c.length][][];
-
-        for (int i = 0; i < plus_c.length; i++){
-            String p = plus_c[i];
-            String[] times_c = p.split("\\*");
-            comps[i] = new String[times_c.length][];
-            for (int j = 0; j < times_c.length; j++){
-                String t = times_c[j];
-                String[] power_c = t.split("\\^");
-                comps[i][j] = power_c;
-            }
-        }
-        return comps;
+        eq = new Equation(equation);
+        ArrayList<String> vars = new ArrayList<>();
+        vars.add("x"); vars.add("y");
+        eq.setVariables(vars);
     }
 
     public String getEquation(){

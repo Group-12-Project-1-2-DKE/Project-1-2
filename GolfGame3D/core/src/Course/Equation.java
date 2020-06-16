@@ -12,7 +12,7 @@ public class Equation {
     private final EquationNode root = new EquationRoot("root");
 
     public static void main(String[] args) {
-        Equation eq = new Equation("-0.2x^2 - log(33y)x3 + e +- pi");
+        Equation eq = new Equation("-0.2x^(2*x) - log(33y)x3 + e +- pi");
         ArrayList<String> v = new ArrayList<>();
         v.add("x"); v.add("y");
         eq.setVariables(v);
@@ -54,10 +54,7 @@ public class Equation {
                     node = NodeFactory.makeNode("var");
                     ((Variable)node).setVar(subtext);
                 }
-                System.out.println(subtext);
-
                 i += subtext.length() - 1;
-
                 if (((BaseEquationNode)node).isFunction()){
                     if (equation.charAt(i+1) != '('){
                         throw new IllegalArgumentException("Expected '(' after " + subtext);
@@ -73,7 +70,6 @@ public class Equation {
                      subtext = "-1";
                 }
                 double number = Double.parseDouble(subtext);
-                System.out.println(number);
                 node = NodeFactory.makeNode("num");
                 ((Number)node).setValue(number);
             }else if (c == '('){
@@ -82,7 +78,6 @@ public class Equation {
                 makeSubEquation(equation.substring(i + 1, end), (SubEquation)node);
                 i = end;
             }else{
-                 System.out.println(c);
                  node = NodeFactory.makeNode(Character.toString(c));
             }
 
@@ -96,8 +91,6 @@ public class Equation {
             }
 
             currentNode = addNode(node, currentNode);
-
-            System.out.println(this);
         }
     }
 
@@ -107,7 +100,6 @@ public class Equation {
             while (node.getPriority() != 0 && node.getPriority() <= p.getPriority()){
                 currentNode = p;
                 p = p.parent();
-                System.out.println("p: " + p);
             }
             p.children().remove(p.children().size() - 1);
             p.add(node);

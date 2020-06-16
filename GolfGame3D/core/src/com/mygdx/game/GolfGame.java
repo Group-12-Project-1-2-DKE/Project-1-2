@@ -26,9 +26,8 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.mygdx.game.Menus.Congrat;
-import javafx.collections.ObservableList;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Random;
 

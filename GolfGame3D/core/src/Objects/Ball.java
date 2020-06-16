@@ -82,10 +82,6 @@ public class Ball {
      */
     public void setLocation(Vector2D newLocation) {
         location = newLocation;
-        if (this.isInWater()){
-            location = newLocation;
-
-        }
     }
 
     /**

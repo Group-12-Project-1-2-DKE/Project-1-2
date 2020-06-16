@@ -109,7 +109,8 @@ public class MainMenu implements Screen{
                 if (Gdx.input.isTouched()){
                     // If the button is pushed, dispose this window and create an OptionScreen.
                     this.dispose();
-                    game.setScreen(new OptionScreen(game));
+                    //game.setScreen(new OptionScreen(game));
+                    game.setScreen(new MazeOption(game));
                 }
             } else {
                 // If the cursor is not around the button, draw the inactivated button.
