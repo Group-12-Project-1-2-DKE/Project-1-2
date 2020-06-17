@@ -59,7 +59,15 @@ public class PuttingSimulator{
                 System.out.println("-----------");
             }*/
 
-            Vector2D next_velocity = engine.calculateShot(initial_ball_velocity, course.getBall(), course);
+        Vector2D next_velocity = null;
+        //vergelijk met take_shot
+        //doe 5 keer per keer in method?
+        for (int i = 0; i < 5; i++) {
+            if (course.getBall().isAtRest()){
+                return null;
+            }
+            next_velocity = engine.calculateShot(initial_ball_velocity, course.getBall(), course);
+        }
 
         //}
 
