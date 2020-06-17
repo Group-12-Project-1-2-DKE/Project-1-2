@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import AI.StraighGreedy;
+import Course.Nodes.Variable;
 import Course.PuttingCourse;
 import Maze.MazeGenerator;
 import Maze.Wall;
@@ -609,8 +610,9 @@ public class GolfGame implements Screen {
 
 
 	public void createWalls(){
-		MazeGenerator maze = new MazeGenerator(5,5);
+		MazeGenerator maze = new MazeGenerator(Variables.mazeX, Variables.mazeY);
 		maze.updateGrid();
+		maze.addStartAndEnd();
 		System.out.print(maze);
 		Wall wallGenerator = new Wall();
 
@@ -619,7 +621,11 @@ public class GolfGame implements Screen {
 				if (maze.getGrid()[i][j] == 1){
 					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*1.5));
 					instances.add(wallInstances[0]);
-				}
+				}else if(maze.getGrid()[i][j] == 8){
+				course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
+				}else if(maze.getGrid()[i][j] == 9){
+				//course.getFlag().setLocation(new Vector2D(i,j*1.5));
+			}
 			}
 		}
 	}

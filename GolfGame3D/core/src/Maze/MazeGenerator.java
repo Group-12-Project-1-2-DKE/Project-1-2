@@ -221,6 +221,7 @@ public class MazeGenerator {
                 }
             }
         }
+        System.out.print("Hello1");
     }
 
     // simply prints the map
@@ -231,19 +232,13 @@ public class MazeGenerator {
     @Override
     public String toString() {
         updateGrid();
+        addStartAndEnd();
         StringBuilder output = new StringBuilder();
         for (int y = 0; y < grid[0].length; y++) {
             for (int x = 0; x < grid.length; x++) {
                 output.append(grid[x][y]);
             }
             output.append("\n");
-        }
-
-        for (int i=0; i<cells.length; i++){
-            System.out.println(" ");
-            for (int j=0; j<cells[i].length; j++){
-                System.out.print(cells[i][j] + " ");
-            }
         }
         System.out.println("");
         return output.toString();
@@ -255,5 +250,11 @@ public class MazeGenerator {
 
     public Cell[][] getCells() {
         return cells;
+    }
+
+    public void addStartAndEnd(){
+        System.out.print("hello");
+        grid[1][1] = 8;         // Start position
+        grid[grid.length-2][grid[0].length-2] = 9; // End position
     }
 }

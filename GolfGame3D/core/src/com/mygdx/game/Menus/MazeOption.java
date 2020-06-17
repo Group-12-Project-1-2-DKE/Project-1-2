@@ -27,6 +27,9 @@ public class MazeOption implements Screen {
     private Texture backButtonInactivated;
     private Texture mazePicture;
 
+    TextField mazeX;
+    TextField mazeY;
+
     public MazeOption(ScreenSpace game) {
         this.game = game;
 
@@ -59,13 +62,13 @@ public class MazeOption implements Screen {
         Skin customizedMenuSkin = new Skin(Gdx.files.internal("uiskin.json"));
         // Create the textFields and add them to the "frame".
         // The textfields on which the user will enter its values.
-        TextField mazeX = new TextField(String.valueOf(10), customizedMenuSkin);
+        mazeX = new TextField(String.valueOf(5), customizedMenuSkin);
         mazeX.setPosition(25,675);
         mazeX.setSize(200, 30);
         mazeX.setColor(Color.WHITE);
         stage.addActor(mazeX);
 
-        TextField mazeY = new TextField(String.valueOf(10), customizedMenuSkin);
+        mazeY = new TextField(String.valueOf(5), customizedMenuSkin);
         mazeY.setPosition(25,525);
         mazeY.setSize(200, 30);
         mazeY.setColor(Color.WHITE);
@@ -105,6 +108,8 @@ public class MazeOption implements Screen {
             if (Gdx.input.isTouched()){
                 this.dispose();
                 Variables.function = "1";
+                Variables.mazeX = Integer.parseInt(mazeX.getText());
+                Variables.mazeY = Integer.parseInt(mazeY.getText());
                 game.setScreen(new GolfGame(game));
 
             }

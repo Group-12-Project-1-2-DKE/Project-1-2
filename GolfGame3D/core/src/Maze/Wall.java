@@ -23,7 +23,7 @@ public class Wall implements Obstacle {
         Model wall = GolfGame.getModelBuilder().createBox(1f,1f,1.5f,
                 new Material(ColorAttribute.createDiffuse(Color.RED)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        ModelInstance wallInstance = new ModelInstance(wall, x-10, 1, z);
+        ModelInstance wallInstance = new ModelInstance(wall, x-20, 1, z-20);
 
         ModelInstance[] instance = new ModelInstance[1];
         instance[0] = wallInstance;
