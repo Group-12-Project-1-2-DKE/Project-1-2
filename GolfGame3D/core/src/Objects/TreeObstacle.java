@@ -77,6 +77,14 @@ public class TreeObstacle implements Obstacle{
         return height;
     }
 
+    public double getWidth() {
+        return width;
+    }
+
+    public double getDiameter() {
+        return diameter;
+    }
+
     public Vector2D getLocation() {
         return location;
     }
