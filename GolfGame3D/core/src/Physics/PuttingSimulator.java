@@ -44,29 +44,32 @@ public class PuttingSimulator{
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
 
-    public Vector2D take_shotSlowly(Vector2D initial_ball_velocity,int fifty) {
-        Vector2D next_velocity = initial_ball_velocity;
+    public Vector2D take_shotSlowly(Vector2D initial_ball_velocity) {
+        //Vector2D next_velocity = initial_ball_velocity;
 
         if (initial_ball_velocity.length() == 0){
-            next_velocity = new Vector2D(0.00000001, 0.00000001);
+            initial_ball_velocity = new Vector2D(0.00000001, 0.00000001);
         }
-        if (course.getBall().isHit() && counter <= fifty){
-            counter++;
-            if (counter <= 10){
+        //if (course.getBall().isHit() && counter <= fifty){
+            //counter++;
+            /*if (counter <= 10){
                 System.out.println(counter);
                 System.out.println(course.getBall().getLocation());
                 System.out.println(next_velocity);
                 System.out.println("-----------");
-            }
+            }*/
 
-            next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+            Vector2D next_velocity = engine.calculateShot(initial_ball_velocity, course.getBall(), course);
 
-        }
+        //}
 
-        if (counter==fifty+1 || !course.getBall().isHit() ) {
-            shot_counter++;
-            System.out.println("Final ball location: " + course.getBall().getLocation());
-            counter=0;
+        //if (counter==fifty+1 || !course.getBall().isHit() ) {
+        //    shot_counter++;
+        //    System.out.println("Final ball location: " + course.getBall().getLocation());
+        //    counter=0;
+        //    return null;
+        //}
+        if (course.getBall().isAtRest()){
             return null;
         }
 

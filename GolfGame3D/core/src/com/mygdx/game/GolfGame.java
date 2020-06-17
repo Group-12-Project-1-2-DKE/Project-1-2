@@ -236,12 +236,12 @@ public class GolfGame implements Screen {
 						Vector2D aiVec = ai.calculate_turn(course,500);
 						dirX.setText("" + aiVec.getX());
 						dirY.setText("" + aiVec.getY());
-						myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
+						myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
 					}
 					attempt++;
-					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())), 50);
+					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
 				} else {
-					myVector = simulator.take_shotSlowly(myVector, 50);
+					myVector = simulator.take_shotSlowly(myVector);
 				}
 			} catch (StackOverflowError s) {
 
