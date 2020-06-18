@@ -13,7 +13,7 @@ public class StraighGreedy implements AI{
      * Algorithm is greedy, so probably inaccurate.
      * @param course
      * @param steps
-     * @return initial velocity for (hopefully) a hole in one
+     * @return initial Vector for (hopefully) a hole in one
      */
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps){
