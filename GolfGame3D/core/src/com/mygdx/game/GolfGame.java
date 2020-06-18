@@ -50,13 +50,13 @@ public class GolfGame implements Screen {
 	private CameraInputController cameraInputController;
 
 	private Model model;
-	public static ModelInstance ball;
+	public  ModelInstance ball;
 	private ModelBatch modelBatch;
 	private static ModelBuilder modelBuilder;
 	private static ArrayList<ModelInstance> instances;
 
 
-	private ArrayList<TreeObstacle> obstacles;
+	private ArrayList<TreeObstacle> obstacles = new ArrayList<>();
 	private boolean collision = false;
 
 	private Stage stage1;
@@ -82,14 +82,6 @@ public class GolfGame implements Screen {
 	public GolfGame(ScreenSpace game) {
 		this.game = game;
 
-		modelBuilder = new ModelBuilder();
-		instances = new ArrayList<>();
-
-		if(Variables.maze){
-			createWalls();
-		}else{
-			createObstacles();
-		}
 
 		Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
 
@@ -150,6 +142,8 @@ public class GolfGame implements Screen {
 
 		modelBatch = new ModelBatch();
 
+		modelBuilder = new ModelBuilder();
+		instances = new ArrayList<>();
 
 
 		modelBuilder.begin();
@@ -167,18 +161,20 @@ public class GolfGame implements Screen {
 		ball = new ModelInstance(model, "ball");
 		ModelInstance flag = new ModelInstance(model, "flagPole");
 
-		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) + 1f, (float) Variables.startY);
-		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
+		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX() , course.getStart().getY())) - 1f, (float) Variables.startY);
+		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())), (float) course.getFlag().getY());
 
-		//obstacle = new TreeObstacle();
-		//obs = obstacle.createModel(10,6);
-		//instances.add(obs[0]);
-		//instances.add(obs[1]);
 		instances.add(ball);
 		instances.add(flag);
 
 
 		createMesh();
+
+		if(Variables.maze){
+			createWalls();
+		}else{
+			createObstacles();
+		}
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -273,6 +269,14 @@ public class GolfGame implements Screen {
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage1.draw();
+
+		if(collides(obstacles)){
+			System.out.println("collision 1 ");
+		}
+
+		if(collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY())){
+			//System.out.println("collision");
+		}
 
 	}
 
@@ -535,12 +539,12 @@ public class GolfGame implements Screen {
 		TreeObstacle treeObstacle = new TreeObstacle();
 		Random random = new Random();
 		for (int i = 0; i < 30; i++) {
-			float randomX = 5+ random.nextFloat() * -(30);
-			float randomY = 5 + random.nextFloat() * (-30);
+			float randomX =  5+ random.nextFloat() * (10);
+			float randomY =  5+ random.nextFloat() * (10);
 
 			while ((Math.abs(randomX - Variables.goalX) < 5) && (Math.abs(randomY - Variables.goalY) < 5) || course.evaluate(new Vector2D(randomX, randomY)) < 0 && numberOfTree < 30) {
-				randomX = random.nextFloat() * (45 - 5);
-				randomY = random.nextFloat() * (45 - 5);
+				randomX =  5+ random.nextFloat() * (10);
+				randomY =  5+ random.nextFloat() * (10);
 				numberOfTree ++;
 
 			}
@@ -606,8 +610,8 @@ public class GolfGame implements Screen {
 		ArrayList<TreeObstacle> collidedObs = new ArrayList<>();
 		for (int i = 0; i < obstacles.size(); i++) {
              //only evaluated the x and z positions.
-			if(Math.abs(obstacles.get(i).getLocation().getX()-course.getBall().getLocation().getX()) < obstacles.get(i).getWidth()
-					&& Math.abs(obstacles.get(i).getLocation().getY()-course.getBall().getLocation().getY())<obstacles.get(i).getWidth()){
+			if(Math.abs(obstacles.get(i).getLocation().getX()-course.getBall().getLocation().getX()) < 0.5
+					&& Math.abs(obstacles.get(i).getLocation().getY()-course.getBall().getLocation().getY())< 0.5 ||( course.getBall().getLocation().getX() == obstacles.get(i).getLocation().getX() && course.getBall().getLocation().getY() == obstacles.get(i).getLocation().getY())){
 				collidedObs.add(obstacles.get(i));
 				System.out.println("collision occurred with object with index" + i);
 				return true;

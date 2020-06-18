@@ -10,11 +10,6 @@ import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
 
 
-import java.util.concurrent.ThreadLocalRandom;
-
-import static com.badlogic.gdx.math.MathUtils.random;
-import static com.mygdx.game.GolfGame.ball;
-
 //https://xoppa.github.io/blog/interacting-with-3d-objects/
 
 /**

@@ -4,7 +4,7 @@ import com.mygdx.game.GolfGame;
 
 import Course.PuttingCourse;
 
-import static com.mygdx.game.GolfGame.ball;
+
 
 public class PuttingSimulator{
     PuttingCourse course;
@@ -86,6 +86,6 @@ public class PuttingSimulator{
 
     public void updateBall(float x, float y){
         float z = (float) course.evaluate(new Vector2D(x,y));
-        ball.transform.setTranslation(x,(float)-(z / course.getBall().getDiameter() /2), y + 1);
+       /* ball.transform.setTranslation(x,(float)-(z / course.getBall().getDiameter() /2), y + 1);*/
     }
 }
