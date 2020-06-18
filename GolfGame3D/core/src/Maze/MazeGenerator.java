@@ -8,24 +8,24 @@ import java.util.Random;
 // https://stackoverflow.com/questions/21815839/simple-java-2d-array-maze-sample
 
 public class MazeGenerator {
-    private int dimensionX;
-    int dimensionY; // dimension of maze
-    private int[][] grid; // output grid
+    private int dimX; // dimension of maze
+    private int dimY;
+    private int[][] maze; // output grid
     private Cell[][] cells; // 2d array of Cells
     private Random random = new Random(); // The random object
 
     // constructor
     public MazeGenerator(int xDimension, int yDimension) {
-        dimensionX = xDimension;
-        dimensionY = yDimension;
-        grid = new int[xDimension * 4 + 1][yDimension * 2 + 1];
-        init();
+        dimX = xDimension;
+        dimY = yDimension;
+        maze = new int[xDimension * 4 + 1][yDimension * 2 + 1];
+        initializeMaze();
         generateMaze(cells[0][0]);
     }
 
-    private void init() {
+    private void initializeMaze() {
         // create cells array and filled it with cells
-        cells = new Cell[dimensionX][dimensionY];
+        cells = new Cell[dimX][dimY];
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
                 cells[x][y] = new Cell(x, y, false); // Create the cell not as a wall
@@ -118,7 +118,7 @@ public class MazeGenerator {
 //        if (start == null){
 //            return;
 //        }
-//        start.projectedDist = getProjectedDistance(start, 0, endCell);
+//        start.projectedDist = getDistance(start, 0, endCell);
 //        start.visited = true;       // Mark the cell as visited
 //        openCells.add(start);       // add the cell the the list so that it can be considered.
 //
@@ -138,7 +138,7 @@ public class MazeGenerator {
 //            Cell current = openCells.remove(0); // pop cell least projectedDist
 //            if (current == endCell) break; // at end
 //            for (Cell neighbor : current.neighbors) {
-//                double projDist = getProjectedDistance(neighbor,
+//                double projDist = getDistance(neighbor,
 //                        current.travelled + 1, endCell);
 //                if (!neighbor.visited || // not visited yet
 //                        projDist < neighbor.projectedDist) { // better path
@@ -160,83 +160,84 @@ public class MazeGenerator {
 //        }
 //    }
 
+    public double getDistance(Cell current,double travelled, Cell end){
+        return travelled + Math.abs(current.x - end.x) +
+                Math.abs(current.y - current.x);
+    }
+
     // draw the maze
     public void updateGrid() {
         int open = 0;
         int wall = 1;
-        int pathChar = 2;
+        int path = 2;
         // fill background
-        for (int x = 0; x < grid.length; x ++) {
-            for (int y = 0; y < grid[x].length; y ++) {
-                grid[x][y] = open;
+        for (int x = 0; x < maze.length; x ++) {
+            for (int y = 0; y < maze[x].length; y ++) {
+                maze[x][y] = open;
             }
         }
         // build walls
-        for (int x = 0; x < grid.length; x ++) {
-            for (int y = 0; y < grid[x].length; y ++) {
+        for (int x = 0; x < maze.length; x ++) {
+            for (int y = 0; y < maze[x].length; y ++) {
                 if (x % 4 == 0 || y % 2 == 0)
-                    grid[x][y] = wall;
+                    maze[x][y] = wall;
             }
         }
         // make meaningful representation
-        for (int x = 0; x < dimensionX; x++) {
-            for (int y = 0; y < dimensionY; y++) {
+        for (int x = 0; x < dimX; x++) {
+            for (int y = 0; y < dimY; y++) {
                 Cell current = getCell(x, y);
                 int gridX = x * 4 + 2;
                 int gridY = y * 2 + 1;
                 if (current.inPath) {
-                    grid[gridX][gridY] = pathChar;
+                    System.out.print("hi");
+                    maze[gridX][gridY] = path;
                     if (current.hasBelowNeighbor())
                         if (getCell(x, y + 1).inPath) {
-                            grid[gridX][gridY + 1] = pathChar;
-                            grid[gridX + 1][gridY + 1] = open;
-                            grid[gridX - 1][gridY + 1] = open;
+                            maze[gridX][gridY + 1] = path;
+                            maze[gridX + 1][gridY + 1] = open;
+                            maze[gridX - 1][gridY + 1] = open;
                         } else {
-                            grid[gridX][gridY + 1] = open;
-                            grid[gridX + 1][gridY + 1] = open;
-                            grid[gridX - 1][gridY + 1] = open;
+                            maze[gridX][gridY + 1] = open;
+                            maze[gridX + 1][gridY + 1] = open;
+                            maze[gridX - 1][gridY + 1] = open;
                         }
                     if (current.hasRightNeighbor())
                         if (getCell(x + 1, y).inPath) {
-                            grid[gridX + 2][gridY] = pathChar;
-                            grid[gridX + 1][gridY] = pathChar;
-                            grid[gridX + 3][gridY] = pathChar;
+                            maze[gridX + 2][gridY] = path;
+                            maze[gridX + 1][gridY] = path;
+                            maze[gridX + 3][gridY] = path;
                         } else {
-                            grid[gridX + 2][gridY] = open;
-                            grid[gridX + 1][gridY] = open;
-                            grid[gridX + 3][gridY] = open;
+                            maze[gridX + 2][gridY] = open;
+                            maze[gridX + 1][gridY] = open;
+                            maze[gridX + 3][gridY] = open;
                         }
                 } else {
-                    grid[gridX][gridY] = open;
+                    maze[gridX][gridY] = open;
                     if (current.hasBelowNeighbor()) {
-                        grid[gridX][gridY + 1] = open;
-                        grid[gridX + 1][gridY + 1] = open;
-                        grid[gridX - 1][gridY + 1] = open;
+                        maze[gridX][gridY + 1] = open;
+                        maze[gridX + 1][gridY + 1] = open;
+                        maze[gridX - 1][gridY + 1] = open;
                     }
                     if (current.hasRightNeighbor()) {
-                        grid[gridX + 2][gridY] = open;
-                        grid[gridX + 1][gridY] = open;
-                        grid[gridX + 3][gridY] = open;
+                        maze[gridX + 2][gridY] = open;
+                        maze[gridX + 1][gridY] = open;
+                        maze[gridX + 3][gridY] = open;
                     }
                 }
             }
         }
-        System.out.print("Hello1");
     }
 
-    // simply prints the map
-    public void draw() {
-        System.out.print(this);
-    }
     // forms a meaningful representation
     @Override
     public String toString() {
         updateGrid();
         addStartAndEnd();
         StringBuilder output = new StringBuilder();
-        for (int y = 0; y < grid[0].length; y++) {
-            for (int x = 0; x < grid.length; x++) {
-                output.append(grid[x][y]);
+        for (int y = 0; y < maze[0].length; y++) {
+            for (int x = 0; x < maze.length; x++) {
+                output.append(maze[x][y]);
             }
             output.append("\n");
         }
@@ -245,16 +246,23 @@ public class MazeGenerator {
     }
 
     public int[][] getGrid(){
-        return grid;
+        return maze;
     }
 
     public Cell[][] getCells() {
         return cells;
     }
 
+    public void setCells(Cell[][] cells){
+        for (int i=0; i<cells.length; i++){
+            for (int j=0; j<cells[i].length; j++){
+                this.cells[i][j] = cells[i][j];
+            }
+        }
+    }
+
     public void addStartAndEnd(){
-        System.out.print("hello");
-        grid[1][1] = 8;         // Start position
-        grid[grid.length-2][grid[0].length-2] = 9; // End position
+        maze[1][1] = 8;         // Start position
+        maze[maze.length-2][maze[0].length-2] = 9; // End position
     }
 }

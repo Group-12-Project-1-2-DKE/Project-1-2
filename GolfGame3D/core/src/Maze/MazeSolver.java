@@ -5,14 +5,18 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class MazeSolver {
-    Cell[][] maze;
+    private Cell[][] maze;
 
     public MazeSolver(Cell[][] maze) {
         this.maze = maze;
     }
 
     // solve the maze starting from the start state (A-star algorithm)
-    public void solve(int startX, int startY, int endX, int endY) {
+    public void solve() {
+        int startX = 0;
+        int startY = 0;
+        int endX = maze.length - 1;
+        int endY = maze[0].length -1;
         // re initialize cells for path finding
         for (Cell[] cellrow : maze) {
             for (Cell cell : cellrow) {
@@ -41,8 +45,10 @@ public class MazeSolver {
 
         // boolean solving = true;
         while (true) {
-            if (openCells.isEmpty()) return; // quit, no path
-            // sort openCells according to least projected distance
+            if (openCells.isEmpty()) {
+                return; // quit, no path
+            }
+            // sort openCells according to least projected.
             Collections.sort(openCells, new Comparator<Cell>() {
                 @Override
                 public int compare(Cell cell1, Cell cell2) {
@@ -52,8 +58,10 @@ public class MazeSolver {
                     else return 0;
                 }
             });
-            Cell current = openCells.remove(0); // pop cell least projectedDist
-            if (current == endCell) break; // at end
+            Cell current = openCells.remove(0); // pop cell with the smallest projectedDist
+            if (current == endCell) {
+                break; // We reached the end
+            }
             for (Cell neighbor : current.neighbors) {
                 double projDist = getDistance(neighbor, current.travelled + 1, endCell);
                 if (!neighbor.visited || // not visited yet
@@ -67,6 +75,17 @@ public class MazeSolver {
                 }
             }
         }
+        // create path from end to beginning
+        Cell backtracking = endCell;
+        backtracking.inPath = true;
+        while (backtracking.parent != null) {
+            backtracking = backtracking.parent;
+            backtracking.inPath = true;
+        }
+    }
+
+    public Cell[][] getMaze(){
+        return maze;
     }
 
     // get the projected distance
