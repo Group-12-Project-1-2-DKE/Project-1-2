@@ -1,6 +1,7 @@
 package Physics;
 import Objects.*;
 import com.mygdx.game.Variables;
+import com.mygdx.game.GolfGame;
 import java.lang.Math;
 
 public class EulerSolver implements PhysicsEngine{
@@ -99,7 +100,36 @@ public class EulerSolver implements PhysicsEngine{
                 final_v.setY(final_v.getY() * -1);
             }
         }
-        Vector2D idkwhatreturnshouldbe = new Vector2D(0, 0);
-        return idkwhatreturnshouldbe;
+        return final_v;
+    }
+
+    public Vector2D rock_collision(Ball ball, RockObstacle rock, Vector2D final_v) {
+        if (x_edge(ball, rock, final_v)) {
+            final_v.setY(final_v.getY()*-1);
+        }
+        if (y_edge(ball, rock, final_v)) {
+            final_v.setX(final_v.getX()*-1);
+        }
+        return final_v;
+    }
+
+    public boolean x_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
+        float x = (float) ball.getLocation().getX();
+        float y = (float) (ball.getLocation().getY() - final_v.getY());
+        if (GolfGame.collision(x, y)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean y_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
+        float x = (float) (ball.getLocation().getX() - final_v.getX());
+        float y = (float) ball.getLocation().getY();
+        if (GolfGame.collision(x, y)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
