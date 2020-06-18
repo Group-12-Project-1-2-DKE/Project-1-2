@@ -11,6 +11,7 @@ public class PuttingSimulator{
     PhysicsEngine engine;
     int shot_counter = 0;
     int counter = 0;
+    int stepsPerRender = 5;
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){
         this.course = course;
@@ -59,14 +60,16 @@ public class PuttingSimulator{
                 System.out.println("-----------");
             }*/
 
-        Vector2D next_velocity = null;
-        //vergelijk met take_shot
-        //doe 5 keer per keer in method?
-        for (int i = 0; i < 5; i++) {
+        Vector2D next_velocity = initial_ball_velocity;
+        for (int i = 0; i < stepsPerRender; i++) {
             if (course.getBall().isAtRest()){
+                shot_counter++;
                 return null;
             }
-            next_velocity = engine.calculateShot(initial_ball_velocity, course.getBall(), course);
+            next_velocity = engine.calculateShot(next_velocity, course.getBall(), course);
+            if (Double.isNaN(next_velocity.getX()) || Double.isNaN(next_velocity.getY())){
+                System.out.println("Something went wrong! NaN");
+            }
         }
 
         //}
@@ -78,6 +81,7 @@ public class PuttingSimulator{
         //    return null;
         //}
         if (course.getBall().isAtRest()){
+            shot_counter++;
             return null;
         }
 

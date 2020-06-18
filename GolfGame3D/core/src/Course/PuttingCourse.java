@@ -34,14 +34,25 @@ public class PuttingCourse implements Function2D{
     /**
      * Main method for testing
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         PuttingCourse h = new PuttingCourse("0.2sin(x0.5)^2 + ln(1+0.1y^2)", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
         RungeKuttaSolver r = new RungeKuttaSolver();
         PuttingSimulator p = new PuttingSimulator(h, r);
         Variables.lowerBound = new Vector2D(-100, -100);
         Variables.upperBound = new Vector2D(100, 100);
-        p.take_shot(new Vector2D(3, 2));
+        Vector2D shot = new Vector2D(5, 9);
+        System.out.println(shot);
+        p.take_shot(shot);
+        System.out.println(p.get_ball_position());
+        h.getBall().setLocation(new Vector2D(0, 0));
+
+        h.getBall().hit();
+        System.out.println(shot);
+        Vector2D next = shot;
+        while (next != null){
+            next = p.take_shotSlowly(next);
+        }
         System.out.println(p.get_ball_position());
     }
 
