@@ -90,6 +90,15 @@ public class GolfGame implements Screen {
 	public GolfGame(ScreenSpace game) {
 		this.game = game;
 
+		modelBuilder = new ModelBuilder();
+		instances = new ArrayList<>();
+
+		if(Variables.maze){
+			createWalls();
+		}else{
+			createObstacles();
+		}
+
 		Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 5); //i entered some random values
 
 		course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
@@ -127,7 +136,6 @@ public class GolfGame implements Screen {
 		stage1.addActor(label);
 		stringBuilder = new StringBuilder();
 
-
 		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set((float) course.getStart().getX() - 0.7f + 1f, 6.97f, 6f);
 		camera.lookAt(0, 0, 0);
@@ -151,7 +159,7 @@ public class GolfGame implements Screen {
 		modelBatch = new ModelBatch();
 
 
-		modelBuilder = new ModelBuilder();
+
 		modelBuilder.begin();
 
 		modelBuilder.node().id = "ball";
@@ -169,7 +177,6 @@ public class GolfGame implements Screen {
 
 		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) + 1f, (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())) + 1f, (float) course.getFlag().getY());
-		instances = new ArrayList<>();
 
 		//obstacle = new TreeObstacle();
 		//obs = obstacle.createModel(10,6);
@@ -180,11 +187,6 @@ public class GolfGame implements Screen {
 
 
 		createMesh();
-		if(Variables.maze){
-			createWalls();
-		}else{
-			createObstacles();
-		}
 
 		Variables.lowerBound = new Vector2D(-100,-100);
 		Variables.upperBound = new Vector2D(100,100);
@@ -279,13 +281,6 @@ public class GolfGame implements Screen {
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage1.draw();
-
-		//createObstacles();
-//		checkCollision();
-//		if(checkCollision()){
-//			System.out.println("collision");
-//		}
-
 	}
 
 	@Override
@@ -622,9 +617,20 @@ public class GolfGame implements Screen {
 					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*1.5));
 					instances.add(wallInstances[0]);
 				}else if(maze.getGrid()[i][j] == 8){
-				course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
+					Variables.startX = i-20;
+					Variables.startY = (float) ((j*1.5)-20);
+				//course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
+//					camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//					camera.position.set(-20f, 10f, -20f);
+//					camera.lookAt(i-20, (float) ((j*1.5)-20), 1);
+//					camera.near = 1f;
+//					camera.far = 300f;
+//					camera.update();
+//					cameraInputController = new CameraInputController(camera);
 				}else if(maze.getGrid()[i][j] == 9){
 				//course.getFlag().setLocation(new Vector2D(i,j*1.5));
+					Variables.goalX = i-20;
+					Variables.goalY = (float) ((j*1.5)-20);
 			}
 			}
 		}
