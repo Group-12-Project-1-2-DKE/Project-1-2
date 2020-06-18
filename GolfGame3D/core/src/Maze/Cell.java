@@ -9,8 +9,8 @@ public class Cell {
     boolean visited = false;                        // solver: if already used
     Cell parent = null;                             // solver: the Cell before this one in the path
     boolean inPath = false;                         // solver: if used in last attempt to solve path
-    double travelled;                               // solver: distance travelled this far
-    double projectedDist;                           // solver: projected distance to end
+    double travelled = 0;                               // solver: distance travelled this far
+    double projectedDist = -1;                           // solver: projected distance to end
     //boolean wall;                                   // impassable cell or not
     boolean open = true;                            // if true, has not been used yet in generation
 

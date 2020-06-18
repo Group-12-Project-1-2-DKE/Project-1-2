@@ -17,16 +17,7 @@ public class MazeSolver {
         int startY = 0;
         int endX = maze.length - 1;
         int endY = maze[0].length -1;
-        // re initialize cells for path finding
-        for (Cell[] cellrow : maze) {
-            for (Cell cell : cellrow) {
-                cell.parent = null;
-                cell.visited = false;
-                cell.inPath = false;
-                cell.travelled = 0;
-                cell.projectedDist = -1;
-            }
-        }
+
         // cells still being considered
         ArrayList<Cell> openCells = new ArrayList<>();
         // cell being considered
