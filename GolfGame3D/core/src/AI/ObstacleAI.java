@@ -10,8 +10,7 @@ import AI.StraighGreedy;
 public class ObstacleAI implements AI{
 
     public static void main(String[] args) {
-        Vector2D test = new Vector2D(1, 0);
-        System.out.println(test.turn(90));
+
     }
 
     /**
@@ -50,12 +49,13 @@ public class ObstacleAI implements AI{
 
         int closestIndex = 0;
 
+        //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen
         //Hoe gaan we te hard/te zacht handelen
         //eerst 45 graden links en rechts.
-        while (distance.length() > course.getTolerance() && shotcount < shotcount){
+        while (distance.length() > course.getTolerance() && shotcount < maxShots){
+            
 
-
-
+            shotcount++;
         }
 
         /*if(checkTree(course, steps)){
