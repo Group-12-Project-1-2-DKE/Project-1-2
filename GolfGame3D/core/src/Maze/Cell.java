@@ -2,68 +2,61 @@ package Maze;
 
 import java.util.ArrayList;
 
-// inner class to represent a cell
 public class Cell {
-    int x, y; // coordinates
+    int x, y;                                       // coordinates of the cell
     ArrayList<Cell> neighbors = new ArrayList<>();  // List of the neighbors of the cell
-    boolean visited = false;                        // solver: if already used
-    Cell parent = null;                             // solver: the Cell before this one in the path
-    boolean inPath = false;                         // solver: if used in last attempt to solve path
-    double travelled = 0;                               // solver: distance travelled this far
-    double projectedDist = -1;                           // solver: projected distance to end
-    //boolean wall;                                   // impassable cell or not
+    boolean inPath = false;                         // solver: if it is contained in the path
     boolean open = true;                            // if true, has not been used yet in generation
 
-    // constructor Cell at x, y
-    Cell(int x, int y) {
-        this(x, y, true);
-    }
-
-    // construct Cell at x, y and with whether it isWall
-    Cell(int x, int y, boolean isWall) {
+    // construct Cell at x, y and set its location
+    public Cell(int x, int y) {
         this.x = x;
         this.y = y;
-        //this.wall = isWall;
     }
 
     // add a neighbor to this cell, and this cell as a neighbor to the other
-    void addNeighbor(Cell other) {
-        if (!this.neighbors.contains(other)) { // avoid duplicates
+    public void addNeighbor(Cell other) {
+        if (!this.neighbors.contains(other)) { // to avoid duplicates
             this.neighbors.add(other);
         }
-        if (!other.neighbors.contains(this)) { // avoid duplicates
+        if (!other.neighbors.contains(this)) { // to avoid duplicates
             other.neighbors.add(this);
         }
     }
 
-    // used in updateGrid()
-    boolean hasBelowNeighbor() {
+    /**
+     * Check if the cell has a bellow neighbor or not.
+     * @return true if the cell has a neighbor bellow her.
+     */
+    public boolean hasBelowNeighbor() {
         return this.neighbors.contains(new Cell(this.x, this.y + 1));
     }
 
-    // used in updateGrid()
-    boolean hasRightNeighbor() {
+    /**
+     * Check if the cell has a right neighbor or not.
+     * @return true if the cell has a neighbor at her right.
+     */
+    public boolean hasRightNeighbor() {
         return this.neighbors.contains(new Cell(this.x + 1, this.y));
     }
 
-    // useful Cell representation
+    /**
+     * Translate the cell into a string
+     * @return a string containing information about the cell.
+     */
     @Override
     public String toString() {
         return String.format("Cell(%s, %s)", x, y);
     }
 
-    // useful Cell equivalence
+    /**
+     * @param other Cell that we want to compare with the actual cell.
+     * @return true if the cells are the same.
+     */
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Cell)) return false;
         Cell otherCell = (Cell) other;
         return (this.x == otherCell.x && this.y == otherCell.y);
-    }
-
-    // should be overridden with equals
-    @Override
-    public int hashCode() {
-        // random hash code method designed to be usually unique
-        return this.x + this.y * 256;
     }
 }

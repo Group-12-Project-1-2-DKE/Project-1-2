@@ -1,23 +1,26 @@
 package Maze;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 // https://stackoverflow.com/questions/21815839/simple-java-2d-array-maze-sample
 
 public class MazeGenerator {
-    private int dimX; // dimension of maze
-    private int dimY;
-    private int[][] maze; // output grid
-    private Cell[][] cells; // 2d array of Cells
+    private int dimX;                       // dimension x of maze
+    private int dimY;                       // dimension y of maze
+    private int[][] maze;                   // 2D array of integer
+    private Cell[][] cells;                 // 2D array of Cells
     private Random random = new Random(); // The random object
 
-    // constructor
+    /**
+     * ctor of the mazeGenerator object
+     * @param xDimension The x dimension of the array of the maze.
+     * @param yDimension The y dimension of the array of the maze.
+     */
     public MazeGenerator(int xDimension, int yDimension) {
         dimX = xDimension;
         dimY = yDimension;
+        // Create a maze of the dimension x*4+1 and y*2+1.
         maze = new int[xDimension * 4 + 1][yDimension * 2 + 1];
         initializeMaze();
         generateMaze(cells[0][0]);
@@ -28,7 +31,7 @@ public class MazeGenerator {
         cells = new Cell[dimX][dimY];
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
-                cells[x][y] = new Cell(x, y, false); // Create the cell not as a wall
+                cells[x][y] = new Cell(x, y); // Create the cell not as a wall
             }
         }
     }
@@ -160,7 +163,6 @@ public class MazeGenerator {
             }
             output.append("\n");
         }
-        //System.out.println("");
         return output.toString();
     }
 
