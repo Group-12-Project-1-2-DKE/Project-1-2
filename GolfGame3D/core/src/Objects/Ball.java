@@ -85,24 +85,6 @@ public class Ball {
     }
 
     /**
-     * getter for the diameter of the ball
-     *
-     * @return the diameter of the ball
-     */
-    public float getDiameter() {
-        return diameter;
-    }
-
-    /**
-     * setter for the diameter
-     *
-     * @param newDiameter is the desired diameter
-     */
-    public void setDiameter(float newDiameter) {
-        diameter = newDiameter;
-    }
-
-    /**
      * getter for the velocity
      *
      * @return the velocity of the ball

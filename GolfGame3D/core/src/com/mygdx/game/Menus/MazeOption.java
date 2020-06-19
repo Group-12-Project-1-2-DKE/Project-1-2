@@ -107,7 +107,7 @@ public class MazeOption implements Screen {
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
                 this.dispose();
-                Variables.function = "1";
+                Variables.function = "0*x + 0*y +1";
                 Variables.mazeX = Integer.parseInt(mazeX.getText());
                 Variables.mazeY = Integer.parseInt(mazeY.getText());
                 game.setScreen(new GolfGame(game));

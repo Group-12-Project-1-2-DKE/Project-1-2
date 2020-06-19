@@ -18,9 +18,9 @@ public class PuttingSimulator{
         this.engine = engine;
     }
 
-    public void setBallPosition(Vector2D vector){
-        course.getBall().setLocation(vector);
-    }
+//    public void setBallPosition(Vector2D vector){
+//        course.getBall().setLocation(vector);
+//    }
 
     public Vector2D get_ball_position(){
         return course.getBall().getLocation();
@@ -85,7 +85,7 @@ public class PuttingSimulator{
             shot_counter++;
             return null;
         }
-        course.getBall().setLocation(next_velocity);
+        // course.getBall().setLocation(next_velocity);
         return next_velocity;
     }
 }
