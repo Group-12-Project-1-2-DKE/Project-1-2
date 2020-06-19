@@ -10,7 +10,7 @@ public class MazeGenerator {
     private int dimY;                       // dimension y of maze
     private int[][] maze;                   // 2D array of integer
     private Cell[][] cells;                 // 2D array of Cells
-    private Random random = new Random(); // The random object
+    private Random random = new Random();   // The random object
 
     /**
      * ctor of the mazeGenerator object
