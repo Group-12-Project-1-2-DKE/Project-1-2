@@ -8,11 +8,15 @@ public class MainTestMaze {
         //solver.solve();
         //maze.setCells(solver.getMaze());
         //maze.solve();
+        long startT = System.currentTimeMillis();
         Solver solver = new Solver(maze.getCells());
         solver.solve();
-        for (int i=0; i<solver.solution.size(); i++){
-            System.out.println(solver.solution.get(i));
-        }
+        long endT = System.currentTimeMillis();
+        System.out.print("Algorithm ran for " + ((endT - startT) / 1000.) + " seconds hello ");
+
+//        for (int i=0; i<solver.solution.size(); i++){
+//            System.out.println(solver.solution.get(i));
+//        }
 //        for(int i=0; i<maze.getCell(0,0).neighbors.size(); i++){
 //            System.out.print(maze.getCell(0,0).neighbors.get(i));
 //        }

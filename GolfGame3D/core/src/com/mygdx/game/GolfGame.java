@@ -602,15 +602,16 @@ public class GolfGame implements Screen {
 		System.out.print(maze);
 		Wall wallGenerator = new Wall();
 
-		for (int i = 0; i < maze.getGrid().length; i++) {
-			for (int j = 0; j < maze.getGrid()[i].length; j++) {
-				if (maze.getGrid()[i][j] == 1) {
-					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j * 1.5));
+		for (int i=0; i< maze.getGrid().length; i++){
+			for(int j=0; j<maze.getGrid()[i].length; j++){
+				if (maze.getGrid()[i][j] == 1){
+					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*2));
 					instances.add(wallInstances[0]);
-				} else if (maze.getGrid()[i][j] == 8) {
-					Variables.startX = i - 20;
-					Variables.startY = (float) ((j * 1.5) - 20);
-					//course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
+				}else if(maze.getGrid()[i][j] == 8){
+					Variables.startX = i-20;
+					Variables.startY = (float) ((j*2)-20);
+				//course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
+//					camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //					camera.position.set(-20f, 10f, -20f);
 					ball.transform.setTranslation(Variables.startX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
 

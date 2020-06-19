@@ -1,23 +1,26 @@
 package Maze;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 
 // https://stackoverflow.com/questions/21815839/simple-java-2d-array-maze-sample
 
 public class MazeGenerator {
-    private int dimX; // dimension of maze
-    private int dimY;
-    private int[][] maze; // output grid
-    private Cell[][] cells; // 2d array of Cells
-    private Random random = new Random(); // The random object
+    private int dimX;                       // dimension x of maze
+    private int dimY;                       // dimension y of maze
+    private int[][] maze;                   // 2D array of integer
+    private Cell[][] cells;                 // 2D array of Cells
+    private Random random = new Random();   // The random object
 
-    // constructor
+    /**
+     * ctor of the mazeGenerator object
+     * @param xDimension The x dimension of the array of the maze.
+     * @param yDimension The y dimension of the array of the maze.
+     */
     public MazeGenerator(int xDimension, int yDimension) {
         dimX = xDimension;
         dimY = yDimension;
+        // Create a maze of the dimension x*4+1 and y*2+1.
         maze = new int[xDimension * 4 + 1][yDimension * 2 + 1];
         initializeMaze();
         generateMaze(cells[0][0]);
@@ -28,7 +31,7 @@ public class MazeGenerator {
         cells = new Cell[dimX][dimY];
         for (int x = 0; x < cells.length; x++) {
             for (int y = 0; y < cells[x].length; y++) {
-                cells[x][y] = new Cell(x, y, false); // Create the cell not as a wall
+                cells[x][y] = new Cell(x, y); // Create the cell not as a wall
             }
         }
     }
@@ -85,86 +88,6 @@ public class MazeGenerator {
         }
     }
 
-    // used to get a Cell at x, y; returns null out of bounds
-    public Cell getCell(int x, int y) {
-        try {
-            return cells[x][y];
-        } catch (ArrayIndexOutOfBoundsException e) { // catch out of bounds
-            return null;
-        }
-    }
-
-//    // solve the maze starting from the start state (A-star algorithm)
-//    public void solve(int startX, int startY, int endX, int endY) {
-//        // re initialize cells for path finding
-//        for (Cell[] cellrow : cells) {
-//            for (Cell cell : cellrow) {
-//                cell.parent = null;
-//                cell.visited = false;
-//                cell.inPath = false;
-//                cell.travelled = 0;
-//                cell.projectedDist = -1;
-//            }
-//        }
-//        // cells still being considered
-//        ArrayList<Cell> openCells = new ArrayList<>();
-//        // cell being considered
-//        Cell endCell = getCell(endX, endY);
-//        if (endCell == null){
-//            return;
-//        }
-//        // anonymous block to delete start, because not used later
-//        Cell start = getCell(startX, startY);
-//        if (start == null){
-//            return;
-//        }
-//        start.projectedDist = getDistance(start, 0, endCell);
-//        start.visited = true;       // Mark the cell as visited
-//        openCells.add(start);       // add the cell the the list so that it can be considered.
-//
-//        // boolean solving = true;
-//        while (true) {
-//            if (openCells.isEmpty()) return; // quit, no path
-//            // sort openCells according to least projected distance
-//            Collections.sort(openCells, new Comparator<Cell>(){
-//                @Override
-//                public int compare(Cell cell1, Cell cell2) {
-//                    double diff = cell1.projectedDist - cell2.projectedDist;
-//                    if (diff > 0) return 1;
-//                    else if (diff < 0) return -1;
-//                    else return 0;
-//                }
-//            });
-//            Cell current = openCells.remove(0); // pop cell least projectedDist
-//            if (current == endCell) break; // at end
-//            for (Cell neighbor : current.neighbors) {
-//                double projDist = getDistance(neighbor,
-//                        current.travelled + 1, endCell);
-//                if (!neighbor.visited || // not visited yet
-//                        projDist < neighbor.projectedDist) { // better path
-//                    neighbor.parent = current;
-//                    neighbor.visited = true;
-//                    neighbor.projectedDist = projDist;
-//                    neighbor.travelled = current.travelled + 1;
-//                    if (!openCells.contains(neighbor))
-//                        openCells.add(neighbor);
-//                }
-//            }
-//        }
-//        // create path from end to beginning
-//        Cell backtracking = endCell;
-//        backtracking.inPath = true;
-//        while (backtracking.parent != null) {
-//            backtracking = backtracking.parent;
-//            backtracking.inPath = true;
-//        }
-//    }
-
-    public double getDistance(Cell current,double travelled, Cell end){
-        return travelled + Math.abs(current.x - end.x) +
-                Math.abs(current.y - current.x);
-    }
-
     // draw the maze
     public void updateGrid() {
         int open = 0;
@@ -190,7 +113,6 @@ public class MazeGenerator {
                 int gridX = x * 4 + 2;
                 int gridY = y * 2 + 1;
                 if (current.inPath) {
-                    System.out.print("hi");
                     maze[gridX][gridY] = path;
                     if (current.hasBelowNeighbor())
                         if (getCell(x, y + 1).inPath) {
@@ -241,7 +163,6 @@ public class MazeGenerator {
             }
             output.append("\n");
         }
-        System.out.println("");
         return output.toString();
     }
 
@@ -264,5 +185,14 @@ public class MazeGenerator {
     public void addStartAndEnd(){
         maze[1][1] = 8;         // Start position
         maze[maze.length-2][maze[0].length-2] = 9; // End position
+    }
+
+    // used to get a Cell at x, y; returns null out of bounds
+    public Cell getCell(int x, int y) {
+        try {
+            return cells[x][y];
+        } catch (ArrayIndexOutOfBoundsException e) { // catch out of bounds
+            return null;
+        }
     }
 }
