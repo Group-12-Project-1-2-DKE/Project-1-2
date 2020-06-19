@@ -263,7 +263,6 @@ public class GolfGame implements Screen {
 				for(int i = 0; i < numTreeS; i++){
 					if(collides(i)){
 						System.out.println("collision");
-
 						EulerSolver.tree_collision(course.getBall(), obstacle,course.getBall().getVelocity());
 
 					}

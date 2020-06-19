@@ -40,6 +40,11 @@ public class Vector2D{
         return new Vector2D(x * factor, y * factor);
     }
 
+    public Vector2D turn(double angle){
+        double newAngle = Math.asin(y/length()) + Math.toRadians(angle);
+        return new Vector2D(length()*Math.cos(newAngle), length()*Math.sin(newAngle));
+    }
+
     public double length() {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }

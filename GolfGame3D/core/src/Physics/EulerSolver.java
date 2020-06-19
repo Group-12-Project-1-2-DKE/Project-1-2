@@ -14,6 +14,7 @@ public class EulerSolver implements PhysicsEngine{
         Vector2D acc = calculate_acc(course, initial_v, ball).multiply(step_size);
 
         Vector2D final_v = initial_v.add(acc);//acc * step_size);
+        ball.setVelocity(final_v);
         ball.setLocation(ball.getLocation().add(final_v.multiply(step_size)));
 
         if (ball.getLocation().getX() > Variables.upperBound.getX() || ball.getLocation().getX() < Variables.lowerBound.getX()) {
@@ -75,13 +76,17 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public static Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
+        System.out.println(final_v.toString());
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
+            System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         }
         double rc = (ball.getLocation().getY() - tree.getLocation().getY())/(ball.getLocation().getX() - tree.getLocation().getX());
         if (rc > Math.tan(0.375 * Math.PI) || rc <= Math.tan(0.625 * Math.PI)) {
+            System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         } else if (Math.tan(0.125 * Math.PI) < rc && rc <= Math.tan(0.375 * Math.PI)) {
+            System.out.println("2/6");
             double temp = final_v.getX();
             final_v.setX(final_v.getY());
             final_v.setY(temp);
@@ -90,8 +95,10 @@ public class EulerSolver implements PhysicsEngine{
                 final_v.setY(final_v.getY() * -1);
             }
         } else if (Math.tan(0.875 * Math.PI) < rc && rc <= Math.tan(0.125 * Math.PI)) {
+            System.out.println("3/7");
             final_v.setX(final_v.getX() * -1);
         } else if (Math.tan(0.625 * Math.PI) < rc && rc <= Math.tan(0.875 * Math.PI)) {
+            System.out.println("4/8");
             double temp = final_v.getX();
             final_v.setX(final_v.getY());
             final_v.setY(temp);
@@ -100,6 +107,7 @@ public class EulerSolver implements PhysicsEngine{
                 final_v.setY(final_v.getY() * -1);
             }
         }
+        System.out.println(final_v.toString());
         return final_v;
     }
 
