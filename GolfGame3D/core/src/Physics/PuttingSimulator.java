@@ -45,14 +45,15 @@ public class PuttingSimulator{
         System.out.println("Final ball location: " + course.getBall().getLocation());
     }
 
+
     public Vector2D take_shotSlowly(Vector2D initial_ball_velocity) {
         //Vector2D next_velocity = initial_ball_velocity;
-
+             course.getBall().setLocation(initial_ball_velocity);
         if (initial_ball_velocity.length() == 0){
             initial_ball_velocity = new Vector2D(0.00000001, 0.00000001);
         }
         //if (course.getBall().isHit() && counter <= fifty){
-            //counter++;
+        //counter++;
             /*if (counter <= 10){
                 System.out.println(counter);
                 System.out.println(course.getBall().getLocation());
@@ -84,12 +85,7 @@ public class PuttingSimulator{
             shot_counter++;
             return null;
         }
-
+        course.getBall().setLocation(next_velocity);
         return next_velocity;
-    }
-
-    public void updateBall(float x, float y){
-        float z = (float) course.evaluate(new Vector2D(x,y));
-       /* ball.transform.setTranslation(x,(float)-(z / course.getBall().getDiameter() /2), y + 1);*/
     }
 }

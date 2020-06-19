@@ -50,7 +50,8 @@ public class GolfGame implements Screen {
 	private CameraInputController cameraInputController;
 
 	private Model model;
-	public  ModelInstance ball;
+	public ModelInstance ball;
+	ModelInstance flag;
 	private ModelBatch modelBatch;
 	private static ModelBuilder modelBuilder;
 	private static ArrayList<ModelInstance> instances;
@@ -76,9 +77,12 @@ public class GolfGame implements Screen {
 
 	private TreeObstacle obstacle;
 	private ModelInstance[] obs;
+	private static TreeObstacle collidedObs = new TreeObstacle();
 
 	private Vector2D[] sandInfo = new Vector2D[12];
-
+	private final int numTreeS = 30;
+	private float[] treePositionX;
+	private float[] treePositionZ;
 	public GolfGame(ScreenSpace game) {
 		this.game = game;
 
@@ -139,12 +143,36 @@ public class GolfGame implements Screen {
 		pixmap1001.dispose();
 
 
-
 		modelBatch = new ModelBatch();
+
 
 		modelBuilder = new ModelBuilder();
 		instances = new ArrayList<>();
 
+		treePositionX = new float[numTreeS];
+		treePositionZ = new float[numTreeS];
+		obstacle = new TreeObstacle();
+		if (Variables.maze) {
+			createWalls();
+		} else {
+			for(int i = 0; i < numTreeS; i++){
+				Random rand = new Random();
+				float randomX = 5 + rand.nextFloat() * (10);
+				float randomZ = 5 + rand.nextFloat() * (10);
+
+				while (((Math.abs(randomX-Variables.goalX) < 5) && (Math.abs(randomZ-Variables.goalY) < 5)) || course.evaluate(randomX,randomZ) < 0) {
+					randomX = 5 + rand.nextFloat() * (10);
+					randomZ = 5 + rand.nextFloat() * (10);
+				}
+				treePositionX[i] = randomX;
+				treePositionZ[i] = randomZ;
+				ModelInstance[] treeinstances = obstacle.createModel(randomX,randomZ);
+				instances.add(treeinstances[0]);
+				instances.add(treeinstances[1]);
+
+			}
+
+		}
 
 		modelBuilder.begin();
 
@@ -159,9 +187,9 @@ public class GolfGame implements Screen {
 
 		model = modelBuilder.end();
 		ball = new ModelInstance(model, "ball");
-		ModelInstance flag = new ModelInstance(model, "flagPole");
+		flag = new ModelInstance(model, "flagPole");
 
-		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX() , course.getStart().getY())) - 1f, (float) Variables.startY);
+		ball.transform.setTranslation((float) Variables.startX, (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())) - 1f, (float) Variables.startY);
 		flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())), (float) course.getFlag().getY());
 
 		instances.add(ball);
@@ -170,14 +198,9 @@ public class GolfGame implements Screen {
 
 		createMesh();
 
-		if(Variables.maze){
-			createWalls();
-		}else{
-			createObstacles();
-		}
 
-		Variables.lowerBound = new Vector2D(-100,-100);
-		Variables.upperBound = new Vector2D(100,100);
+		Variables.lowerBound = new Vector2D(-100, -100);
+		Variables.upperBound = new Vector2D(100, 100);
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
@@ -187,6 +210,7 @@ public class GolfGame implements Screen {
 
 		shootStage(skin1);
 		changeBallPositionStage(skin1);
+		course.getBall().setLocation(new Vector2D(0,0));
 	}
 
 	public float myDelta = 0;
@@ -204,35 +228,47 @@ public class GolfGame implements Screen {
 				(course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
 				&& (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
 				&& (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
-			game.setScreen(new Congrat(game,attempt));
+			game.setScreen(new Congrat(game, attempt));
 
 		} else {
+
 			ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 1f,
 					(float) course.getBall().getLocation().getY() + 1f);
 
 		}
 
-		if (course.getBall().isInWater()){
+		if (course.getBall().isInWater()) {
 			stage2.draw();
-			if (Gdx.input.getX() > ScreenSpace.WIDTH-175 && Gdx.input.getX() < ScreenSpace.WIDTH  && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
+			if (Gdx.input.getX() > ScreenSpace.WIDTH - 175 && Gdx.input.getX() < ScreenSpace.WIDTH && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
 				Gdx.input.setInputProcessor(stage2);
 			}
 		}
 
 		if (ballReachedFlag) {
 			try {
+
 				if (myVector == null) {
-					if(Variables.ai){
-						Vector2D aiVec = ai.calculate_turn(course,500);
+					if (Variables.ai) {
+						Vector2D aiVec = ai.calculate_turn(course, 500);
 						dirX.setText("" + aiVec.getX());
 						dirY.setText("" + aiVec.getY());
 						myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
 					}
 					attempt++;
 					myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
-				} else {
+				}
+				else {
 					myVector = simulator.take_shotSlowly(myVector);
 				}
+				for(int i = 0; i < numTreeS; i++){
+					if(collides(i)){
+						System.out.println("collision");
+
+						EulerSolver.tree_collision(course.getBall(), obstacle,course.getBall().getVelocity());
+
+					}
+				}
+
 			} catch (StackOverflowError s) {
 
 			}
@@ -245,11 +281,11 @@ public class GolfGame implements Screen {
 		}
 
 		if (myVector != null) {
-			camera.translate((float) myVector.getX() / 100,0, (float) myVector.getY()/100);
+			camera.translate((float) myVector.getX() / 100, 0, (float) myVector.getY() / 100);
 		}
 
 
-		camera.lookAt((float) course.getBall().getLocation().getX(),-(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())), (float)course.getBall().getLocation().getY());
+		camera.lookAt((float) course.getBall().getLocation().getX(), -(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())), (float) course.getBall().getLocation().getY());
 		camera.update();
 		cameraInputController.update();
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -269,14 +305,6 @@ public class GolfGame implements Screen {
 		stringBuilder.append("Equation : ").append(course.getEquation());
 		label.setText(stringBuilder);
 		stage1.draw();
-
-		if(collides(obstacles)){
-			System.out.println("collision 1 ");
-		}
-
-		if(collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY())){
-			//System.out.println("collision");
-		}
 
 	}
 
@@ -314,7 +342,7 @@ public class GolfGame implements Screen {
 	/**
 	 * this method determines if the given instance is visible on the screen
 	 *
-	 * @param camera   the game camera that makes the instances visible
+	 * @param camera the game camera that makes the instances visible
 	 * @return true if the instance is visible
 	 */
 	private boolean isVisible(final Camera camera) {
@@ -325,58 +353,61 @@ public class GolfGame implements Screen {
 
 	/**
 	 * method that builds a surface from Vector2Ds
-	 * @param start is the start coordinate
-	 * @param goal is the goal coordinate
+	 *
+	 * @param start  is the start coordinate
+	 * @param goal   is the goal coordinate
 	 * @param margin is the margin between each surface vector
 	 * @return an array of Vector2D's that represents the surface
 	 */
-	private Vector2D[] getBase(Vector2D start, Vector2D goal, double margin){
-		double xMin,xMax, yMin, yMax;
-		if(start.getX()>goal.getX()){
-			xMax = start.getX()+margin;
-			xMin=goal.getX()-margin;
-		}else{
-			xMin = start.getX()-margin;
-			xMax=goal.getX()+margin;
+	private Vector2D[] getBase(Vector2D start, Vector2D goal, double margin) {
+		double xMin, xMax, yMin, yMax;
+		if (start.getX() > goal.getX()) {
+			xMax = start.getX() + margin;
+			xMin = goal.getX() - margin;
+		} else {
+			xMin = start.getX() - margin;
+			xMax = goal.getX() + margin;
 		}
-		if(start.getY()>goal.getY()){
-			yMax = start.getY()+margin;
-			yMin=goal.getY()-margin;
-		}else{
-			yMin = start.getY()-margin;
-			yMax=goal.getY()+margin;
+		if (start.getY() > goal.getY()) {
+			yMax = start.getY() + margin;
+			yMin = goal.getY() - margin;
+		} else {
+			yMin = start.getY() - margin;
+			yMax = goal.getY() + margin;
 		}
-		return new Vector2D[]{new Vector2D(xMin,yMin), new Vector2D(xMax,yMax)};
+		return new Vector2D[]{new Vector2D(xMin, yMin), new Vector2D(xMax, yMax)};
 	}
 
 	/**
 	 * this model calls the overloaded getModel to construct the field
-	 * @param mesh the parts of the field
-	 * @param gl the primitive GL type
+	 *
+	 * @param mesh     the parts of the field
+	 * @param gl       the primitive GL type
 	 * @param material is the texture of the field
 	 * @return a model that overloaded getmodel() returns
 	 */
-	public static Model getModel (final Mesh mesh, int gl , final Material material) {
+	public static Model getModel(final Mesh mesh, int gl, final Material material) {
 		return getModel(mesh, 0, mesh.getNumIndices(), gl, material);
 	}
 
 
 	/**
 	 * this method builds a Model instance from mesh parts and returns a field Model
-	 * @param mesh the parts of the field
-	 * @param offset an offset value to provide in mesh part
+	 *
+	 * @param mesh     the parts of the field
+	 * @param offset   an offset value to provide in mesh part
 	 * @param vertices vertices of the mesh
-	 * @param gl the primitive GL type
+	 * @param gl       the primitive GL type
 	 * @param material is the texture of the field
 	 * @return a field model
 	 */
-	public static Model getModel (final Mesh mesh, int offset, int vertices, int gl,
-										final Material material) {
+	public static Model getModel(final Mesh mesh, int offset, int vertices, int gl,
+								 final Material material) {
 		Model finalModel = new Model();
 		MeshPart meshPart = new MeshPart();
-		meshPart.set("meshNode",mesh,offset,vertices, gl);
+		meshPart.set("meshNode", mesh, offset, vertices, gl);
 
-		NodePart partMaterial = new NodePart(meshPart,material);
+		NodePart partMaterial = new NodePart(meshPart, material);
 		partMaterial.material = material;
 		partMaterial.meshPart = meshPart;
 		Node node = new Node();
@@ -392,21 +423,21 @@ public class GolfGame implements Screen {
 	}
 
 
-	public void changeBallPositionStage(Skin skin1){
+	public void changeBallPositionStage(Skin skin1) {
 		TextArea lastLoc1 = new TextArea("Set the new position", skin1);
 		lastLoc1.setDisabled(true);
-		lastLoc1.setPosition(ScreenSpace.WIDTH-175, 90);
+		lastLoc1.setPosition(ScreenSpace.WIDTH - 175, 90);
 		lastLoc1.setSize(175, 30);
 		stage2.addActor(lastLoc1);
 		TextArea lastLoc2 = new TextArea("of the ball: ", skin1);
 		lastLoc2.setDisabled(true);
-		lastLoc2.setPosition(ScreenSpace.WIDTH-175, 60);
+		lastLoc2.setPosition(ScreenSpace.WIDTH - 175, 60);
 		lastLoc2.setSize(175, 30);
 		stage2.addActor(lastLoc2);
 
 		TextButton lastLocation = new TextButton("Last Location", skin1);
 		lastLocation.setDisabled(true);
-		lastLocation.setPosition(ScreenSpace.WIDTH-175, 30);
+		lastLocation.setPosition(ScreenSpace.WIDTH - 175, 30);
 		lastLocation.setSize(175, 30);
 		stage2.addActor(lastLocation);
 
@@ -420,7 +451,7 @@ public class GolfGame implements Screen {
 
 		TextButton startLocation = new TextButton("Start Location", skin1);
 		startLocation.setDisabled(true);
-		startLocation.setPosition(ScreenSpace.WIDTH-175, 0);
+		startLocation.setPosition(ScreenSpace.WIDTH - 175, 0);
 		startLocation.setSize(175, 30);
 		stage2.addActor(startLocation);
 
@@ -433,7 +464,7 @@ public class GolfGame implements Screen {
 		});
 	}
 
-	public void shootStage(Skin skin1){
+	public void shootStage(Skin skin1) {
 		TextArea dirxText = new TextArea("Vector x:", skin1);
 		dirxText.setDisabled(true);
 		dirxText.setPosition(0, ScreenSpace.HEIGHT - 30);
@@ -453,7 +484,7 @@ public class GolfGame implements Screen {
 		shoot.addListener(new ClickListener() {
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				if(Variables.ai){
+				if (Variables.ai) {
 					shoot.setDisabled(true);
 					shoot.setVisible(false);
 				}
@@ -476,58 +507,53 @@ public class GolfGame implements Screen {
 		stage1.addActor(dirY);
 	}
 
-	public void createMesh(){
+	public void createMesh() {
 		Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
 		Texture fieldTex = new Texture("groundTexture.jpg");
 		Texture sandTex = new Texture("sandTexture.jpg");
-		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX,Variables.startY), new Vector2D(Variables.goalX,Variables.goalY),25);
+		Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), 25);
 		int chunkSize = 1;
-		int numberX =(int)(coverVectors[1].getX()-coverVectors[0].getX())/chunkSize;
-		int numberY=(int)(coverVectors[1].getY()-coverVectors[0].getY())/chunkSize;
+		int numberX = (int) (coverVectors[1].getX() - coverVectors[0].getX()) / chunkSize;
+		int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
 		TerrainChunk chunk;
 		Vector2D currentPos;
 		TerrainChunk.setFunction(Variables.function);
 		TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
 		Material material = new Material(TextureAttribute.createDiffuse(fieldTex));
 
-		for(int x = 0; x < numberX; x++){
-			Random random = new Random();
-			for(int y = 0; y < numberY; y++){
-				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x , coverVectors[0].getY() + chunkSize * y);
+		for (int x = 0; x < numberX; x++) {
+			for (int y = 0; y < numberY; y++) {
+				currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
 				chunk = new TerrainChunk(currentPos, chunkSize, course);
-				chunk.setLocation((float)course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
+				chunk.setLocation((float) course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
 				terrainChunks[x][y] = chunk;
 
-				Mesh mesh = new Mesh(true, chunk.vertices.length/9 , chunk.indices.length,
+				Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
 						new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
 						new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
 						new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
-						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2,  ShaderProgram.TEXCOORD_ATTRIBUTE));
+						new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE));
 				mesh.setVertices(chunk.vertices);
 				mesh.setIndices(chunk.indices);
-				if(course.evaluate(currentPos) <= 0){
+				if (course.evaluate(currentPos) <= 0) {
 					material = new Material(TextureAttribute.createDiffuse(waterTex));
-				}
-				 else if(course.evaluate(currentPos) < 1 && course.evaluate(currentPos) != 0 /*course.evaluate(currentPos) == random.nextInt(12) && course.evaluate(currentPos) != 0 && course.evaluate(currentPos) > 0*/){
-                   material = new Material(TextureAttribute.createDiffuse(sandTex));
-					//System.out.println(currentPos);
-
-                   sandInfo[0] = currentPos;
+				} else if (course.evaluate(currentPos) < 1 && course.evaluate(currentPos) != 0)  {
+					material = new Material(TextureAttribute.createDiffuse(sandTex));
+					sandInfo[0] = currentPos;
 					System.out.println(sandInfo[0]);
 				}
-
-				else{
+				else {
 
 					material = new Material(TextureAttribute.createDiffuse(fieldTex));
-					ball.transform.setTranslation((float)course.getBall().getLocation().getX(), (float)course.evaluate(new Vector2D(course.getBall().getLocation().getX(),course.getBall().getLocation().getY())) - 1f,(float)course.getBall().getLocation().getY());
+					ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) - 1f, (float) course.getBall().getLocation().getY());
 				}
-				Model terrain = getModel(mesh,GL20.GL_TRIANGLES,material);
-				ModelInstance terrainInstance = new ModelInstance(terrain, 0,0,0);
+				Model terrain = getModel(mesh, GL20.GL_TRIANGLES, material);
+				ModelInstance terrainInstance = new ModelInstance(terrain, 0, 0, 0);
 
 				chunk.setModelInstance(terrainInstance);
 				instances.add(terrainInstance);
 
-				terrainInstance.transform.setTranslation((float)currentPos.getX(),0,(float)currentPos.getY());
+				terrainInstance.transform.setTranslation((float) currentPos.getX(), 0, (float) currentPos.getY());
 			}
 		}
 
@@ -537,19 +563,20 @@ public class GolfGame implements Screen {
 	public void createObstacles() {
 		int numberOfTree = 0;
 		TreeObstacle treeObstacle = new TreeObstacle();
+		obstacles = new ArrayList<>();
+		//TreeObstacle treeObstacle = new TreeObstacle();
 		Random random = new Random();
 		for (int i = 0; i < 30; i++) {
-			float randomX =  5+ random.nextFloat() * (10);
-			float randomY =  5+ random.nextFloat() * (10);
+			float randomX = 5 + random.nextFloat() * (10);
+			float randomY = 5 + random.nextFloat() * (10);
 
 			while ((Math.abs(randomX - Variables.goalX) < 5) && (Math.abs(randomY - Variables.goalY) < 5) || course.evaluate(new Vector2D(randomX, randomY)) < 0 && numberOfTree < 30) {
-				randomX =  5+ random.nextFloat() * (10);
-				randomY =  5+ random.nextFloat() * (10);
-				numberOfTree ++;
+				randomX = 5 + random.nextFloat() * (10);
+				randomY = 5 + random.nextFloat() * (10);
+				numberOfTree++;
 
 			}
-			obs = treeObstacle.createModel(randomX,randomY);
-			obstacles = new ArrayList<>();
+			obs = treeObstacle.createModel(randomX, randomY);
 			obstacles.add(treeObstacle);
 
 			instances.add(obs[0]);
@@ -559,85 +586,77 @@ public class GolfGame implements Screen {
 
 	}
 
-	public static ModelBuilder getModelBuilder(){
+	public static ModelBuilder getModelBuilder() {
 		return modelBuilder;
 	}
 
-	public static PuttingCourse getCourse(){
+	public static PuttingCourse getCourse() {
 		return course;
 	}
 
 
-	public void createWalls(){
+	public void createWalls() {
 		MazeGenerator maze = new MazeGenerator(Variables.mazeX, Variables.mazeY);
 		maze.updateGrid();
 		maze.addStartAndEnd();
 		System.out.print(maze);
 		Wall wallGenerator = new Wall();
 
-		for (int i=0; i< maze.getGrid().length; i++){
-			for(int j=0; j<maze.getGrid()[i].length; j++){
-				if (maze.getGrid()[i][j] == 1){
-					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*1.5));
+		for (int i = 0; i < maze.getGrid().length; i++) {
+			for (int j = 0; j < maze.getGrid()[i].length; j++) {
+				if (maze.getGrid()[i][j] == 1) {
+					ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j * 1.5));
 					instances.add(wallInstances[0]);
-				}else if(maze.getGrid()[i][j] == 8){
-					Variables.startX = i-20;
-					Variables.startY = (float) ((j*1.5)-20);
-				//course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
-//					camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				} else if (maze.getGrid()[i][j] == 8) {
+					Variables.startX = i - 20;
+					Variables.startY = (float) ((j * 1.5) - 20);
+					//course.getBall().setLocation(new Vector2D(i-20,(j*1.5)-20));
 //					camera.position.set(-20f, 10f, -20f);
-//					camera.lookAt(i-20, (float) ((j*1.5)-20), 1);
-//					camera.near = 1f;
-//					camera.far = 300f;
-//					camera.update();
-//					cameraInputController = new CameraInputController(camera);
-				}else if(maze.getGrid()[i][j] == 9){
-				//course.getFlag().setLocation(new Vector2D(i,j*1.5));
-					Variables.goalX = i-20;
-					Variables.goalY = (float) ((j*1.5)-20);
-			}
+					ball.transform.setTranslation(Variables.startX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
+
+				} else if (maze.getGrid()[i][j] == 9) {
+					//course.getFlag().setLocation(new Vector2D(i,j*1.5));
+					Variables.goalX = i - 20;
+					Variables.goalY = (float) ((j * 1.5) - 20);
+					flag.transform.setTranslation(Variables.goalX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
+				}
 			}
 		}
 	}
 
 	/**
+	 * rocks collision
 	 *
-	 *rock collision
-	 * @param obstacles
+	 * @param x x positzion of the obstacle
+	 * @param y y position of the obstacle
 	 * @return
 	 */
-	public static boolean collides(ArrayList<TreeObstacle> obstacles) {
-		ArrayList<TreeObstacle> collidedObs = new ArrayList<>();
-		for (int i = 0; i < obstacles.size(); i++) {
-             //only evaluated the x and z positions.
-			if(Math.abs(obstacles.get(i).getLocation().getX()-course.getBall().getLocation().getX()) < 0.5
-					&& Math.abs(obstacles.get(i).getLocation().getY()-course.getBall().getLocation().getY())< 0.5 ||( course.getBall().getLocation().getX() == obstacles.get(i).getLocation().getX() && course.getBall().getLocation().getY() == obstacles.get(i).getLocation().getY())){
-				collidedObs.add(obstacles.get(i));
-				System.out.println("collision occurred with object with index" + i);
-				return true;
-			}
-		}
-		return false;
-		}
-
-
-	/**
-	 * trees collision
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public static boolean collision(float x, float y){
-		for(ModelInstance instance : instances){
-			Vector2 treeLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x,instance.transform.getTranslation(new Vector3()).y);
-			if((x<=treeLocation.x+0.5f/2&&x>=treeLocation.x-0.5/2)&&(y<=treeLocation.y+6/2&&y>=treeLocation.y-6/2)){
+	public static boolean collision(float x, float y) {
+		//TODO : take corners into consideration to make it more accurate
+		for (ModelInstance instance : instances) {
+			Vector2 treeLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
+			if ((x <= treeLocation.x + 0.5 / 3 && x >= treeLocation.x - 0.25 / 3) && (y <= treeLocation.y + 0.25 / 3 && y >= treeLocation.y - 0.25 / 3)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	public boolean collides(int i) {
+		if(euclideanDistance((float)course.getBall().getLocation().getX(), (float)course.getBall().getLocation().getY(),i) < 0.5){
+			obstacle.setLocation(new Vector2D(treePositionX[i], treePositionZ[i]));
+			return true;
+		}
+		return false;
+	}
 
+	public float euclideanDistance(float posX, float posZ, int i ){
+		float treeX = treePositionX[i];
+		float treeZ = treePositionZ[i];
+		float euclideanDist = (float) Math.sqrt(Math.pow((posX-treeX), 2) + Math.pow((posZ-treeZ), 2));
+
+		return euclideanDist;
+	}
 
 
 }

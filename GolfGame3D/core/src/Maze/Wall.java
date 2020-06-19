@@ -20,8 +20,8 @@ public class Wall implements Obstacle {
 
     @Override
     public ModelInstance[] createModel(float x, float z) {
-        Model wall = GolfGame.getModelBuilder().createBox(1f,1f,1.5f,
-                new Material(ColorAttribute.createDiffuse(Color.RED)),
+        Model wall = GolfGame.getModelBuilder().createBox(1f,4f,1.5f,
+                new Material(ColorAttribute.createDiffuse(Color.GRAY)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         ModelInstance wallInstance = new ModelInstance(wall, x-20, 1, z-20);
 

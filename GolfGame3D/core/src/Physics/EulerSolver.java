@@ -74,7 +74,7 @@ public class EulerSolver implements PhysicsEngine{
         );
     }
 
-    public Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
+    public static Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
             final_v.setY(final_v.getY() * -1);
         }
@@ -116,7 +116,7 @@ public class EulerSolver implements PhysicsEngine{
     public boolean x_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
         float x = (float) ball.getLocation().getX();
         float y = (float) (ball.getLocation().getY() - final_v.getY());
-        if (GolfGame.collision(x, y)) {
+       if (GolfGame.collision(x, y)) {
             return true;
         } else {
             return false;
