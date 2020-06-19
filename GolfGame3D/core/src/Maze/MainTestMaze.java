@@ -1,5 +1,7 @@
 package Maze;
 
+import AI.MazeAI;
+
 public class MainTestMaze {
 
     public static void main(String[] args) {
@@ -8,11 +10,9 @@ public class MainTestMaze {
         //solver.solve();
         //maze.setCells(solver.getMaze());
         //maze.solve();
-        long startT = System.currentTimeMillis();
         Solver solver = new Solver(maze.getCells());
         solver.solve();
-        long endT = System.currentTimeMillis();
-        System.out.print("Algorithm ran for " + ((endT - startT) / 1000.) + " seconds hello ");
+
 
 //        for (int i=0; i<solver.solution.size(); i++){
 //            System.out.println(solver.solution.get(i));

@@ -11,7 +11,7 @@ public class Solver {
     public Stack<Cell> actualPath = new Stack<Cell>();
     public ArrayList<Cell> solution = new ArrayList<>();
     private int count =0;
-    ArrayList<Vector2D> locations = new ArrayList<>();
+    private ArrayList<Vector2D> locations = new ArrayList<>();
 
     /**
      * Constructor of the object
@@ -103,5 +103,9 @@ public class Solver {
                 }
             }
         }
+    }
+
+    public ArrayList<Vector2D> getLocations() {
+        return locations;
     }
 }

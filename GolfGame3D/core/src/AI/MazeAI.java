@@ -5,7 +5,7 @@ import Objects.Ball;
 import Physics.*;
 import com.mygdx.game.Variables;
 
-public class MazeAI implements AI{
+public class MazeAI{
 
     /**
      * Calculates the initial velocity to make a hole-in-one.
@@ -14,12 +14,10 @@ public class MazeAI implements AI{
      * @param steps
      * @return initial velocity vector
      */
-    @Override
-    public Vector2D calculate_turn(PuttingCourse course, int steps) {
+    public Vector2D calculate_turn(PuttingCourse course, int steps, Vector2D end) {
         double grav_constant = Variables.gravity;
         Ball ball = course.getBall();
         Vector2D begin = ball.getLocation();//startlocation of the ball
-        Vector2D end = course.getFlag();//location of the flag
         Vector2D direction = end.add(begin.multiply(-1));
         double step_size = direction.length()/steps;
         double factor = step_size/direction.length();
