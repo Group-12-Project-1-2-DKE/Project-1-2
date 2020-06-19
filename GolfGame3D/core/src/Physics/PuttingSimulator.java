@@ -48,7 +48,7 @@ public class PuttingSimulator{
 
     public Vector2D take_shotSlowly(Vector2D initial_ball_velocity) {
         //Vector2D next_velocity = initial_ball_velocity;
-             course.getBall().setLocation(initial_ball_velocity);
+        //     course.getBall().setLocation(initial_ball_velocity);
         if (initial_ball_velocity.length() == 0){
             initial_ball_velocity = new Vector2D(0.00000001, 0.00000001);
         }
