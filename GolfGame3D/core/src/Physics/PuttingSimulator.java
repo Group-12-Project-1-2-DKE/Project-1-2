@@ -85,7 +85,7 @@ public class PuttingSimulator{
             shot_counter++;
             return null;
         }
-        course.getBall().setLocation(next_velocity);
+        // course.getBall().setLocation(next_velocity);
         return next_velocity;
     }
 }
