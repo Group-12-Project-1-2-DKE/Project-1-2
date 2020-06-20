@@ -26,6 +26,7 @@ public class EulerSolver implements PhysicsEngine{
         }
 
         if (final_v.length() < max_error && /*acc.length()*/initial_v.add(final_v.multiply(-1)).length() < max_error) {
+            //System.out.println(final_v.toString() + acc.toString());
             ball.putAtRest();
             return new Vector2D(0, 0);
         }
