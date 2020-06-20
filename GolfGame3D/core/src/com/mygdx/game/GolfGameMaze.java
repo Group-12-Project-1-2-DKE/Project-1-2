@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class GolfGameMaze implements Screen{
     private static PuttingCourse course;
     private PuttingSimulator simulator;
-    private Boolean ballReachedFlag = false;
+    private boolean ballReachedFlag = false;
     private PhysicsEngine engine;
     private StraighGreedy ai;
 
