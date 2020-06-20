@@ -1,8 +1,9 @@
 package com.mygdx.game;
 
-import AI.StraighGreedy;
+import AI.MazeAI;
 import Course.PuttingCourse;
 import Maze.MazeGenerator;
+import Maze.Solver;
 import Maze.Wall;
 import Objects.Ball;
 import Physics.*;
@@ -34,7 +35,8 @@ public class GolfGameMaze implements Screen{
     private PuttingSimulator simulator;
     private Boolean ballReachedFlag = false;
     private PhysicsEngine engine;
-    private StraighGreedy ai;
+    private MazeAI ai;
+    private ArrayList<Vector2D> locations;
 
     private Environment environment;
 
@@ -76,7 +78,7 @@ public class GolfGameMaze implements Screen{
         Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 0.5f); //i entered some random values
 
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
-        ai = new StraighGreedy();
+        ai = new MazeAI();
 
         if (Variables.euler) {
             EulerSolver eulerSolver = new EulerSolver();
@@ -180,15 +182,17 @@ public class GolfGameMaze implements Screen{
             ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 0.25f,
                     (float) course.getBall().getLocation().getY() + 1f);
         }
-
         if (ballReachedFlag) {
             try {
                 if (myVector == null) {
                     if (Variables.ai) {
-                        Vector2D aiVec = ai.calculate_turn(course, 500);
-                        dirX.setText("" + aiVec.getX());
-                        dirY.setText("" + aiVec.getY());
-                        myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
+                        for (int i = 0; i<locations.size(); i++) {
+                            System.out.println(locations.toString());
+                            Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(i));
+                            dirX.setText("" + aiVec.getX());
+                            dirY.setText("" + aiVec.getY());
+                            myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
+                        }
                     }
                     attempt++;
                     myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
@@ -452,6 +456,9 @@ public class GolfGameMaze implements Screen{
                 }
             }
         }
+        Solver solver = new Solver(maze.getCells());
+        solver.solve();
+        locations = solver.getLocations();
     }
 
     /**

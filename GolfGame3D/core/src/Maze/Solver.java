@@ -88,7 +88,7 @@ public class Solver {
             for(int i=index; i<solution.size(); i++){
                 // If the x is different, store the location and call the recursion.
                 if(solution.get(i).x != x && solution.get(i).x != oldx){
-                    locations.add(new Vector2D(solution.get(i-1).x, solution.get(i-1).y));
+                    locations.add(new Vector2D((solution.get(i-1).x * 4 + 2) - 20, (solution.get(i-1).y * 2 + 1) - 20));
                     strategicLocation(i-1);
                     return;
                 }
