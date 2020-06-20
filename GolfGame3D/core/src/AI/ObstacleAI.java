@@ -1,6 +1,7 @@
 package AI;
 
 import Course.PuttingCourse;
+import Objects.Ball;
 import Physics.EulerSolver;
 import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
@@ -10,7 +11,11 @@ import AI.StraighGreedy;
 public class ObstacleAI implements AI{
 
     public static void main(String[] args) {
-
+        PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
+                new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
+        ObstacleAI o = new ObstacleAI();
+        Vector2D shot = o.calculate_turn(h, 500);
+        System.out.println(shot);
     }
 
     /**
@@ -27,9 +32,9 @@ public class ObstacleAI implements AI{
     private boolean pAssigned = false;
     private Vector2D initLoc;
     private int shotcount = 0;
-    private int maxShots = 20;
-    private double[] distanceArr = new double[shotcount];
-    private Vector2D[] velocityArr =  new Vector2D[shotcount];
+    private int maxShots = 20;// maxshots need to be EVEN
+    private double[] distanceArr = new double[maxShots + 1];
+    private Vector2D[] velocityArr =  new Vector2D[maxShots + 1];
 
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps) {
@@ -39,22 +44,40 @@ public class ObstacleAI implements AI{
         Vector2D tempHoleInOne = sG.calculate_turn(course, steps);
         p.take_shot(tempHoleInOne);
         Vector2D distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-        course.getBall().setLocation(initLoc);
+        course.getBall().setLocation(initLoc.clone());
         if (distance.length() <= course.getTolerance()){
             return tempHoleInOne;
         }
-        shotcount++;
-        distanceArr[0] = distance.length();
-        velocityArr[0] = tempHoleInOne.clone();
+        distanceArr[maxShots/2+1] = distance.length();
+        velocityArr[maxShots/2+1] = tempHoleInOne.clone();
 
-        int closestIndex = 0;
+        int closestIndex = maxShots/2+1;
+        double angle = 45/(.5*maxShots);
+        tempHoleInOne = tempHoleInOne.turn(45);
 
-        //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen
-        //Hoe gaan we te hard/te zacht handelen
+        //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen - nu nog niet
+        //Hoe gaan we te hard/te zacht handelen - nu nog niet.
         //eerst 45 graden links en rechts.
         while (distance.length() > course.getTolerance() && shotcount < maxShots){
-            
+            if (shotcount == maxShots/2+1){
+                tempHoleInOne = tempHoleInOne.turn(-angle);
+                shotcount++;
+                continue;
+            }
 
+            p.take_shot(tempHoleInOne);
+            distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
+            course.getBall().setLocation(initLoc.clone());
+            if (distance.length() <= course.getTolerance()){
+                return tempHoleInOne;
+            }
+            if (distance.length() < distanceArr[closestIndex]){
+                closestIndex = shotcount;
+            }
+            distanceArr[shotcount] = distance.length();
+            velocityArr[shotcount] = tempHoleInOne.clone();
+
+            tempHoleInOne = tempHoleInOne.turn(-angle);
             shotcount++;
         }
 
