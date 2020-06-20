@@ -58,7 +58,7 @@ public class ObstacleAI implements AI{
         //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen - nu nog niet
         //Hoe gaan we te hard/te zacht handelen - nu nog niet.
         //eerst 45 graden links en rechts.
-        while (distance.length() > course.getTolerance() && shotcount < maxShots){
+        while (distance.length() > course.getTolerance() && shotcount < maxShots + 1){
             if (shotcount == maxShots/2+1){
                 tempHoleInOne = tempHoleInOne.turn(-angle);
                 shotcount++;
