@@ -187,7 +187,6 @@ public class GolfGameMaze implements Screen{
             try {
                 if (myVector == null) {
                     if (Variables.ai) {
-                            System.out.println(locations.toString());
                             Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(count));
                             dirX.setText("" + aiVec.getX());
                             dirY.setText("" + aiVec.getY());
