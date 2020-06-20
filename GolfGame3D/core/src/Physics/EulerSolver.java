@@ -113,7 +113,6 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public Vector2D rock_collision(Ball ball, RockObstacle rock, Vector2D final_v) {
-        System.out.println("collision");
         if (x_edge(ball, rock, final_v)) {
             final_v.setY(final_v.getY()*-1);
         }
