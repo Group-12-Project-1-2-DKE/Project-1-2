@@ -37,6 +37,7 @@ public class GolfGameMaze implements Screen{
     private PhysicsEngine engine;
     private MazeAI ai;
     private ArrayList<Vector2D> locations;
+    private int count = -1;
 
     private Environment environment;
 
@@ -186,13 +187,12 @@ public class GolfGameMaze implements Screen{
             try {
                 if (myVector == null) {
                     if (Variables.ai) {
-                        for (int i = 0; i<locations.size(); i++) {
                             System.out.println(locations.toString());
-                            Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(i));
+                            Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(count));
                             dirX.setText("" + aiVec.getX());
                             dirY.setText("" + aiVec.getY());
                             myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
-                        }
+
                     }
                     attempt++;
                     myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
@@ -359,11 +359,11 @@ public class GolfGameMaze implements Screen{
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 if (Variables.ai) {
+                    count++;
                     shoot.setDisabled(true);
                     shoot.setVisible(false);
                 }
                 ballReachedFlag = true;
-                course.getBall().setLastPosition();
                 shoot.setVisible(false);
                 course.getBall().hit();
             }

@@ -29,7 +29,7 @@ public class Solver {
     public void solve(){
         depthFirstSearch(maze[0][0]);
         strategicLocation(0);
-        locations.add(new Vector2D((solution.get(solution.size()-1).x * 4 + 2) -20, ((solution.get(solution.size()-1).y)*2 +1)-20));
+        locations.add(new Vector2D((solution.get(solution.size()-1).x * 4 + 2) -20, ((solution.get(solution.size()-1).y)*4 + 2)-20));
         upgradeGrid();
     }
 
@@ -88,7 +88,7 @@ public class Solver {
             for(int i=index; i<solution.size(); i++){
                 // If the x is different, store the location and call the recursion.
                 if(solution.get(i).x != x && solution.get(i).x != oldx){
-                    locations.add(new Vector2D((solution.get(i-1).x * 4 + 2) - 20, (solution.get(i-1).y * 2 + 1) - 20));
+                    locations.add(new Vector2D((solution.get(i-1).x * 4 + 2) - 20, (solution.get(i-1).y * 4) - 20));
                     strategicLocation(i-1);
                     return;
                 }
@@ -97,7 +97,7 @@ public class Solver {
             for(int i=index; i<solution.size(); i++){
                 // If the y is different, store the location and call the recursion.
                 if(solution.get(i).y != y && solution.get(i).y != oldy){
-                    locations.add(new Vector2D((solution.get(i-1).x * 4 + 2) - 20,  (solution.get(i-1).y * 2 + 1) - 20));
+                    locations.add(new Vector2D((solution.get(i-1).x * 4 + 2) - 20,  (solution.get(i-1).y * 4 + 2) - 20));
                     strategicLocation(i-1);
                     return;
                 }
