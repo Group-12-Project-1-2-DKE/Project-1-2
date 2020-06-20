@@ -4,7 +4,6 @@ import Physics.Vector2D;
 
 public class Variables {
     public static float gravity = (float) 9.81;
-    //public static float ballDiameter;
     public static float ballMass;
     public static float coefficientOfFriction = (float)0.1;
     public static float tolerance;

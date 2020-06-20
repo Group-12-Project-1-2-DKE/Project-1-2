@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.mygdx.game.GolfGame;
+import com.mygdx.game.GolfGameNoMaze;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,13 +36,13 @@ public class TreeObstacle implements Obstacle{
      */
     @Override
     public ModelInstance[] createModel(float x , float z) {
-        Model tree = GolfGame.getModelBuilder().createCylinder(0.5f, 6, 0.5f, 20,
+        Model tree = GolfGameNoMaze.getModelBuilder().createCylinder(0.5f, 6, 0.5f, 20,
                 new Material(ColorAttribute.createDiffuse(Color.BROWN)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        ModelInstance treeInstance = new ModelInstance(tree, x, (float)GolfGame.getCourse().evaluate(x,z), z);
+        ModelInstance treeInstance = new ModelInstance(tree, x, (float)GolfGameNoMaze.getCourse().evaluate(x,z), z);
 
-        Model branch = GolfGame.getModelBuilder().createCone(2,3,2,20,
+        Model branch = GolfGameNoMaze.getModelBuilder().createCone(2,3,2,20,
                 new Material(ColorAttribute.createDiffuse(Color.FOREST)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        ModelInstance branchInstance = new ModelInstance(branch, x, (float)GolfGame.getCourse().evaluate(x,z) + 3.5f,z);
+        ModelInstance branchInstance = new ModelInstance(branch, x, (float)GolfGameNoMaze.getCourse().evaluate(x,z) + 3.5f,z);
         ModelInstance[] instance = new ModelInstance[2];
         instance[0] = treeInstance;
         instance[1] = branchInstance;

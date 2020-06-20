@@ -1,10 +1,6 @@
 package Physics;
 
-import com.mygdx.game.GolfGame;
-
 import Course.PuttingCourse;
-
-
 
 public class PuttingSimulator{
     PuttingCourse course;
@@ -18,9 +14,9 @@ public class PuttingSimulator{
         this.engine = engine;
     }
 
-    public void setBallPosition(Vector2D vector){
-        course.getBall().setLocation(vector);
-    }
+//    public void setBallPosition(Vector2D vector){
+//        course.getBall().setLocation(vector);
+//    }
 
     public Vector2D get_ball_position(){
         return course.getBall().getLocation();

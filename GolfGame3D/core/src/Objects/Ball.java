@@ -2,12 +2,9 @@ package Objects;
 
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.GolfGame;
-
+import com.mygdx.game.GolfGameNoMaze;
 
 /**
  * class Ball is used to describe a ball in the putting simulator
@@ -82,24 +79,6 @@ public class Ball {
      */
     public void setLocation(Vector2D newLocation) {
         location = newLocation;
-    }
-
-    /**
-     * getter for the diameter of the ball
-     *
-     * @return the diameter of the ball
-     */
-    public float getDiameter() {
-        return diameter;
-    }
-
-    /**
-     * setter for the diameter
-     *
-     * @param newDiameter is the desired diameter
-     */
-    public void setDiameter(float newDiameter) {
-        diameter = newDiameter;
     }
 
     /**
@@ -182,7 +161,7 @@ public class Ball {
 
     public boolean isInWater(){
         //add evaluate
-        if(GolfGame.getCourse().evaluate(location) < 0){
+        if(GolfGameNoMaze.getCourse().evaluate(location) < 0){
             return true;
         }
         return false;

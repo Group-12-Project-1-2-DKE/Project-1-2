@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import Reader.FileReaders;
-import com.mygdx.game.GolfGame;
+import com.mygdx.game.GolfGameNoMaze;
 import com.mygdx.game.Menus.MainMenu;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
@@ -46,7 +46,7 @@ public class OptionScreen implements Screen {
 
     private Stage stage;
 
-    public GolfGame hold;
+    public GolfGameNoMaze hold;
 
 
     public OptionScreen(ScreenSpace game){
@@ -160,7 +160,7 @@ public class OptionScreen implements Screen {
 
 
                 this.dispose();
-                game.setScreen(new GolfGame(game));
+                game.setScreen(new GolfGameNoMaze(game));
 
             }
         } else {

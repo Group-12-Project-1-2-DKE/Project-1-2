@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.mygdx.game.GolfGame;
+import com.mygdx.game.GolfGameNoMaze;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,7 +26,6 @@ public class RockObstacle implements Obstacle  {
 
     }
 
-
 /**
      * cretaes a model instance to be used in the graphics
      * @return model instance
@@ -34,9 +33,9 @@ public class RockObstacle implements Obstacle  {
 
     @Override
     public ModelInstance[] createModel(float x, float z) {
-        Model tree = GolfGame.getModelBuilder().createBox(1f, 1f, 1f, 20,
+        Model tree = GolfGameNoMaze.getModelBuilder().createBox(1f, 1f, 1f, 20,
                 new Material(ColorAttribute.createDiffuse(Color.GRAY)), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        ModelInstance rockInstance = new ModelInstance(tree, x, (float)GolfGame.getCourse().evaluate(x,z), z);
+        ModelInstance rockInstance = new ModelInstance(tree, x, (float)GolfGameNoMaze.getCourse().evaluate(x,z), z);
 
         ModelInstance[] instances = {rockInstance};
 
