@@ -22,10 +22,9 @@ public class Variables {
     // Booleans corresponding to the game mode the user choose.
     public static boolean ai = false;
     public static boolean singlePlayer = true;  // Set the single player a the default value.
-   
-         
-    public static Vector2D lowerBound;
-    public static Vector2D upperBound;
+
+    public static Vector2D upperBound = new Vector2D(100, 100);
+    public static Vector2D lowerBound = new Vector2D(-100, -100);
 
     public static boolean maze = false;
     public static int mazeX;

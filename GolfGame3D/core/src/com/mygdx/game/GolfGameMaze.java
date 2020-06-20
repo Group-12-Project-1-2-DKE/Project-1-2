@@ -183,12 +183,12 @@ public class GolfGameMaze implements Screen{
         } else {
             Gdx.input.setInputProcessor(cameraInputController);
         }
-        if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
-                (course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
-                && (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
-                && (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
+//        if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
+//                (course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
+//                && (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
+//                && (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
+        if (course.getFlag().add(course.getBall().getLocation().multiply(-1)).length() <= course.getTolerance()){
             game.setScreen(new Congrat(game, attempt));
-
         } else {
             ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 0.25f,
                     (float) course.getBall().getLocation().getY() + 1f);
@@ -197,7 +197,6 @@ public class GolfGameMaze implements Screen{
             try {
                 if (myVector == null) {
                     if (Variables.ai) {
-                            System.out.println(locations.toString());
                             Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(count));
                             dirX.setText("" + aiVec.getX());
                             dirY.setText("" + aiVec.getY());

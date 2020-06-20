@@ -13,9 +13,15 @@ public class ObstacleAI implements AI{
     public static void main(String[] args) {
         PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
-        ObstacleAI o = new ObstacleAI();
+        PhysicsEngine e = new EulerSolver();
+        e.set_fric_coefficient(0.05);
+        PuttingSimulator p = new PuttingSimulator(h, e);
+
+        AI o = new ObstacleAI();
+        //o = new StraighGreedy();
         Vector2D shot = o.calculate_turn(h, 500);
         System.out.println(shot);
+        p.take_shot(shot);
     }
 
     /**
@@ -42,6 +48,7 @@ public class ObstacleAI implements AI{
         initLoc = course.getBall().getLocation().clone();
         makePuttingSim(course);
         Vector2D tempHoleInOne = sG.calculate_turn(course, steps);
+        System.out.println(tempHoleInOne);
         p.take_shot(tempHoleInOne);
         Vector2D distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
@@ -93,6 +100,7 @@ public class ObstacleAI implements AI{
             return;
         }
         PhysicsEngine e = new EulerSolver();
+        e.set_fric_coefficient(course.getFrictionCoefficient());
         p = new PuttingSimulator(course, e);
         pAssigned = true;
     }
