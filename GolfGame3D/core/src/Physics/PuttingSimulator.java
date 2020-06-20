@@ -1,10 +1,6 @@
 package Physics;
 
-import com.mygdx.game.GolfGame;
-
 import Course.PuttingCourse;
-
-
 
 public class PuttingSimulator{
     PuttingCourse course;

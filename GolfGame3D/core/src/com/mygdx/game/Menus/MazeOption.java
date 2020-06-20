@@ -1,5 +1,7 @@
 package com.mygdx.game.Menus;
 
+import Course.Nodes.Variable;
+import Maze.MazeGenerator;
 import Reader.FileReaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.mygdx.game.GolfGame;
+import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
 
@@ -110,7 +112,7 @@ public class MazeOption implements Screen {
                 Variables.function = "0*x + 0*y +1";
                 Variables.mazeX = Integer.parseInt(mazeX.getText());
                 Variables.mazeY = Integer.parseInt(mazeY.getText());
-                game.setScreen(new GolfGame(game));
+                game.setScreen(new GolfGameMaze(game));
 
             }
         } else {

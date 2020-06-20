@@ -24,6 +24,8 @@ public class MazeGenerator {
         maze = new int[xDimension * 4 + 1][yDimension * 2 + 1];
         initializeMaze();
         generateMaze(cells[0][0]);
+        updateGrid();
+        addStartAndEnd();
     }
 
     private void initializeMaze() {

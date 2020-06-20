@@ -1,7 +1,6 @@
 package Physics;
 
 import Objects.Ball;
-import com.mygdx.game.GolfGame;
 import com.mygdx.game.Variables;
 
 public class RungeKuttaSolver implements PhysicsEngine{

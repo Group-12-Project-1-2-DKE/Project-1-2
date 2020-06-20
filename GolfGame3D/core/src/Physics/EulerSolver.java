@@ -1,7 +1,7 @@
 package Physics;
 import Objects.*;
+import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.Variables;
-import com.mygdx.game.GolfGame;
 import java.lang.Math;
 
 public class EulerSolver implements PhysicsEngine{
@@ -124,7 +124,7 @@ public class EulerSolver implements PhysicsEngine{
     public boolean x_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
         float x = (float) ball.getLocation().getX();
         float y = (float) (ball.getLocation().getY() - final_v.getY());
-       if (GolfGame.collision(x, y)) {
+       if (GolfGameMaze.collision(x, y)) {
             return true;
         } else {
             return false;
@@ -134,7 +134,7 @@ public class EulerSolver implements PhysicsEngine{
     public boolean y_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
         float x = (float) (ball.getLocation().getX() - final_v.getX());
         float y = (float) ball.getLocation().getY();
-        if (GolfGame.collision(x, y)) {
+        if (GolfGameMaze.collision(x, y)) {
             return true;
         } else {
             return false;
