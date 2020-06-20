@@ -6,6 +6,7 @@ import Maze.MazeGenerator;
 import Maze.Solver;
 import Maze.Wall;
 import Objects.Ball;
+import Objects.RockObstacle;
 import Physics.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -29,6 +30,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Menus.Congrat;
 import java.util.ArrayList;
+
+import static com.mygdx.game.Variables.euler;
 
 public class GolfGameMaze implements Screen{
     private static PuttingCourse course;
@@ -68,7 +71,13 @@ public class GolfGameMaze implements Screen{
     public float myDelta = 0;
     public Vector2D myVector;
 
+    private static float[] wallPositionX = new float[Variables.mazeX];
+    private static  float[] wallPositionY = new float[Variables.mazeY];
+
+    RockObstacle rock;
+
     public GolfGameMaze(ScreenSpace game) {
+        EulerSolver eulerSolver = new EulerSolver();
         this.game = game;
 
         modelBuilder = new ModelBuilder();
@@ -81,8 +90,8 @@ public class GolfGameMaze implements Screen{
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
         ai = new MazeAI();
 
-        if (Variables.euler) {
-            EulerSolver eulerSolver = new EulerSolver();
+        if (euler) {
+            EulerSolver euler = new EulerSolver();
             eulerSolver.set_step_size(0.01);
             eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
             eulerSolver.set_grav_constant(9.81);
@@ -163,6 +172,7 @@ public class GolfGameMaze implements Screen{
         Skin skin1 = new Skin(Gdx.files.internal("uiskin.json"));
 
         shootStage(skin1);
+        rock = new RockObstacle();
     }
 
     @Override
@@ -200,6 +210,14 @@ public class GolfGameMaze implements Screen{
                 else {
                     myVector = simulator.take_shotSlowly(myVector);
                 }
+                for(int i = 0; i < wallPositionX.length; i++){
+                    if(collisionWalls(wallPositionX[i],wallPositionY[i])) {
+                        EulerSolver eulerSolver = new EulerSolver();
+                        eulerSolver.rock_collision(course.getBall() ,rock, course.getBall().getVelocity());
+                        System.out.println("collision");
+                    }
+                }
+
             } catch (StackOverflowError s) {
                 System.out.println("the AI couldn't shoot");
             }
@@ -472,6 +490,22 @@ public class GolfGameMaze implements Screen{
         for (ModelInstance instance : instances) {
             Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
             if ((x <= wallLocation.x + 0.5 / 3 && x >= wallLocation.x - 0.25 / 3) && (y <= wallLocation.y + 0.25 / 3 && y >= wallLocation.y - 0.25 / 3)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static double euclideanDistance(float posX, float posY, int  i ){
+      float wallX = wallPositionX[i];
+      float wallZ  =wallPositionY[i];
+      float euclideanDist = (float) Math.sqrt(Math.pow((posX - wallX), 2) + Math.pow((posY - wallZ), 2));
+      return euclideanDist;
+    }
+
+    public static boolean collisionWalls(float x, float z){
+        for(int i = 0; i < wallPositionX.length; i++){
+            if(euclideanDistance((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY(),i)< 0.5f){
                 return true;
             }
         }
