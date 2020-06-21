@@ -88,6 +88,7 @@ public class ObstacleAI implements AI{
         Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
+        return null;
     }
 
     private Vector2D bestAngle(Vector2D initVector, double maxDegree, PuttingCourse course){
