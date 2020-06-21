@@ -62,11 +62,12 @@ public class ObstacleAI implements AI{
         for (int i = 0; i < 2; i++) {
             tempHoleInOne = bestAngle(tempHoleInOne, angle, course);
             angle /= 10;
-            System.out.println("------------------------------------");
+//            System.out.println("------------------------------------");
         }
 
-        double initFactor = tempHoleInOne.length()/4;
+        double initFactor = tempHoleInOne.length()/200;
 
+        tempHoleInOne = bestPower(tempHoleInOne, initFactor, course);
 
         return tempHoleInOne;
 
@@ -77,18 +78,45 @@ public class ObstacleAI implements AI{
     }
 
     private Vector2D bestPower(Vector2D initVector, double initFactor, PuttingCourse course){
-        Vector2D faster = initVector.multiply(initFactor);
-        Vector2D slower = initVector.multiply(1/initFactor);
+        for (int i = 0; i < 5; i++) {
+            p.take_shot(initVector);
+            Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
+            course.getBall().setLocation(initLoc.clone());
+            if (initDistance.length() <= course.getTolerance()){
+                return initVector;
+            }
 
-        p.take_shot(faster);
-        Vector2D Fdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-        course.getBall().setLocation(initLoc.clone());
+            Vector2D faster = initVector.multiply(initFactor);
+            Vector2D slower = initVector.multiply(1 / initFactor);
 
-        p.take_shot(slower);
-        Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-        course.getBall().setLocation(initLoc.clone());
+            p.take_shot(faster);
+            Vector2D Fdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
+            course.getBall().setLocation(initLoc.clone());
+            if (Fdistance.length() <= course.getTolerance()){
+                return faster;
+            }
 
-        return null;
+            p.take_shot(slower);
+            Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
+            course.getBall().setLocation(initLoc.clone());
+            if (Sdistance.length() <= course.getTolerance()){
+                return slower;
+            }
+
+            double closest = Math.min(initDistance.length(), Math.min(Fdistance.length(), Sdistance.length()));
+
+            if (closest == Sdistance.length()) {
+                System.out.println("slower: " + Sdistance.length());
+                initVector = slower;
+            } else if (closest == Fdistance.length()) {
+                System.out.println("faster: " + Fdistance.length());
+                initVector = faster;
+            } else {
+                System.out.println("same: " + initDistance.length());
+                initFactor /= 2;
+            }
+        }
+        return initVector;
     }
 
     private Vector2D bestAngle(Vector2D initVector, double maxDegree, PuttingCourse course){
@@ -116,9 +144,9 @@ public class ObstacleAI implements AI{
         while (distance.length() > course.getTolerance() && shotcount <= maxShots){
             if (shotcount == maxShots/2){
                 tempHoleInOne = tempHoleInOne.turn(-angle);
-                System.out.println("a: " + angleCount);
-                System.out.println(distanceArr[shotcount]);
-                System.out.println(velocityArr[shotcount]);
+//                System.out.println("a: " + angleCount);
+//                System.out.println(distanceArr[shotcount]);
+//                System.out.println(velocityArr[shotcount]);
                 angleCount -= angle;
                 shotcount++;
                 continue;
@@ -127,9 +155,9 @@ public class ObstacleAI implements AI{
 
             p.take_shot(tempHoleInOne);
             distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-            System.out.println("a: " + angleCount);
-            System.out.println(distance.length());
-            System.out.println(tempHoleInOne);
+//            System.out.println("a: " + angleCount);
+//            System.out.println(distance.length());
+//            System.out.println(tempHoleInOne);
 
             course.getBall().setLocation(initLoc.clone());
             if (distance.length() <= course.getTolerance()){
