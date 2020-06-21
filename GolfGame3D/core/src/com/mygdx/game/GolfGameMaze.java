@@ -467,7 +467,7 @@ public class GolfGameMaze implements Screen{
                     instances.add(wallInstances[0]);
                 }else if(maze.getGrid()[i][j] == 8){
                     Variables.startX = i-20 + 1;
-                    Variables.startY = (float) ((j*2)-20);
+                    Variables.startY = (float) ((j*2)-20.5);
 //				camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //				camera.position.set(-20f, 10f, -20f);
                     //ball.transform.setTranslation(Variables.startX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
