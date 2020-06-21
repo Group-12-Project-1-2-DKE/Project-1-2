@@ -160,8 +160,7 @@ public class Ball {
     }
 
     public boolean isInWater(){
-        //add evaluate
-        if(GolfGameNoMaze.getCourse().evaluate(location) < 0){
+        if(GolfGameNoMaze.getCourse().evaluate(this.location) < 0){
             return true;
         }
         return false;

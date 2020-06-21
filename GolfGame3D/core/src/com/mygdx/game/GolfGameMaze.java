@@ -209,12 +209,11 @@ public class GolfGameMaze implements Screen{
                 else {
                     myVector = simulator.take_shotSlowly(myVector);
                 }
-
-                    if(collision((float)course.getBall().getLocation().getX() , (float)course.getBall().getLocation().getY())) {
-                        EulerSolver eulerSolver = new EulerSolver();
-                        eulerSolver.rock_collision(course.getBall() ,wall, course.getBall().getVelocity());
-                        System.out.println("collision");
-                    }
+                       if(collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY())) {
+                           EulerSolver eulerSolver = new EulerSolver();
+                           eulerSolver.rock_collision(course.getBall() ,wall, course.getBall().getVelocity());
+                           System.out.println("collision");
+                       }
 
 
             } catch (StackOverflowError s) {
@@ -405,14 +404,14 @@ public class GolfGameMaze implements Screen{
         int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
         TerrainChunk chunk;
         Vector2D currentPos;
-        TerrainChunk.setFunction(Variables.function);
+       // TerrainChunk.setFunction(Variables.function);
         TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
         Material material;
 
         for (int x = 0; x < numberX; x++) {
             for (int y = 0; y < numberY; y++) {
                 currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
-                chunk = new TerrainChunk(currentPos, chunkSize, course);
+                chunk = new TerrainChunk(currentPos, chunkSize, course,false);
                 chunk.setLocation((float) course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
                 terrainChunks[x][y] = chunk;
 
@@ -452,7 +451,7 @@ public class GolfGameMaze implements Screen{
         maze.updateGrid();
         maze.addStartAndEnd();
         wallPositionX = new float[maze.getGrid().length];
-        wallPositionY = new float[maze.getGrid().length];
+        wallPositionY = new float[maze.getGrid()[0].length];
         // System.out.print(maze);
         Wall wallGenerator = new Wall();
 
@@ -477,7 +476,7 @@ public class GolfGameMaze implements Screen{
                     //flag.transform.setTranslation(Variables.goalX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
                 }
                 wallPositionX[i] = xPos;
-                wallPositionY[i] = yPos;
+                wallPositionY[j] = yPos;
             }
         }
         Solver solver = new Solver(maze.getCells());
@@ -491,23 +490,15 @@ public class GolfGameMaze implements Screen{
      * @param y y position of the obstacle
      * @return true if the ball enter in collision with a wall.
      */
-   /* public static boolean collision(float x, float y) {
+    public static boolean collision(float x, float y) {
         for (ModelInstance instance : instances) {
-            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
-            if ((x < wallLocation.x + 1f && x + 0.5f > wallLocation.x ) && (y < wallLocation.y + 2f && y + 0.5f >  wallLocation.y)) {
-                return true;
-            }
-        }
-        return false;
-    }*/
-    public static boolean collision(float x, float y){
-        for(int i = 0; i < instances.size(); i++){
-            Vector2 wallLocation = new Vector2(instances.get(i).transform.getTranslation(new Vector3()).x, instances.get(i).transform.getTranslation(new Vector3()).z);
-            if ((x < wallLocation.x + 0.1f && x + 0.1f > wallLocation.x ) && (y < wallLocation.y + 0.1f && y + 0.1f >  wallLocation.y)) {
+            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).z);
+            if ((x < wallLocation.x + 1f && x + 0.5f > wallLocation.x ) && (y < wallLocation.y + 1f && y + 0.5f >  wallLocation.y)) {
                 return true;
             }
         }
         return false;
     }
+
 
 }
