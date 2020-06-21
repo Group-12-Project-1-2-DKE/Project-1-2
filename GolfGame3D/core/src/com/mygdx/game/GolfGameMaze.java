@@ -484,14 +484,14 @@ public class GolfGameMaze implements Screen{
 
     /**
      * wall collision
-     * @param x x positzion of the obstacle
+     * @param x x position of the obstacle
      * @param y y position of the obstacle
      * @return true if the ball enter in collision with a wall.
      */
     public static boolean collision(float x, float y) {
         for (ModelInstance instance : instances) {
             Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
-            if ((x <= wallLocation.x + 1f && x + 0.5f >= wallLocation.x ) && (y <= wallLocation.y + 2f && y + 0.5f >=  wallLocation.y)) {
+            if ((x <= wallLocation.x && x  + 0.5f >= wallLocation.x - 1f) && (y <= wallLocation.y && y  + 0.5f >=  wallLocation.y - 2f)) {
                 System.out.println(wallLocation.toString());
                 System.out.println(course.getBall().getLocation().toString());
                 return true;
