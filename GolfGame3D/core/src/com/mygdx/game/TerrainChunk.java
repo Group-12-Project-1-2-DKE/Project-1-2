@@ -71,6 +71,7 @@ public class TerrainChunk {
 
     }
 
+
    // public static void setFunction(String function){Variables.function = function;};
 
     /**

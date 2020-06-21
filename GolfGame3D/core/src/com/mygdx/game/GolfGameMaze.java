@@ -40,7 +40,7 @@ public class GolfGameMaze implements Screen{
     private PhysicsEngine engine;
     private MazeAI ai;
     private ArrayList<Vector2D> locations;
-    private int count = -1;
+    private int count = 0;
 
     private Environment environment;
 
@@ -375,7 +375,10 @@ public class GolfGameMaze implements Screen{
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 if (Variables.ai) {
-                    count++;
+                    double difference = locations.get(count).add(course.getBall().getLocation().multiply(-1)).length();
+                    if (difference < 0.15){
+                        count++;
+                    }
                     shoot.setDisabled(true);
                     shoot.setVisible(false);
                 }
@@ -459,7 +462,7 @@ public class GolfGameMaze implements Screen{
             for(int j=0; j<maze.getGrid()[i].length; j++){
             
                 if (maze.getGrid()[i][j] == 1){
-                    ModelInstance[] wallInstances = wallGenerator.createModel(i-1, (float) (j*2));
+                    ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*2)+0.25f);
                     instances.add(wallInstances[0]);
                 }else if(maze.getGrid()[i][j] == 8){
                     Variables.startX = i-20 + 1;
