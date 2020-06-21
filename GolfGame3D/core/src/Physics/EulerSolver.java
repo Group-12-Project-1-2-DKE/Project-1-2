@@ -111,7 +111,6 @@ public class EulerSolver implements PhysicsEngine{
                 final_v.setY(final_v.getY() * -1);
             }
         }
-        System.out.println(final_v.toString());
         return final_v;
     }
 
