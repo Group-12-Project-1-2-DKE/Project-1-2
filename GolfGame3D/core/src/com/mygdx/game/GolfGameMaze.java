@@ -51,6 +51,7 @@ public class GolfGameMaze implements Screen{
     private ModelBatch modelBatch;
     private static ModelBuilder modelBuilder;
     private static ArrayList<ModelInstance> instances;
+    private static ArrayList<ModelInstance> redwallsinstances;
 
     private Stage stage1;
     private Label label;
@@ -418,7 +419,9 @@ public class GolfGameMaze implements Screen{
         stage1.addActor(dirY);
     }
 
-    // TODO comments
+    /**
+     * creates the mesh that represents the field of the game
+     */
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY),
@@ -485,6 +488,7 @@ public class GolfGameMaze implements Screen{
         maze.updateGrid();
         maze.addStartAndEnd();
         Wall wallGenerator = new Wall();
+        redwallsinstances = new ArrayList<>();
 
         // Goes through the array of integers that represent the maze and draw the walls when needed.
         for (int i=0; i< maze.getGrid().length; i++){
@@ -493,6 +497,7 @@ public class GolfGameMaze implements Screen{
                     // If the integer at that position is 1, create a wall.
                     ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*2)+0.25f);
                     instances.add(wallInstances[0]);
+                    redwallsinstances.add(wallInstances[0]);
                 }else if(maze.getGrid()[i][j] == 8){
                     // Set the start position as the one in the array.
                     Variables.startX = i-20 + 1;
@@ -511,19 +516,24 @@ public class GolfGameMaze implements Screen{
 
     /**
      * wall collision
-     * @param x x position of the obstacle
+     * @param x x positzion of the obstacle
      * @param y y position of the obstacle
      * @return true if the ball enter in collision with a wall.
      */
     public static boolean collision(float x, float y) {
-        for (ModelInstance instance : instances) {
-            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
-            if ((x <= wallLocation.x && x  + 0.5f >= wallLocation.x - 1f) && (y <= wallLocation.y && y  + 0.5f >=  wallLocation.y - 2f)) {
-                System.out.println(wallLocation.toString());
-                System.out.println(course.getBall().getLocation().toString());
+
+        for (ModelInstance instance : redwallsinstances) {
+            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).z);
+
+
+            if ( (x <= wallLocation.x +0.75f && x+0.75f  >= wallLocation.x) && (y<=wallLocation.y+0.25f && y+2.25f>=wallLocation.y) ) {
+
                 return true;
             }
+
+
         }
+
         return false;
     }
 }

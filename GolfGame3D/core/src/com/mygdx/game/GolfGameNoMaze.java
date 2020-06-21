@@ -81,7 +81,7 @@ public class GolfGameNoMaze implements Screen {
     public Vector2D myVector;
 
     /**
-     * COntructor method of the GolfGameNoMaze object.
+     * constructor method of the GolfGameNoMaze object.
      * @param game ScreenSpace object on which the object is going to be rendered.
      */
     public GolfGameNoMaze(ScreenSpace game) {
@@ -508,7 +508,9 @@ public class GolfGameNoMaze implements Screen {
         stage1.addActor(dirY);
     }
 
-    // TODO comments
+    /**
+     * creates the mesh that represents the field of the game
+     */
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
         Texture sandTex = new Texture("sandTexture.jpg");
@@ -564,7 +566,9 @@ public class GolfGameNoMaze implements Screen {
         }
     }
 
-    // TODO comment
+    /**
+     * creates the mesh that represents the water when the height is <= 0
+     */
     private void createWaterMesh(){
         Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY),
@@ -632,7 +636,13 @@ public class GolfGameNoMaze implements Screen {
         return false;
     }
 
-    // TODO comments
+    /**
+     * computes the euclidean distance between the ball and the obstacle
+     * @param posX x position of the ball
+     * @param posZ y position of the ball
+     * @param i index of the obstacle to compute the distance
+     * @return the euclidean distance
+     */
     public float euclideanDistance(float posX, float posZ, int i) {
         float treeX = treePositionX[i];
         float treeZ = treePositionZ[i];

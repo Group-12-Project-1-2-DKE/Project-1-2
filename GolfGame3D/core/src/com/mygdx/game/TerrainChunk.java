@@ -31,7 +31,7 @@ public class TerrainChunk {
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
      * @param position The position of the center of the terrainChunk.
-     * @param size
+     * @param size is the dimensions of a single chunk
      * @param course physics that apply to the world
      * @param water Boolean that represent if that mesh is water (true) or not (false).
      */
