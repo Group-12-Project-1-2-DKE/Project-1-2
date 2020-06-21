@@ -30,6 +30,8 @@ public class EulerSolver implements PhysicsEngine{
             ball.putAtRest();
             return new Vector2D(0, 0);
         }
+
+
         return final_v;
     }
 

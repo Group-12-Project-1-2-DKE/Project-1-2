@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import AI.AI;
+import AI.ObstacleAI;
 import AI.StraighGreedy;
 import Course.PuttingCourse;
 import Objects.Ball;
@@ -38,7 +40,7 @@ public class GolfGameNoMaze implements Screen {
     private PuttingSimulator simulator;
     private Boolean ballReachedFlag = false;
     private PhysicsEngine engine;
-    private StraighGreedy ai;
+    private AI ai;
 
     private Environment environment;
 
@@ -86,7 +88,7 @@ public class GolfGameNoMaze implements Screen {
         Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 0.5f); //i entered some random values
 
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
-        ai = new StraighGreedy();
+        ai = new ObstacleAI();//StraighGreedy();
 
         treePositionX = new float[numTreeS];
         treePositionZ = new float[numTreeS];

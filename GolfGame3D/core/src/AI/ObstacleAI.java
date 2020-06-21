@@ -11,11 +11,12 @@ import AI.StraighGreedy;
 public class ObstacleAI implements AI{
 
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,0),
+        PuttingCourse h = new PuttingCourse("1", new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(0.05);
         PuttingSimulator p = new PuttingSimulator(h, e);
+
 
         AI o = new ObstacleAI();
         //o = new StraighGreedy();
