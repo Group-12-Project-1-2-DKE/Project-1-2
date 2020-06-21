@@ -1,4 +1,5 @@
 package Physics;
+import Maze.Wall;
 import Objects.*;
 import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.Variables;
@@ -112,18 +113,18 @@ public class EulerSolver implements PhysicsEngine{
         return final_v;
     }
 
-    public Vector2D rock_collision(Ball ball, RockObstacle rock, Vector2D final_v) {
+    public Vector2D rock_collision(Ball ball, Wall wall, Vector2D final_v) {
         System.out.println("collision");
-        if (x_edge(ball, rock, final_v)) {
+        if (x_edge(ball, wall, final_v)) {
             final_v.setY(final_v.getY()*-1);
         }
-        if (y_edge(ball, rock, final_v)) {
+        if (y_edge(ball, wall, final_v)) {
             final_v.setX(final_v.getX()*-1);
         }
         return final_v;
     }
 
-    public boolean x_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
+    public boolean x_edge(Ball ball, Wall wall, Vector2D final_v) {
         float x = (float) ball.getLocation().getX();
         float y = (float) (ball.getLocation().getY() - final_v.getY() * step_size);
        if (GolfGameMaze.collision(x, y)) {
@@ -133,7 +134,7 @@ public class EulerSolver implements PhysicsEngine{
         }
     }
 
-    public boolean y_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
+    public boolean y_edge(Ball ball, Wall wall, Vector2D final_v) {
         float x = (float) (ball.getLocation().getX() - final_v.getX() * step_size);
         float y = (float) ball.getLocation().getY();
         if (GolfGameMaze.collision(x, y)) {
