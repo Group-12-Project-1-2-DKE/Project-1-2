@@ -69,7 +69,7 @@ public class GolfGameNoMaze implements Screen {
 
     private TreeObstacle obstacle;
 
-    private Vector2D[] sandInfo = new Vector2D[12];
+    private int[][] terrainInfo;
     private final int numTreeS = 30;
     private float[] treePositionX;
     private float[] treePositionZ;
@@ -166,7 +166,9 @@ public class GolfGameNoMaze implements Screen {
         instances.add(ball);
         instances.add(flag);
 
+        createWaterMesh();
         createMesh();
+
 
         Variables.lowerBound = new Vector2D(-100, -100);
         Variables.upperBound = new Vector2D(100, 100);
@@ -202,8 +204,8 @@ public class GolfGameNoMaze implements Screen {
 
         }
 
-        if (course.getBall().isInWater()) {
-            System.out.println("I am into the water");
+        if (course.evaluate(course.getBall().getLocation().getX(),course.getBall().getLocation().getY()) <= 0) {
+            System.out.println("in water");
             stage2.draw();
             if (Gdx.input.getX() > ScreenSpace.WIDTH - 175 && Gdx.input.getX() < ScreenSpace.WIDTH && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
                 Gdx.input.setInputProcessor(stage2);
@@ -448,23 +450,24 @@ public class GolfGameNoMaze implements Screen {
     }
 
     public void createMesh() {
-        Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
         Texture fieldTex = new Texture("groundTexture.jpg");
         Texture sandTex = new Texture("sandTexture.jpg");
+        Texture darkTex = new Texture("darkgr.jpg");
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY));
         int chunkSize = 1;
         int numberX = (int) (coverVectors[1].getX() - coverVectors[0].getX()) / chunkSize;
         int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
         TerrainChunk chunk;
         Vector2D currentPos;
-        TerrainChunk.setFunction(Variables.function);
+
         TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
+        terrainInfo = new int[numberX][numberY];
         Material material;
 
         for (int x = 0; x < numberX; x++) {
             for (int y = 0; y < numberY; y++) {
                 currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
-                chunk = new TerrainChunk(currentPos, chunkSize, course);
+                chunk = new TerrainChunk(currentPos, chunkSize, course,false);
                 chunk.setLocation((float) course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
                 terrainChunks[x][y] = chunk;
 
@@ -475,17 +478,59 @@ public class GolfGameNoMaze implements Screen {
                         new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE));
                 mesh.setVertices(chunk.vertices);
                 mesh.setIndices(chunk.indices);
-                if (course.evaluate(currentPos) <= 0) {
-                    material = new Material(TextureAttribute.createDiffuse(waterTex));
-                } else if (course.evaluate(currentPos) < 1 && course.evaluate(currentPos) != 0) {
+                Random random = new Random();
+                int xPos = random.nextInt(8);
+                int yPos = random.nextInt(8) ;
+                if (course.evaluate(currentPos) < 1 && course.evaluate(currentPos) != 0) {
                     material = new Material(TextureAttribute.createDiffuse(sandTex));
-                    sandInfo[0] = currentPos;
-                    System.out.println(sandInfo[0]);
+                    terrainInfo[x][y] = 1;
+                } else if (course.evaluate(currentPos) == xPos && course.evaluate(currentPos) > 0) {
+                    material = new Material(TextureAttribute.createDiffuse(darkTex));
+                    terrainInfo[x][y] = 2;
                 } else {
-
                     material = new Material(TextureAttribute.createDiffuse(fieldTex));
+                    terrainInfo[x][y] = 3;
                     ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) - 1f, (float) course.getBall().getLocation().getY());
                 }
+                    Model terrain = getModel(mesh, GL20.GL_TRIANGLES, material);
+                    ModelInstance terrainInstance = new ModelInstance(terrain, 0, 0, 0);
+
+                    chunk.setModelInstance(terrainInstance);
+                    instances.add(terrainInstance);
+
+                    terrainInstance.transform.setTranslation((float) currentPos.getX(), 0, (float) currentPos.getY());
+
+            }
+        }
+    }
+
+    private void createWaterMesh(){
+        Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
+        Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY));
+        int chunkSize = 1;
+        int numberX = (int) (coverVectors[1].getX() - coverVectors[0].getX()) / chunkSize;
+        int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
+        TerrainChunk chunk;
+        Vector2D currentPos;
+        TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
+        terrainInfo = new int[numberX][numberY];
+        Material material;
+
+        for (int x = 0; x < numberX; x++) {
+            for (int y = 0; y < numberY; y++) {
+                currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
+                chunk = new TerrainChunk(currentPos, chunkSize, course, true);
+                chunk.setLocation(0);
+                terrainChunks[x][y] = chunk;
+
+                Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
+                        new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE),
+                        new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE));
+                mesh.setVertices(chunk.vertices);
+                mesh.setIndices(chunk.indices);
+                material = new Material((TextureAttribute.createDiffuse(waterTex)));
                 Model terrain = getModel(mesh, GL20.GL_TRIANGLES, material);
                 ModelInstance terrainInstance = new ModelInstance(terrain, 0, 0, 0);
 
@@ -493,6 +538,7 @@ public class GolfGameNoMaze implements Screen {
                 instances.add(terrainInstance);
 
                 terrainInstance.transform.setTranslation((float) currentPos.getX(), 0, (float) currentPos.getY());
+
             }
         }
     }
@@ -544,4 +590,6 @@ public class GolfGameNoMaze implements Screen {
 
         }
     }
+
+
 }
