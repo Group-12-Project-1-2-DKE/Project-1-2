@@ -4,9 +4,8 @@ import AI.MazeAI;
 import Course.PuttingCourse;
 import Maze.MazeGenerator;
 import Maze.Solver;
-import Maze.Wall;
+import Objects.Wall;
 import Objects.Ball;
-import Objects.RockObstacle;
 import Physics.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,7 +23,6 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -32,7 +30,6 @@ import com.mygdx.game.Menus.Congrat;
 import java.util.ArrayList;
 
 import static com.mygdx.game.Variables.euler;
-import static com.mygdx.game.Variables.goalY;
 
 public class GolfGameMaze implements Screen{
     private static PuttingCourse course;
@@ -50,7 +47,7 @@ public class GolfGameMaze implements Screen{
 
     private Model model;
     public ModelInstance ball;
-    ModelInstance flag;
+    private ModelInstance flag;
     private ModelBatch modelBatch;
     private static ModelBuilder modelBuilder;
     private static ArrayList<ModelInstance> instances;
@@ -72,14 +69,9 @@ public class GolfGameMaze implements Screen{
     public float myDelta = 0;
     public Vector2D myVector;
 
-
-    private static float[] wallPositionX ;
-    private static  float[] wallPositionY;
-
-    Wall wall;
+    private Wall wall;
 
     public GolfGameMaze(ScreenSpace game) {
-        EulerSolver eulerSolver = new EulerSolver();
         this.game = game;
 
         modelBuilder = new ModelBuilder();
@@ -87,13 +79,16 @@ public class GolfGameMaze implements Screen{
 
         createWalls();
 
-        Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 0.5f); //i entered some random values
+        Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 0.5f);
 
-        course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7, Variables.tolerance);//again some  random values
+        course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY),
+                new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7,
+                Variables.tolerance);
+
         ai = new MazeAI();
 
         if (euler) {
-            EulerSolver euler = new EulerSolver();
+            EulerSolver eulerSolver = new EulerSolver();
             eulerSolver.set_step_size(0.01);
             eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
             eulerSolver.set_grav_constant(9.81);
@@ -114,7 +109,9 @@ public class GolfGameMaze implements Screen{
 
         simulator = new PuttingSimulator(course, engine);
 
-        position = new Vector3((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) course.getStart().getY());
+        position = new Vector3((float) course.getStart().getX(),
+                (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())),
+                (float) course.getStart().getY());
 
         stage1 = new Stage();
         font = new BitmapFont();
@@ -155,8 +152,12 @@ public class GolfGameMaze implements Screen{
         ball = new ModelInstance(model, "ball");
         flag = new ModelInstance(model, "flagPole");
 
-        ball.transform.setTranslation((float) course.getStart().getX(), (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())), (float) course.getStart().getY());
-        flag.transform.setTranslation((float) course.getFlag().getX(), (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())), (float) course.getFlag().getY());
+        ball.transform.setTranslation((float) course.getStart().getX(),
+                (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())),
+                (float) course.getStart().getY());
+        flag.transform.setTranslation((float) course.getFlag().getX(),
+                (float) course.evaluate(new Vector2D(course.getFlag().getX(), course.getFlag().getY())),
+                (float) course.getFlag().getY());
 
         instances.add(ball);
         instances.add(flag);
@@ -179,19 +180,18 @@ public class GolfGameMaze implements Screen{
     @Override
     public void render(float delta) {
         myDelta += delta;
-        if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > ScreenSpace.HEIGHT - 150) {
+        if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() > ScreenSpace.HEIGHT - 150) {
             Gdx.input.setInputProcessor(stage1);
         } else {
             Gdx.input.setInputProcessor(cameraInputController);
         }
-//        if (((((course.getFlag().getX() - course.getTolerance() <= course.getBall().getLocation().getX()) &&
-//                (course.getBall().getLocation().getX() <= course.getFlag().getX() + course.getTolerance())))
-//                && (course.getFlag().getY() - course.getTolerance() <= course.getBall().getLocation().getY())
-//                && (course.getBall().getLocation().getY() <= course.getFlag().getY() + course.getTolerance()))) {
         if (course.getFlag().add(course.getBall().getLocation().multiply(-1)).length() <= course.getTolerance()){
             game.setScreen(new Congrat(game, attempt));
         } else {
-            ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) + 0.25f,
+            ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
+                    (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
+                            course.getBall().getLocation().getY())) + 0.25f,
                     (float) course.getBall().getLocation().getY() + 1f);
         }
         if (ballReachedFlag) {
@@ -201,11 +201,13 @@ public class GolfGameMaze implements Screen{
                             Vector2D aiVec = ai.calculate_turn(course, 500, locations.get(count));
                             dirX.setText("" + aiVec.getX());
                             dirY.setText("" + aiVec.getY());
-                            myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
+                            myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()),
+                                    Float.parseFloat(dirY.getText())));
 
                     }
                     attempt++;
-                    myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()), Float.parseFloat(dirY.getText())));
+                    myVector = simulator.take_shotSlowly(new Vector2D(Float.parseFloat(dirX.getText()),
+                            Float.parseFloat(dirY.getText())));
                 }
                 else {
                     myVector = simulator.take_shotSlowly(myVector);
@@ -232,7 +234,9 @@ public class GolfGameMaze implements Screen{
             camera.translate((float) myVector.getX() / 100, 0, (float) myVector.getY() / 100);
         }
 
-        camera.lookAt((float) course.getBall().getLocation().getX(), -(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())), (float) course.getBall().getLocation().getY());
+        camera.lookAt((float) course.getBall().getLocation().getX(),
+                -(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
+                        course.getBall().getLocation().getY())), (float) course.getBall().getLocation().getY());
         camera.update();
         cameraInputController.update();
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -277,7 +281,6 @@ public class GolfGameMaze implements Screen{
 
     /**
      * this method determines if the given instance is visible on the screen
-     *
      * @param camera the game camera that makes the instances visible
      * @return true if the instance is visible
      */
@@ -288,7 +291,6 @@ public class GolfGameMaze implements Screen{
 
     /**
      * method that builds a surface from Vector2Ds
-     *
      * @param start  is the start coordinate
      * @param goal   is the goal coordinate
      * @return an array of Vector2D's that represents the surface
@@ -315,7 +317,6 @@ public class GolfGameMaze implements Screen{
 
     /**
      * this model calls the overloaded getModel to construct the field
-     *
      * @param mesh     the parts of the field
      * @param gl       the primitive GL type
      * @param material is the texture of the field
@@ -327,7 +328,6 @@ public class GolfGameMaze implements Screen{
 
     /**
      * this method builds a Model instance from mesh parts and returns a field Model
-     *
      * @param mesh     the parts of the field
      * @param offset   an offset value to provide in mesh part
      * @param vertices vertices of the mesh
@@ -354,7 +354,7 @@ public class GolfGameMaze implements Screen{
         finalModel.manageDisposable(mesh);
         return finalModel;
     }
-
+    // TODO comments
     public void shootStage(Skin skin1) {
         TextArea dirxText = new TextArea("Vector x:", skin1);
         dirxText.setDisabled(true);
@@ -402,14 +402,13 @@ public class GolfGameMaze implements Screen{
 
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
-        Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY));
+        Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY),
+                new Vector2D(Variables.goalX, Variables.goalY));
         int chunkSize = 1;
         int numberX = (int) (coverVectors[1].getX() - coverVectors[0].getX()) / chunkSize;
         int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
         TerrainChunk chunk;
         Vector2D currentPos;
-       // TerrainChunk.setFunction(Variables.function);
-        TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
         Material material;
 
         for (int x = 0; x < numberX; x++) {
@@ -417,7 +416,6 @@ public class GolfGameMaze implements Screen{
                 currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
                 chunk = new TerrainChunk(currentPos, chunkSize, course,false);
                 chunk.setLocation((float) course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
-                terrainChunks[x][y] = chunk;
 
                 Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
                         new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
@@ -429,7 +427,9 @@ public class GolfGameMaze implements Screen{
 
 
                 material = new Material(TextureAttribute.createDiffuse(fieldTex));
-                ball.transform.setTranslation((float) course.getBall().getLocation().getX(), (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())) - 1f, (float) course.getBall().getLocation().getY());
+                ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
+                        (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
+                        course.getBall().getLocation().getY())) - 1f, (float) course.getBall().getLocation().getY());
 
                 Model terrain = getModel(mesh, GL20.GL_TRIANGLES, material);
                 ModelInstance terrainInstance = new ModelInstance(terrain, 0, 0, 0);
@@ -442,21 +442,21 @@ public class GolfGameMaze implements Screen{
         }
     }
 
+    // TODO comments
     public static ModelBuilder getModelBuilder() {
         return modelBuilder;
     }
 
+    // TODO comments
     public static PuttingCourse getCourse() {
         return course;
     }
 
+    // TODO comments
     public void createWalls() {
        MazeGenerator maze = new MazeGenerator(Variables.mazeX, Variables.mazeY);
         maze.updateGrid();
         maze.addStartAndEnd();
-        wallPositionX = new float[maze.getGrid().length];
-        wallPositionY = new float[maze.getGrid()[0].length];
-        // System.out.print(maze);
         Wall wallGenerator = new Wall();
 
         for (int i=0; i< maze.getGrid().length; i++){
@@ -468,14 +468,10 @@ public class GolfGameMaze implements Screen{
                 }else if(maze.getGrid()[i][j] == 8){
                     Variables.startX = i-20 + 1;
                     Variables.startY = (float) ((j*2)-20.5);
-//				camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//				camera.position.set(-20f, 10f, -20f);
-                    //ball.transform.setTranslation(Variables.startX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
 
                 }else if (maze.getGrid()[i][j] == 9) {
                     Variables.goalX = i - 21;
                     Variables.goalY = (float) ((j * 2) - 20);
-                    //flag.transform.setTranslation(Variables.goalX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
                 }
             }
         }
@@ -503,6 +499,4 @@ public class GolfGameMaze implements Screen{
         }
         return false;
     }
-
-
 }

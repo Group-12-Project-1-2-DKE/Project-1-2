@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import Reader.FileReaders;
 import com.mygdx.game.GolfGameNoMaze;
-import com.mygdx.game.Menus.MainMenu;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
 
@@ -45,9 +44,6 @@ public class OptionScreen implements Screen {
     private TextField startY;
 
     private Stage stage;
-
-    public GolfGameNoMaze hold;
-
 
     public OptionScreen(ScreenSpace game){
         this.game = game;
@@ -86,7 +82,6 @@ public class OptionScreen implements Screen {
         tolerance.setColor(Color.WHITE);
         stage.addActor(tolerance);
 
-        //0.02*x^2 + 0.02*y^2
         function = new TextField(Variables.function, customizedMenuSkin);
         function.setPosition(ScreenSpace.WIDTH/2,500);
         function.setSize(200, 30);
@@ -145,7 +140,8 @@ public class OptionScreen implements Screen {
 
         // Create the play button.
         int x = ScreenSpace.WIDTH / 2;
-        if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
+        if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             // If the cursor is around the button, draw the activated button.
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
@@ -158,10 +154,8 @@ public class OptionScreen implements Screen {
                 Variables.startX = Float.parseFloat(startX.getText());
                 Variables.startY = Float.parseFloat(startY.getText());
 
-
                 this.dispose();
                 game.setScreen(new GolfGameNoMaze(game));
-
             }
         } else {
             // If the cursor is not around the button, draw the inactivated button.
@@ -170,7 +164,8 @@ public class OptionScreen implements Screen {
 
         // Create the go back button.
         int z = 35;
-        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
+        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             // If the cursor is around the button, draw the activated button.
             game.batch.draw(backButtonActivated, z, PLAY_Y, BACK_WIDTH, BACK_WIDTH);
             // If the button id clicked, go back to the main menu.

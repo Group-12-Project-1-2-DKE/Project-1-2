@@ -1,5 +1,5 @@
 package Physics;
-import Maze.Wall;
+import Objects.Wall;
 import Objects.*;
 import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.Variables;

@@ -1,7 +1,5 @@
 package com.mygdx.game.Menus;
 
-import Course.Nodes.Variable;
-import Maze.MazeGenerator;
 import Reader.FileReaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -135,9 +133,7 @@ public class MazeOption implements Screen {
     }
 
     @Override
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     public void render(float v) {
@@ -162,7 +158,8 @@ public class MazeOption implements Screen {
         int PLAY_WIDTH = 300;
         int PLAY_HEIGHT = 120;
         int PLAY_Y = 75;
-        if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
+        if (Gdx.input.getX() < x + PLAY_WIDTH && Gdx.input.getX() > x &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             // If the cursor is around the button, draw the activated button.
             game.batch.draw(playButtonActive, x, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
             if (Gdx.input.isTouched()){
@@ -182,7 +179,8 @@ public class MazeOption implements Screen {
         int z = 35;
         int BACK_WIDTH = 125;
         int BACK_HEIGHT = 125;
-        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z && ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
+        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
             // If the cursor is around the button, draw the activated button.
             game.batch.draw(backButtonActivated, z, PLAY_Y, BACK_WIDTH, BACK_HEIGHT);
             // If the button id clicked, go back to the main menu.
@@ -203,7 +201,7 @@ public class MazeOption implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {    }
+    public void resize(int i, int i1) {}
 
     @Override
     public void pause() {}
