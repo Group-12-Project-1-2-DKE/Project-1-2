@@ -120,6 +120,7 @@ public class EulerSolver implements PhysicsEngine{
         if (y_edge(ball, wall, final_v)) {
             final_v.setX(final_v.getX()*-1);
         }
+        System.out.println(final_v.toString());
         return final_v;
     }
 

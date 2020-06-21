@@ -32,6 +32,7 @@ import com.mygdx.game.Menus.Congrat;
 import java.util.ArrayList;
 
 import static com.mygdx.game.Variables.euler;
+import static com.mygdx.game.Variables.goalY;
 
 public class GolfGameMaze implements Screen{
     private static PuttingCourse course;
@@ -40,7 +41,7 @@ public class GolfGameMaze implements Screen{
     private PhysicsEngine engine;
     private MazeAI ai;
     private ArrayList<Vector2D> locations;
-    private int count = 0;
+    private int count = -1;
 
     private Environment environment;
 
@@ -375,10 +376,10 @@ public class GolfGameMaze implements Screen{
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 if (Variables.ai) {
-                    double difference = locations.get(count).add(course.getBall().getLocation().multiply(-1)).length();
-                    if (difference < 0.15){
+                    //double difference = locations.get(count).add(course.getBall().getLocation().multiply(-1)).length();
+                    //if (difference < 0.15){
                         count++;
-                    }
+                    //}
                     shoot.setDisabled(true);
                     shoot.setVisible(false);
                 }
@@ -472,7 +473,7 @@ public class GolfGameMaze implements Screen{
                     //ball.transform.setTranslation(Variables.startX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
 
                 }else if (maze.getGrid()[i][j] == 9) {
-                    Variables.goalX = i - 20;
+                    Variables.goalX = i - 21;
                     Variables.goalY = (float) ((j * 2) - 20);
                     //flag.transform.setTranslation(Variables.goalX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
                 }
@@ -480,6 +481,8 @@ public class GolfGameMaze implements Screen{
         }
         Solver solver = new Solver(maze.getCells());
         solver.solve();
+        System.out.println(Variables.goalX + " " + Variables.goalY);
+        System.out.println(solver.getLocations().toString());
         locations = solver.getLocations();
     }
 
@@ -492,7 +495,9 @@ public class GolfGameMaze implements Screen{
     public static boolean collision(float x, float y) {
         for (ModelInstance instance : instances) {
             Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
-            if ((x < wallLocation.x + 1f && x + 0.5f > wallLocation.x ) && (y < wallLocation.y + 1f && y + 0.5f >  wallLocation.y)) {
+            if ((x <= wallLocation.x + 1f && x + 0.5f >= wallLocation.x ) && (y <= wallLocation.y + 2f && y + 0.5f >=  wallLocation.y)) {
+                System.out.println(wallLocation.toString());
+                System.out.println(course.getBall().getLocation().toString());
                 return true;
             }
         }
