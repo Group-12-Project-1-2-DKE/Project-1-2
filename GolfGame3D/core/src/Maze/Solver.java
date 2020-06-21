@@ -4,11 +4,14 @@ import Physics.Vector2D;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * Class that solve a given maze.
+ */
 public class Solver {
     private Cell[][] maze;
     public ArrayList<Cell> visited = new ArrayList<>();
     private boolean pathFound;
-    public Stack<Cell> actualPath = new Stack<Cell>();
+    public Stack<Cell> actualPath = new Stack<>();
     public ArrayList<Cell> solution = new ArrayList<>();
     private int count =0;
     private ArrayList<Vector2D> locations = new ArrayList<>();
@@ -30,7 +33,6 @@ public class Solver {
         depthFirstSearch(maze[0][0]);
         strategicLocation(0);
         locations.add(new Vector2D((solution.get(solution.size()-1).x * 4 + 2) -20, ((solution.get(solution.size()-1).y)*4 + 2)-20));
-        upgradeGrid();
     }
 
     /**
@@ -62,13 +64,6 @@ public class Solver {
                 }
             }
             actualPath.pop();
-        }
-    }
-
-    private void upgradeGrid(){
-        // Mark all the cell that are contained in the solution as path.
-        for (int i=0; i<solution.size(); i++){
-            solution.get(i).inPath = true;
         }
     }
 
@@ -105,6 +100,10 @@ public class Solver {
         }
     }
 
+    /**
+     * Getter method
+     * @return the arrayList that contains all the locations that will be used with the AI.
+     */
     public ArrayList<Vector2D> getLocations() {
         return locations;
     }
