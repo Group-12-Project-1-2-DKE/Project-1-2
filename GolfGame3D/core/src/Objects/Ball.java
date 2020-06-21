@@ -19,17 +19,16 @@ public class Ball {
     /**
      * constructor for a ball
      * @param location is the position vector of the ball
-     * @param mass     is the mass of the given ball
-     * @param d        is the diameter of the given ball
+     * @param mass is the mass of the given ball
      */
-    public Ball(Vector2D location, double mass, float d) {
+    public Ball(Vector2D location, double mass) {
         this.location = location;
         this.mass = mass;
     }
 
     /**
      * getter for the mass
-     * @return the mass
+     * @return the mass of the ball
      */
     public double getMass() {
         return mass;

@@ -7,12 +7,13 @@ import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
 import Physics.Vector2D;
 import AI.StraighGreedy;
+import com.mygdx.game.Variables;
 
 public class ObstacleAI implements AI{
 
     public static void main(String[] args) {
         PuttingCourse h = new PuttingCourse("2 + sin(x) - 0.5cos(y)", new Vector2D(0,0), new Vector2D(10,10),
-                new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
+                new Ball(new Vector2D(0,0), Variables.ballMass), 0.05, 4, 4);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);

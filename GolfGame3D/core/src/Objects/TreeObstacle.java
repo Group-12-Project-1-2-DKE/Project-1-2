@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.mygdx.game.GolfGameNoMaze;
 
+/**
+ * Class that implements Object interface.
+ * This class creates a tree at a certain position.
+ */
 public class TreeObstacle implements Obstacle{
     private Vector2D location;
 
@@ -18,8 +22,8 @@ public class TreeObstacle implements Obstacle{
     public TreeObstacle(){}
 
     /**
-     * cretaes a model instance to be used in the graphics
-     * @return model instance
+     * Creates a model instance that can be used in the graphics
+     * @return model instance that contains the tree.
      */
     @Override
     public ModelInstance[] createModel(float x , float z) {
@@ -39,7 +43,7 @@ public class TreeObstacle implements Obstacle{
 
     /**
      * Set the location as a new location.
-     * @param location The location of the obstacle.
+     * @param location Vector2D that represent the location of the obstacle.
      */
     public void setLocation(Vector2D location){
         this.location = location;
@@ -50,8 +54,7 @@ public class TreeObstacle implements Obstacle{
      * @return a double that represent the height of the obstacle.
      */
     public double getHeight() {
-        double height = 6f;
-        return height;
+        return 6f;
     }
 
     /**

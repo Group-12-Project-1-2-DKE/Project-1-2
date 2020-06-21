@@ -30,6 +30,10 @@ public class TerrainChunk {
 
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
+     * @param position The position of the center of the terrainChunk.
+     * @param size
+     * @param course physics that apply to the world
+     * @param water Boolean that represent if that mesh is water (true) or not (false).
      */
     public TerrainChunk(Vector2D position, int size, PuttingCourse course, boolean water) {
         this.course = course;
@@ -153,7 +157,6 @@ public class TerrainChunk {
      * @param y coordinate
      * @param z coordinate
      */
-
     private void addNormal(int vertIndex, float[] verts, float x, float y, float z) {
         int i = getNormalStart(vertIndex);
 
@@ -242,13 +245,19 @@ public class TerrainChunk {
         }
     }
 
-    // TODO comments
+    /**
+     * Setter method
+     * @param y the new y position.
+     */
     public void setLocation( float y){
         this.positionY=(y-size);
 
     }
 
-    // TODO comments
+    /**
+     * Setter method Change the modelInstance of the object
+     * @param instance the new ModelInstance.
+     */
     public void setModelInstance(ModelInstance instance){
         instance.transform.translate(this.positionX, this.positionY, this.positionZ);
     }

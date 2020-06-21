@@ -36,7 +36,7 @@ public class PuttingCourse implements Function2D{
      */
     public static void main(String[] args) throws Exception {
         PuttingCourse h = new PuttingCourse("0.2sin(x0.5)^2 + ln(1+0.1y^2)", new Vector2D(0,0), new Vector2D(10,0),
-                new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
+                new Ball(new Vector2D(0,0), Variables.ballMass), 0.05, 4, 4);
         RungeKuttaSolver r = new RungeKuttaSolver();
         PuttingSimulator p = new PuttingSimulator(h, r);
         Variables.lowerBound = new Vector2D(-100, -100);

@@ -7,6 +7,5 @@ import java.util.ArrayList;
 
 public interface Obstacle{
     ModelInstance[] createModel(float x, float y);
-
     Vector2D getLocation();
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.ScreenSpace;
 
 public class Congrat implements Screen {
+    // Dimensions of the pictures and the buttons that are in this screen.
     private static final int OVER_IMAGE_WIDTH = 500;
     private static final int OVER_IMAGE_HEIGHT = 350;
     private static final int EXIT_WIDTH = 250;
@@ -19,17 +20,24 @@ public class Congrat implements Screen {
     private static final int REPLAY_HEIGHT = 120;
     private static final int REPLAY_Y = 50;
 
+    // Number of times the user pushed the button shoot.
     private int attempt;
 
     final ScreenSpace game;
     BitmapFont font;
 
+    // Pictures used in the object.
     Texture gameOverPicture;
     Texture exitButtonActive;
     Texture exitButtonInactive;
     Texture replayButtonActive;
     Texture replayButtonInactive;
 
+    /**
+     * Constructor method of the object.
+     * @param game Element on which the object is going to be rendered.
+     * @param attempts The number of attempts to reach the goal.
+     */
     public Congrat(ScreenSpace game, int attempts){
         this.game = game;
         this.attempt = attempts;
@@ -39,6 +47,7 @@ public class Congrat implements Screen {
         replayButtonActive = new Texture("replay_button_active.png");
         replayButtonInactive = new Texture ("replay_button_inactive.png");
 
+        // "Police" of the text on the screen.
         FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter1.size = 80;

@@ -7,4 +7,4 @@ Start position Y = 0.0
 Goal position X = 10.0
 Goal position Y = 10
 Shoot X = 0.0
-Shoot y = 10
+Shoot y = 2
