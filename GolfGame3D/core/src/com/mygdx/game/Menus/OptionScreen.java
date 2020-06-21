@@ -14,7 +14,9 @@ import com.mygdx.game.GolfGameNoMaze;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
 
-
+/**
+ * Object that allows the user to change settings of the golf game without maze.
+ */
 public class OptionScreen implements Screen {
     private ScreenSpace game;
 
@@ -45,6 +47,10 @@ public class OptionScreen implements Screen {
 
     private Stage stage;
 
+    /**
+     * Constructor method of the OptionScreen object.
+     * @param game ScreenSpace object on which the object is going to be rendered.
+     */
     public OptionScreen(ScreenSpace game){
         this.game = game;
 
@@ -62,7 +68,7 @@ public class OptionScreen implements Screen {
         // Allows the user to interact with the stage (click on buttons in this case).
         Gdx.input.setInputProcessor(stage);
 
-        // Create the textFields and add them to the "frame".
+        // Create the textFields and add them to the "frame". (Allows the user to change the settings).
         Skin customizedMenuSkin = new Skin(Gdx.files.internal("uiskin.json"));
         gravity = new TextField(String.valueOf(Variables.gravity), customizedMenuSkin);
         gravity.setPosition(ScreenSpace.WIDTH/2,725);

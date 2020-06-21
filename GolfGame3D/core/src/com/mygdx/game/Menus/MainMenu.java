@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.ScreenSpace;
 
+/**
+ * Screen that allows the user to choose between different maze options.
+ */
 public class MainMenu implements Screen{
     final ScreenSpace game;
 
@@ -26,6 +29,10 @@ public class MainMenu implements Screen{
 
     private Stage stage;
 
+    /**
+     * Constructor method of the MainMenu object.
+     * @param game ScreenSpace object on which the object is going to be rendered.
+     */
     public MainMenu (ScreenSpace game) {
         this.game = game;
 

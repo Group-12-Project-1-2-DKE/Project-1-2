@@ -18,6 +18,9 @@ import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
 
+/**
+ * Object that allows the user to change settings of the maze golf game.
+ */
 public class MazeOption implements Screen {
     private ScreenSpace game;
     private Stage stage;
@@ -31,18 +34,23 @@ public class MazeOption implements Screen {
     private Texture backButtonInactivated;
     private Texture mazePicture;
 
-    TextField mazeX;
-    TextField mazeY;
+    TextField mazeX;    // x size of the maze
+    TextField mazeY;    // y size of the maze
 
     // All the buttons
     private TextButton button1;
     private TextButton button2;
 
+    /**
+     * constructor method of the MazeOption object.
+     * @param game ScreenSpace object on which the object is going to be rendered.
+     */
     public MazeOption(ScreenSpace game) {
         this.game = game;
 
         Variables.maze = true;
 
+        // Called the file reader object and reads a text that contains default values for the maze settings.
         FileReaders reader = new FileReaders();
         reader.read("banana.txt");
 
@@ -147,6 +155,7 @@ public class MazeOption implements Screen {
         font.draw(game.batch,"Maze length y:", 25,600);
         font2.draw(game.batch,"Game Mode:", 25,475);
 
+        // Size of the picture.
         int MAZE_X = 375;
         int MAZE_WIDTH = 300;
         int MAZE_HEIGHT = 300;

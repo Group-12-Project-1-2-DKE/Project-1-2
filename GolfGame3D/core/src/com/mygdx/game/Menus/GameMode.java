@@ -14,10 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.ScreenSpace;
 import com.mygdx.game.Variables;
 
+/**
+ * Screen that allow the user to choose the game mode he wants to use
+ * and the physic engine he wants to use.
+ */
 public class GameMode implements Screen {
     final ScreenSpace game;
 
-    // All the buttons
+    // All the buttons used in this class.
     private TextButton button1;
     private TextButton button2;
     private TextButton button3;
@@ -27,15 +31,21 @@ public class GameMode implements Screen {
     private BitmapFont font2;
     private Stage stage;
 
+    // Dimentions of the different pictures used in this object.
     private static final int BACK_WIDTH = 125;
     private static final int BACK_HEIGHT = 125;
     private static final int BACK_Y = 15;
+    private static final int LOGO_WIDTH = 350;
+    private static final int LOGO_HEIGHT = 350;
+    // The picture used in this object.
     private Texture backButtonActivated;
     private Texture backButtonInactivated;
     private Texture littleMenLogo;
-    private static final int LOGO_WIDTH = 350;
-    private static final int LOGO_HEIGHT = 350;
 
+    /**
+     * Constructor method of the object.
+     * @param game Element on which the object is going to be rendered.
+     */
     public GameMode(ScreenSpace game){
         this.game = game;
 
@@ -167,8 +177,8 @@ public class GameMode implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        font2.draw(game.batch,"Game Mode:", 25,750);
-        font2.draw(game.batch,"Physic Engine:", 25,(ScreenSpace.HEIGHT/2)+100);
+        font2.draw(game.batch,"Game Mode:", 25,750);                            // Prints some text.
+        font2.draw(game.batch,"Physic Engine:", 25,(ScreenSpace.HEIGHT/2)+100); // Prints some text.
         game.batch.draw(littleMenLogo, 400, 100, LOGO_WIDTH, LOGO_HEIGHT);
 
         int z = 35;

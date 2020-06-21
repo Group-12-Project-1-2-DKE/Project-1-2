@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import AI.AI;
 import AI.ObstacleAI;
-import AI.StraighGreedy;
 import Course.PuttingCourse;
 import Objects.Ball;
 import Objects.TreeObstacle;
@@ -48,7 +47,6 @@ public class GolfGameNoMaze implements Screen {
 
     private Model model;
     public ModelInstance ball;
-    ModelInstance flag;
     private ModelBatch modelBatch;
     private static ModelBuilder modelBuilder;
     private static ArrayList<ModelInstance> instances;
@@ -56,7 +54,6 @@ public class GolfGameNoMaze implements Screen {
     private Stage stage1;
     private Stage stage2;
     private Label label;
-    BitmapFont font;
     private StringBuilder stringBuilder;
 
     private ScreenSpace game;
@@ -83,6 +80,10 @@ public class GolfGameNoMaze implements Screen {
     public float myDelta = 0;
     public Vector2D myVector;
 
+    /**
+     * COntructor method of the GolfGameNoMaze object.
+     * @param game ScreenSpace object on which the object is going to be rendered.
+     */
     public GolfGameNoMaze(ScreenSpace game) {
         this.game = game;
 
@@ -94,7 +95,7 @@ public class GolfGameNoMaze implements Screen {
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY),
                 new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7,
                 Variables.tolerance);
-        ai = new ObstacleAI();//StraighGreedy();
+        ai = new ObstacleAI(); //StraighGreedy();
 
         treePositionX = new float[numTreeS];
         treePositionZ = new float[numTreeS];
@@ -102,19 +103,20 @@ public class GolfGameNoMaze implements Screen {
 
         setTreeLocation();
 
+        // If the user select euler solver, create eulerSolver object.
         if (Variables.euler) {
             EulerSolver eulerSolver = new EulerSolver();
             eulerSolver.set_step_size(0.01);
             eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
             eulerSolver.set_grav_constant(9.81);
             engine = eulerSolver;
-        } else if (Variables.rungeKutta) {
+        } else if (Variables.rungeKutta) {  // If the user select rungeKutta solver, create RungeKuttaSolver object.
             RungeKuttaSolver rungeKuttaSolver = new RungeKuttaSolver();
             rungeKuttaSolver.set_step_size(0.01);
             rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
             rungeKuttaSolver.set_grav_constant(9.81);
             engine = rungeKuttaSolver;
-        } else if (Variables.verlet) {
+        } else if (Variables.verlet) { // If the user select verlet solver, create VerletSolver object.
             VerletSolver verletSolver = new VerletSolver();
             verletSolver.set_step_size(0.01);
             verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
@@ -131,11 +133,12 @@ public class GolfGameNoMaze implements Screen {
         Bullet.init();
         stage1 = new Stage();
         stage2 = new Stage();
-        font = new BitmapFont();
+        BitmapFont font = new BitmapFont();
         label = new Label(" ", new Label.LabelStyle(font, Color.WHITE));
         stage1.addActor(label);
         stringBuilder = new StringBuilder();
 
+        // Instantiate the camera.
         camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set((float) course.getStart().getX() - 0.7f + 1f, 6.97f, 6f);
         camera.lookAt(0, 0, 0);
@@ -158,18 +161,21 @@ public class GolfGameNoMaze implements Screen {
 
         modelBuilder.begin();
 
+        // Instantiate the ball object that is going to be rendered.
         modelBuilder.node().id = "ball";
         modelBuilder.part("sphere", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
                 new Material(TextureAttribute.createDiffuse(ballTex))).sphere(0.5f, 0.5f, 0.5f, 10, 10);
 
+        // Instantiate the hole object that is going to be rendered.
         modelBuilder.node().id = "flagPole";
         modelBuilder.part("cylinder", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal,
                 new Material(ColorAttribute.createDiffuse(Color.PINK))).cylinder(Variables.tolerance, 0.1f, Variables.tolerance, 10);
 
         model = modelBuilder.end();
         ball = new ModelInstance(model, "ball");
-        flag = new ModelInstance(model, "flagPole");
+        ModelInstance flag = new ModelInstance(model, "flagPole");
 
+        // Sets the initial position of the ball and the position of the flag.
         ball.transform.setTranslation((float) course.getStart().getX(),
                 (float) course.evaluate(new Vector2D(course.getStart().getX(), course.getStart().getY())),
                 (float) course.getStart().getY());
@@ -184,8 +190,8 @@ public class GolfGameNoMaze implements Screen {
         createMesh();
 
 
-        Variables.lowerBound = new Vector2D(-100, -100);
-        Variables.upperBound = new Vector2D(100, 100);
+        Variables.lowerBound = new Vector2D(-100, -100);    // Lower bound of the field
+        Variables.upperBound = new Vector2D(100, 100);      // Upper bound of the field
 
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.5f, 0.2f));
@@ -200,29 +206,34 @@ public class GolfGameNoMaze implements Screen {
     @Override
     public void render(float delta) {
         myDelta += delta;
+        // If the user's cursor is in the area of the stage1, allow the user to interact with it.
         if (Gdx.input.getX() < 150 && Gdx.input.getX() > 0 && ScreenSpace.HEIGHT - Gdx.input.getY() < ScreenSpace.HEIGHT &&
                 ScreenSpace.HEIGHT - Gdx.input.getY() > ScreenSpace.HEIGHT - 150) {
             Gdx.input.setInputProcessor(stage1);
         } else {
+            // if the user is not in the area of the stage 1, allow the user to interact with the camera.
             Gdx.input.setInputProcessor(cameraInputController);
         }
+        // If the ball is in the hole, call the congrat screen.
         if (course.getFlag().add(course.getBall().getLocation().multiply(-1)).length() <= course.getTolerance()){
             game.setScreen(new Congrat(game, attempt));
         } else {
-
+            // If the ball is not int the hole, render the ball at the Ball object's position.
             ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                     (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
                             course.getBall().getLocation().getY())) + 0.25f,
                     (float) course.getBall().getLocation().getY() + 1f);
         }
+        // If the ball's y position is under0, it means that the ball is into the water
         if (course.evaluate(course.getBall().getLocation().getX(),course.getBall().getLocation().getY()) <= -0.25) {
-            System.out.println("in water");
+            // Set the element of the stage2 as visible like that, the user can interact with them.
             course.getBall().setAtRest(true);
             lastLoc1.setVisible(true);
             lastLoc2.setVisible(true);
             lastLocation.setVisible(true);
             startLocation.setVisible(true);
 
+            // If the user is in the area of the stage2, allow him to interact with that stage.
             if (Gdx.input.getX() > ScreenSpace.WIDTH - 175 && Gdx.input.getX() < ScreenSpace.WIDTH &&
                     Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
                 Gdx.input.setInputProcessor(stage2);
@@ -233,6 +244,7 @@ public class GolfGameNoMaze implements Screen {
             try {
                 if (myVector == null) {
                     if (Variables.ai) {
+                        // If the user choose to use the AI, calcultate the shot with the AI.
                         Vector2D aiVec = ai.calculate_turn(course, 500);
                         dirX.setText("" + aiVec.getX());
                         dirY.setText("" + aiVec.getY());
@@ -266,6 +278,7 @@ public class GolfGameNoMaze implements Screen {
             camera.translate((float) myVector.getX() / 100, 0, (float) myVector.getY() / 100);
         }
 
+        // The camera looks at the ball.
         camera.lookAt((float) course.getBall().getLocation().getX(),
                 -(float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(), course.getBall().getLocation().getY())),
                 (float) course.getBall().getLocation().getY());
@@ -389,17 +402,21 @@ public class GolfGameNoMaze implements Screen {
         return finalModel;
     }
 
+    /**
+     * Create the stage that allow the user to enter the details of his shot.
+     * @param skin1 "police" of the text in this stage.
+     */
     public void changeBallPositionStage(Skin skin1) {
-        lastLoc1 = new TextArea("Set the new position", skin1);
-        lastLoc1.setPosition(ScreenSpace.WIDTH - 175, 90);
-        lastLoc1.setSize(175, 30);
+        lastLoc1 = new TextArea("Set the new position", skin1); // Create the textArea an add the text to it.
+        lastLoc1.setPosition(ScreenSpace.WIDTH - 175, 90);      // Set the position of the textarea.
+        lastLoc1.setSize(175, 30);                              // Set the size of the textArea.
         stage2.addActor(lastLoc1);
         lastLoc2 = new TextArea("of the ball: ", skin1);
         lastLoc2.setPosition(ScreenSpace.WIDTH - 175, 60);
         lastLoc2.setSize(175, 30);
         stage2.addActor(lastLoc2);
 
-        lastLocation = new TextButton("Last Location", skin1);
+        lastLocation = new TextButton("Last Location", skin1);  // Create the textButton with the text that is on it.
         lastLocation.setDisabled(true);
         lastLocation.setPosition(ScreenSpace.WIDTH - 175, 30);
         lastLocation.setSize(175, 30);
@@ -408,6 +425,7 @@ public class GolfGameNoMaze implements Screen {
         lastLocation.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                // If the button is clicked, set the ball location as the last position of the ball.
                 course.getBall().setLocation(course.getBall().getLastPosition());
                 lastLoc1.setVisible(false);
                 lastLoc2.setVisible(false);
@@ -425,6 +443,7 @@ public class GolfGameNoMaze implements Screen {
         startLocation.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                // If the button is clicked, set the ball position as the start position.
                 course.getBall().setLocation(new Vector2D(Variables.startX, Variables.startY));
                 lastLoc1.setVisible(false);
                 lastLoc2.setVisible(false);
@@ -439,7 +458,10 @@ public class GolfGameNoMaze implements Screen {
         startLocation.setVisible(false);
     }
 
-    // TODO comments
+    /**
+     * Create the stage that allow the user to enter the details of his shot.
+     * @param skin1 "police" of the text in this stage.
+     */
     public void shootStage(Skin skin1) {
         TextArea dirxText = new TextArea("Vector x:", skin1);
         dirxText.setDisabled(true);
@@ -460,10 +482,12 @@ public class GolfGameNoMaze implements Screen {
         shoot.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                // If the button is clicked, prepare the next shot for the AI.
                 if (Variables.ai) {
                     shoot.setDisabled(true);
                     shoot.setVisible(false);
                 }
+                // Set the ball as hit.
                 ballReachedFlag = true;
                 course.getBall().setLastPosition();
                 shoot.setVisible(false);
@@ -473,6 +497,7 @@ public class GolfGameNoMaze implements Screen {
         });
         stage1.addActor(shoot);
 
+        // The fields where the user can enter the x and the y values of his shot vector.
         dirX = new TextField(String.valueOf(Variables.shootX), skin1);
         dirX.setPosition(100, ScreenSpace.HEIGHT - 30);
         dirX.setSize(50, 30);
@@ -483,6 +508,7 @@ public class GolfGameNoMaze implements Screen {
         stage1.addActor(dirY);
     }
 
+    // TODO comments
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
         Texture sandTex = new Texture("sandTexture.jpg");
@@ -495,7 +521,6 @@ public class GolfGameNoMaze implements Screen {
         TerrainChunk chunk;
         Vector2D currentPos;
 
-        TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
         terrainInfo = new int[numberX][numberY];
         Material material;
 
@@ -504,7 +529,6 @@ public class GolfGameNoMaze implements Screen {
                 currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
                 chunk = new TerrainChunk(currentPos, chunkSize, course,false);
                 chunk.setLocation((float) course.evaluate(new Vector2D(x * chunkSize, y * chunkSize)));
-                terrainChunks[x][y] = chunk;
 
                 Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
                         new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
@@ -550,7 +574,6 @@ public class GolfGameNoMaze implements Screen {
         int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
         TerrainChunk chunk;
         Vector2D currentPos;
-        TerrainChunk[][] terrainChunks = new TerrainChunk[numberX][numberY];
         terrainInfo = new int[numberX][numberY];
         Material material;
 
@@ -559,7 +582,6 @@ public class GolfGameNoMaze implements Screen {
                 currentPos = new Vector2D(coverVectors[0].getX() + chunkSize * x, coverVectors[0].getY() + chunkSize * y);
                 chunk = new TerrainChunk(currentPos, chunkSize, course, true);
                 chunk.setLocation(0);
-                terrainChunks[x][y] = chunk;
 
                 Mesh mesh = new Mesh(true, chunk.vertices.length / 9, chunk.indices.length,
                         new VertexAttribute(VertexAttributes.Usage.Position, 3, ShaderProgram.POSITION_ATTRIBUTE),
@@ -580,12 +602,18 @@ public class GolfGameNoMaze implements Screen {
         }
     }
 
-    // TODO comments
+    /**
+     * Getter method
+     * @return return the modelBuilder of the object.
+     */
     public static ModelBuilder getModelBuilder() {
         return modelBuilder;
     }
 
-    // TODO comments
+    /**
+     * Getter method
+     * @return the Putting course of the world.
+     */
     public static PuttingCourse getCourse() {
         return course;
     }
@@ -608,23 +636,26 @@ public class GolfGameNoMaze implements Screen {
     public float euclideanDistance(float posX, float posZ, int i) {
         float treeX = treePositionX[i];
         float treeZ = treePositionZ[i];
-        float euclideanDist = (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
-
-        return euclideanDist;
+        return (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
     }
 
-    // TODO comments
+    /**
+     * Set the location of the tree on the golf field.
+     */
     private void setTreeLocation(){
-        for (int i = 0; i < numTreeS; i++) {
+        for (int i = 0; i < numTreeS; i++) { // Set the location for a determined number of tree.
             Random rand = new Random();
-            float randomX = rand.nextFloat() * (25 +25)-25;
-            float randomZ = rand.nextFloat() * (25 +25) -25;
+            float randomX = rand.nextFloat() * (25 +25)-25;     // Generate random x position of the tree.
+            float randomZ = rand.nextFloat() * (25 +25) -25;    // Generate random y position of the tree.
 
+            // While the tree is too close to the ball's initial position or to the hole's position,
+            // Create other numbers.
             while (((Math.abs(randomX - Math.abs(Variables.goalX)) < 5) &&
                     (Math.abs(randomZ - Math.abs(Variables.goalY)) < 5)) || (course.evaluate(randomX, randomZ) < 0)) {
                 randomX = rand.nextFloat() * (25+25)-25;
                 randomZ = rand.nextFloat() * (25+25)-25;
             }
+            // Add theposition to the arrays that contain the tree location.
             treePositionX[i] = randomX;
             treePositionZ[i] = randomZ;
             ModelInstance[] treeinstances = obstacle.createModel(randomX, randomZ);
