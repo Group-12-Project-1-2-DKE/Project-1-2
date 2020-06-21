@@ -70,7 +70,7 @@ public class GolfGameMaze implements Screen{
     public Vector2D myVector;
 
     private Wall wall;
-
+   public static  boolean isCollision = false;
     /**
      * Contructor method of the GolfGameMaze object.
      * @param game ScreenSpace object on which the object is going to be rendered.
@@ -226,11 +226,14 @@ public class GolfGameMaze implements Screen{
                 else {
                     myVector = simulator.take_shotSlowly(myVector);
                 }
-                       if(collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY())) {
+                isCollision = collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY());
+                       if(isCollision) {
                            EulerSolver eulerSolver = new EulerSolver();
-                           eulerSolver.rock_collision(course.getBall() ,wall, course.getBall().getVelocity());
+                           eulerSolver.wall_collision(course.getBall());
+
                            System.out.println("collision");
-                       }
+                           }
+
 
 
             } catch (StackOverflowError s) {
@@ -527,7 +530,7 @@ public class GolfGameMaze implements Screen{
 
 
             if ( (x <= wallLocation.x +0.75f && x+0.75f  >= wallLocation.x) && (y<=wallLocation.y+0.25f && y+2.25f>=wallLocation.y) ) {
-
+                isCollision = true;
                 return true;
             }
 

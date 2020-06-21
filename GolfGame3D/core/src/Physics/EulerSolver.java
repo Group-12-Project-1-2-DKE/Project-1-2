@@ -116,6 +116,7 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public Vector2D rock_collision(Ball ball, Wall wall, Vector2D final_v) {
+        ball.setLocation(new Vector2D(ball.getLocation().getX() +0.2f,ball.getLocation().getY()-0.2f));
         if (x_edge(ball, wall, final_v)) {
             final_v.setY(final_v.getY()*-1);
         }
@@ -124,6 +125,11 @@ public class EulerSolver implements PhysicsEngine{
         }
         System.out.println(final_v.toString());
         return final_v;
+    }
+
+    public void wall_collision(Ball ball){
+        ball.getVelocity().setX(ball.getVelocity().getX()*-1);
+        ball.getVelocity().setY(ball.getVelocity().getY()*-1);
     }
 
     public boolean x_edge(Ball ball, Wall wall, Vector2D final_v) {
