@@ -203,6 +203,7 @@ public class GolfGameNoMaze implements Screen {
         }
 
         if (course.getBall().isInWater()) {
+            System.out.println("I am into the water");
             stage2.draw();
             if (Gdx.input.getX() > ScreenSpace.WIDTH - 175 && Gdx.input.getX() < ScreenSpace.WIDTH && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
                 Gdx.input.setInputProcessor(stage2);

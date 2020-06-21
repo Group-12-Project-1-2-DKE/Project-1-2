@@ -71,7 +71,8 @@ public class TerrainChunk {
 
     }
 
-    public static void setFunction(String function){Variables.function = function;};
+    public static void setFunction(String function){
+        Variables.function = function;};
 
     /**
      * This builds the vertices which pretty much means the elevation on the map
