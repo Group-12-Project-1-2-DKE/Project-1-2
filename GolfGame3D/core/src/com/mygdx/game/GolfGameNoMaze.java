@@ -64,6 +64,11 @@ public class GolfGameNoMaze implements Screen {
     private TextField dirX;
     private TextField dirY;
 
+    private TextArea lastLoc1;
+    private TextArea lastLoc2;
+    private TextButton lastLocation;
+    private TextButton startLocation;
+
     private Vector3 position;
     public int attempt = 0;
 
@@ -206,7 +211,12 @@ public class GolfGameNoMaze implements Screen {
 
         if (course.evaluate(course.getBall().getLocation().getX(),course.getBall().getLocation().getY()) <= 0) {
             System.out.println("in water");
-            stage2.draw();
+            // TODO set the ball speed at zero.
+            lastLoc1.setVisible(true);
+            lastLoc2.setVisible(true);
+            lastLocation.setVisible(true);
+            startLocation.setVisible(true);
+
             if (Gdx.input.getX() > ScreenSpace.WIDTH - 175 && Gdx.input.getX() < ScreenSpace.WIDTH && Gdx.input.getY() > ScreenSpace.HEIGHT - 90 && Gdx.input.getY() < ScreenSpace.HEIGHT) {
                 Gdx.input.setInputProcessor(stage2);
             }
@@ -267,6 +277,7 @@ public class GolfGameNoMaze implements Screen {
         stringBuilder.append("Equation : ").append(course.getEquation());
         label.setText(stringBuilder);
         stage1.draw();
+        stage2.draw();
 
     }
 
@@ -368,18 +379,18 @@ public class GolfGameNoMaze implements Screen {
     }
 
     public void changeBallPositionStage(Skin skin1) {
-        TextArea lastLoc1 = new TextArea("Set the new position", skin1);
-        lastLoc1.setDisabled(true);
+        lastLoc1 = new TextArea("Set the new position", skin1);
+        //lastLoc1.setDisabled(true);
         lastLoc1.setPosition(ScreenSpace.WIDTH - 175, 90);
         lastLoc1.setSize(175, 30);
         stage2.addActor(lastLoc1);
-        TextArea lastLoc2 = new TextArea("of the ball: ", skin1);
-        lastLoc2.setDisabled(true);
+        lastLoc2 = new TextArea("of the ball: ", skin1);
+        //lastLoc2.setDisabled(true);
         lastLoc2.setPosition(ScreenSpace.WIDTH - 175, 60);
         lastLoc2.setSize(175, 30);
         stage2.addActor(lastLoc2);
 
-        TextButton lastLocation = new TextButton("Last Location", skin1);
+        lastLocation = new TextButton("Last Location", skin1);
         lastLocation.setDisabled(true);
         lastLocation.setPosition(ScreenSpace.WIDTH - 175, 30);
         lastLocation.setSize(175, 30);
@@ -392,7 +403,7 @@ public class GolfGameNoMaze implements Screen {
             }
         });
 
-        TextButton startLocation = new TextButton("Start Location", skin1);
+        startLocation = new TextButton("Start Location", skin1);
         startLocation.setDisabled(true);
         startLocation.setPosition(ScreenSpace.WIDTH - 175, 0);
         startLocation.setSize(175, 30);
@@ -404,6 +415,11 @@ public class GolfGameNoMaze implements Screen {
                 course.getBall().setLocation(new Vector2D(Variables.startX, Variables.startY));
             }
         });
+
+        lastLoc1.setVisible(false);
+        lastLoc2.setVisible(false);
+        lastLocation.setVisible(false);
+        startLocation.setVisible(false);
     }
 
     public void shootStage(Skin skin1) {

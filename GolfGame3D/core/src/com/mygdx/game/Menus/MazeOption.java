@@ -47,7 +47,6 @@ public class MazeOption implements Screen {
 
         FileReaders reader = new FileReaders();
         reader.read("banana.txt");
-        Variables.function = "1";
 
         // Create a new stage, where the buttons will be drawn.
         this.stage = new Stage();
