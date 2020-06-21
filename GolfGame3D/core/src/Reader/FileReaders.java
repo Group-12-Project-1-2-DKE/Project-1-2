@@ -7,10 +7,7 @@ import java.util.*;
 import java.io.*;
 
 public class FileReaders{
-
-
-    public FileReaders(){
-    }
+    public FileReaders(){}
 
     public void read (String fileName){
         // Get the path of the project on the computer
@@ -76,26 +73,4 @@ public class FileReaders{
             }
         }
     }
-
-//    public void writeFile(String fileName){
-//        PrintWriter writer = null;
-//        try {
-//            writer = new PrintWriter(fileName);
-//            writer.println("Gravity = ");
-//            writer.println("Mass = ");
-//            writer.println("Coefficient of friction = ");
-//            writer.println("Max speed = ");
-//            writer.println("tolerence for the goal = ");
-//            writer.println("Start position X = ");
-//            writer.println("Start position Y = ");
-//            writer.println("Goal position X = ");
-//            writer.println("Goal position Y = ");
-//            writer.println("Ball latest position X = ");
-//            writer.println("Ball latest position Y = ");
-//
-//        } catch (IOException e) {
-//        }finally{
-//            writer.close();
-//        }
-//    }
 }

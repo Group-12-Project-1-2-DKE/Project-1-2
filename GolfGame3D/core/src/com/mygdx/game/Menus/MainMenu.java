@@ -11,23 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.ScreenSpace;
 
 public class MainMenu implements Screen{
-    // Different position and size of the pictures
-    private final int EXIT_WIDTH = 250;
-    private final int EXIT_HEIGHT = 120;
-    private final int PLAY_WIDTH = 300;
-    private final int PLAY_HEIGHT = 120;
-    private final int EXIT_Y = 300;
-    private final int PLAY_Y = 400;
-    private final int GOLF_IMAGE_WIDTH = 500;
-    private final int GOLF_IMAGE_HEIGHT = 250;
-    private final int GOLF_IMAGE_Y = 25;
-    private final int OPTION_WIDTH =200;
-    private final int OPTION_HEIGHT = 175;
-    private final int OPTION_Y = 600;
-    private final int MAZE_WIDTH = 250;
-    private final int MAZE_HEIGHT = 90;
-    private final int MAZE_Y = 540;
-
     final ScreenSpace game;
 
     // The different texture (picture) of the buttons.
@@ -40,8 +23,6 @@ public class MainMenu implements Screen{
     private Texture optionButtonActive;
     private Texture mazeButtonActive;
     private Texture mazeButtonInactive;
-
-    private BitmapFont font;
 
     private Stage stage;
 
@@ -57,7 +38,7 @@ public class MainMenu implements Screen{
         FreeTypeFontGenerator font1 = new FreeTypeFontGenerator(Gdx.files.internal("Courier_New.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter1.size = 40;
-        font = font1.generateFont(parameter1);
+        BitmapFont font = font1.generateFont(parameter1);
         font.setColor(Color.WHITE);
 
         // Give to the variables a value (picture from assets folder).
@@ -70,7 +51,6 @@ public class MainMenu implements Screen{
         optionButtonActive = new Texture("gearwheelActive.png");
         mazeButtonActive = new Texture("mazeButtonActive.png");
         mazeButtonInactive = new Texture("mazeButtonInactive.png");
-
     }
 
     @Override
@@ -84,10 +64,17 @@ public class MainMenu implements Screen{
         game.batch.begin();
 
         // Draw a picture on the screen.
+        int GOLF_IMAGE_WIDTH = 500;
+        int GOLF_IMAGE_HEIGHT = 250;
+        int GOLF_IMAGE_Y = 25;
         game.batch.draw(golfImage, ScreenSpace.WIDTH / 2 - GOLF_IMAGE_WIDTH / 2, GOLF_IMAGE_Y, GOLF_IMAGE_WIDTH, GOLF_IMAGE_HEIGHT);
 
         // Add the exit button.
+        // Different position and size of the pictures
+        int EXIT_WIDTH = 250;
         int x = ScreenSpace.WIDTH / 2 - EXIT_WIDTH / 2;
+        int EXIT_HEIGHT = 120;
+        int EXIT_Y = 300;
         if (Gdx.input.getX() < x + EXIT_WIDTH && Gdx.input.getX() > x){
             if(ScreenSpace.HEIGHT - Gdx.input.getY()< EXIT_Y + EXIT_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY()> EXIT_Y) {
                 // If the cursor is close to the button, draw the same button with a different color
@@ -107,7 +94,10 @@ public class MainMenu implements Screen{
         }
 
             // Add the Play button.
+        int PLAY_WIDTH = 300;
         int y = ScreenSpace.WIDTH / 2 - PLAY_WIDTH / 2;
+        int PLAY_HEIGHT = 120;
+        int PLAY_Y = 400;
         if (Gdx.input.getX() < y + PLAY_WIDTH && Gdx.input.getX() > y){
             if ( ScreenSpace.HEIGHT - Gdx.input.getY() < PLAY_Y + PLAY_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > PLAY_Y){
                 // If the cursor is close to the button, draw the same button with a different color
@@ -130,6 +120,9 @@ public class MainMenu implements Screen{
 
         // Add the option button.
         int z = 15;
+        int OPTION_WIDTH = 200;
+        int OPTION_HEIGHT = 175;
+        int OPTION_Y = 600;
         if (Gdx.input.getX() < z + OPTION_WIDTH && Gdx.input.getX() > z){
             if(ScreenSpace.HEIGHT - Gdx.input.getY()< OPTION_Y + OPTION_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY()> OPTION_Y) {
                 // If the cursor is close to the button, draw the same button with a different color
@@ -150,7 +143,10 @@ public class MainMenu implements Screen{
         }
 
         // Add the maze button.
+        int MAZE_WIDTH = 250;
         int w = (ScreenSpace.WIDTH / 2 - MAZE_WIDTH / 2) -5;
+        int MAZE_HEIGHT = 90;
+        int MAZE_Y = 540;
         if (Gdx.input.getX() < w + MAZE_WIDTH && Gdx.input.getX() > w){
             if ( ScreenSpace.HEIGHT - Gdx.input.getY() < MAZE_Y + MAZE_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > MAZE_Y){
                 // If the cursor is close to the button, draw the same button with a different color

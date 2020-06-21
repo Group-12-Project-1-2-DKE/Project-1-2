@@ -9,27 +9,14 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.mygdx.game.GolfGameNoMaze;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-
-
 public class TreeObstacle implements Obstacle{
-
-    private final double width = 0.5f;
-    private final double height= 6f;
-    private final double diameter = 0.5f;
-
     private Vector2D location;
 
-
-
     /**
-     * constructor
+     * default constructor method
      */
-    public TreeObstacle(){
+    public TreeObstacle(){}
 
-    }
     /**
      * cretaes a model instance to be used in the graphics
      * @return model instance
@@ -50,41 +37,27 @@ public class TreeObstacle implements Obstacle{
         return instance;
     }
 
-    @Override
     /**
-     * creates an arraylist with multiple obstacles located in a random position
-     * @param n is the number of obstacles to be created
+     * Set the location as a new location.
+     * @param location The location of the obstacle.
      */
-    public ArrayList<Obstacle> createInstance(int n) {
-
-        Random random = new Random();
-        ArrayList<Obstacle> obstacles = new ArrayList<>();
-        for(int i = 0; i <=n; i++){
-            TreeObstacle obstacle = new TreeObstacle();
-            obstacle.setLocation(new Vector2D(random.nextInt(50),random.nextInt(50)));
-            obstacles.add(obstacle);
-
-        }
-        return obstacles;
-    }
-
-
     public void setLocation(Vector2D location){
         this.location = location;
     }
 
+    /**
+     * Getter method
+     * @return a double that represent the height of the obstacle.
+     */
     public double getHeight() {
+        double height = 6f;
         return height;
     }
 
-    public double getWidth() {
-        return width;
-    }
-
-    public double getDiameter() {
-        return diameter;
-    }
-
+    /**
+     * Getter method
+     * @return a Vector2D object that represent the location of the obstacle
+     */
     public Vector2D getLocation() {
         return location;
     }

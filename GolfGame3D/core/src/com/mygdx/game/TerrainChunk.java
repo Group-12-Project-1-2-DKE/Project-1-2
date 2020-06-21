@@ -2,18 +2,11 @@ package com.mygdx.game;
 
 
 import Course.PuttingCourse;
-import Objects.Ball;
 import Physics.Vector2D;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
-
-
-//https://xoppa.github.io/blog/interacting-with-3d-objects/
 
 /**
- * 
  * Original code is taken from the source below : 
  * https://stackoverflow.com/questions/20337797/libgdx-mesh-heightmap-normals-and-lights
  *
@@ -31,15 +24,9 @@ public class TerrainChunk {
     private float positionY;
     private float positionZ;
 
-    private ModelInstance modelInstance;
-    //private PuttingCourse course = new PuttingCourse(Variables.function,new Vector2D(Variables.startX,Variables.startY),new Vector2D(Variables.goalX,Variables.goalY), new Ball(new Vector2D(Variables.startX, Variables.startY), 10, 5),Variables.tolerance,100,Variables.tolerance );;
     private PuttingCourse course;
 
-    boolean sand;
     boolean water;
-
-    private int [][] sandInfo;
-    private int[][] waterInfo;
 
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
@@ -62,17 +49,11 @@ public class TerrainChunk {
         this.vertexSize = vertexSize;
         this.size=size;
 
-
         buildVertices();
         buildIndices();
 
-
         calcNormals(indices, vertices);
-
     }
-
-
-   // public static void setFunction(String function){Variables.function = function;};
 
     /**
      * This builds the vertices which pretty much means the elevation on the map
@@ -82,8 +63,6 @@ public class TerrainChunk {
         int widthPitch = size + 1;
 
         int idx = 0;
-
-        float scale = 1f;
 
         for (int x = 0; x < heightPitch; x++) {
             for (int y = 0; y < widthPitch; y++) {
@@ -166,7 +145,6 @@ public class TerrainChunk {
         return vertIndex * vertexSize;
     }
 
-
     /**
      * This method aims to add the provided value to the normal
      * @param vertIndex receives the iterator
@@ -175,8 +153,8 @@ public class TerrainChunk {
      * @param y coordinate
      * @param z coordinate
      */
-    private void addNormal(int vertIndex, float[] verts, float x, float y, float z) {
 
+    private void addNormal(int vertIndex, float[] verts, float x, float y, float z) {
         int i = getNormalStart(vertIndex);
 
         verts[i] += x;
@@ -190,7 +168,6 @@ public class TerrainChunk {
      * @param verts receives the array
      */
     private void normalizeNormal(int vertIndex, float[] verts) {
-
         int i = getNormalStart(vertIndex);
 
         float x = verts[i];
@@ -214,7 +191,6 @@ public class TerrainChunk {
      * @param verts array
      */
     private void calcNormals(short[] indices, float[] verts) {
-
         for (int i = 0; i < indices.length; i += 3) {
             int i1 = getPositionStart(indices[i]);
             int i2 = getPositionStart(indices[i + 1]);
@@ -261,39 +237,19 @@ public class TerrainChunk {
             addNormal(indices[i + 1], verts, nx, ny, nz);
             addNormal(indices[i + 2], verts, nx, ny, nz);
         }
-
         for (int i = 0; i < (verts.length / vertexSize); i++) {
             normalizeNormal(i, verts);
         }
     }
 
+    // TODO comments
     public void setLocation( float y){
         this.positionY=(y-size);
 
     }
 
+    // TODO comments
     public void setModelInstance(ModelInstance instance){
-        this.modelInstance = instance;
-        this.modelInstance.transform.translate(this.positionX, this.positionY, this.positionZ);
-    }
-
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public float getPositionZ() {
-        return positionZ;
-    }
-
-    public int[][] getSandInfo(){
-        return sandInfo;
-    }
-
-    public int[][] getWaterInfo(){
-        return waterInfo;
+        instance.transform.translate(this.positionX, this.positionY, this.positionZ);
     }
 }

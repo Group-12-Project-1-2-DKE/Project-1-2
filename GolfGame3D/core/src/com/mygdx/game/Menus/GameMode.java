@@ -172,7 +172,9 @@ public class GameMode implements Screen {
         game.batch.draw(littleMenLogo, 400, 100, LOGO_WIDTH, LOGO_HEIGHT);
 
         int z = 35;
-        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z && ScreenSpace.HEIGHT - Gdx.input.getY() < BACK_Y + BACK_HEIGHT && ScreenSpace.HEIGHT - Gdx.input.getY() > BACK_Y){
+        if (Gdx.input.getX() < z + BACK_WIDTH && Gdx.input.getX() > z &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() < BACK_Y + BACK_HEIGHT &&
+                ScreenSpace.HEIGHT - Gdx.input.getY() > BACK_Y){
             game.batch.draw(backButtonActivated, z, BACK_Y, BACK_WIDTH, BACK_WIDTH);
             // If the button id clicked, go back to the main menu.
             if (Gdx.input.isTouched()){

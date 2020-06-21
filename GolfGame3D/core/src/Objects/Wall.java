@@ -1,4 +1,4 @@
-package Maze;
+package Objects;
 
 import Objects.Obstacle;
 import Physics.Vector2D;
@@ -37,11 +37,6 @@ public class Wall implements Obstacle {
 
     private void setLocation(Vector2D location) {
         this.location = location;
-    }
-
-    @Override
-    public ArrayList<Obstacle> createInstance(int n) {
-        return null;
     }
 
     @Override
