@@ -26,7 +26,7 @@ public class EulerSolver implements PhysicsEngine{
         }
 
         if (final_v.length() < max_error && /*acc.length()*/initial_v.add(final_v.multiply(-1)).length() < max_error) {
-            System.out.println(final_v.toString() + acc.toString());
+            //System.out.println(final_v.toString() + acc.toString());
             ball.putAtRest();
             return new Vector2D(0, 0);
         }
@@ -124,7 +124,7 @@ public class EulerSolver implements PhysicsEngine{
 
     public boolean x_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
         float x = (float) ball.getLocation().getX();
-        float y = (float) (ball.getLocation().getY() - final_v.getY());
+        float y = (float) (ball.getLocation().getY() - final_v.getY() * step_size);
        if (GolfGameMaze.collision(x, y)) {
             return true;
         } else {
@@ -133,7 +133,7 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public boolean y_edge(Ball ball, RockObstacle rock, Vector2D final_v) {
-        float x = (float) (ball.getLocation().getX() - final_v.getX());
+        float x = (float) (ball.getLocation().getX() - final_v.getX() * step_size);
         float y = (float) ball.getLocation().getY();
         if (GolfGameMaze.collision(x, y)) {
             return true;
