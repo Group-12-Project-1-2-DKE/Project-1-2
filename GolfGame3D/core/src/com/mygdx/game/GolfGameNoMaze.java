@@ -90,7 +90,7 @@ public class GolfGameNoMaze implements Screen {
         modelBuilder = new ModelBuilder();
         instances = new ArrayList<>();
 
-        Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass, 0.5f);
+        Ball gameBall = new Ball(new Vector2D(Variables.startX, Variables.startY), Variables.ballMass);
 
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY),
                 new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7,
