@@ -79,7 +79,7 @@ public class EulerSolver implements PhysicsEngine{
         );
     }
 
-    public static Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
+    public  Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
         System.out.println(final_v.toString());
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
             System.out.println("1/5");

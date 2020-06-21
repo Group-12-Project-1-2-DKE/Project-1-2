@@ -105,23 +105,22 @@ public class GolfGameNoMaze implements Screen {
 
         // If the user select euler solver, create eulerSolver object.
         if (Variables.euler) {
-            EulerSolver eulerSolver = new EulerSolver();
-            eulerSolver.set_step_size(0.01);
-            eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            eulerSolver.set_grav_constant(9.81);
-            engine = eulerSolver;
+            engine = new EulerSolver();
+            engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
+            
         } else if (Variables.rungeKutta) {  // If the user select rungeKutta solver, create RungeKuttaSolver object.
-            RungeKuttaSolver rungeKuttaSolver = new RungeKuttaSolver();
-            rungeKuttaSolver.set_step_size(0.01);
-            rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            rungeKuttaSolver.set_grav_constant(9.81);
-            engine = rungeKuttaSolver;
+            engine = new RungeKuttaSolver();
+            engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
         } else if (Variables.verlet) { // If the user select verlet solver, create VerletSolver object.
-            VerletSolver verletSolver = new VerletSolver();
-            verletSolver.set_step_size(0.01);
-            verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            verletSolver.set_grav_constant(9.81);
-            engine = verletSolver;
+            engine = new VerletSolver();
+           engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
+
         }
 
         simulator = new PuttingSimulator(course, engine);
@@ -260,7 +259,7 @@ public class GolfGameNoMaze implements Screen {
                 for (int i = 0; i < numTreeS; i++) {
                     if (collides(i)) {
                         System.out.println("collision");
-                        EulerSolver.tree_collision(course.getBall(), obstacle, course.getBall().getVelocity());
+                        engine.tree_collision(course.getBall(), obstacle, course.getBall().getVelocity());
                     }
                 }
             } catch (StackOverflowError s) {

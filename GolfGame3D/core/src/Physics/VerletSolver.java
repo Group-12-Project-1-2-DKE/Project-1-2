@@ -64,7 +64,7 @@ public class VerletSolver implements PhysicsEngine{
         );
     }
 
-    public static Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
+    public Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
         System.out.println(final_v.toString());
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
             System.out.println("1/5");
@@ -108,6 +108,11 @@ public class VerletSolver implements PhysicsEngine{
         }
         System.out.println(final_v.toString());
         return final_v;
+    }
+
+    public void wall_collision(Ball ball){
+        ball.getVelocity().setX(ball.getVelocity().getX()*-1);
+        ball.getVelocity().setY(ball.getVelocity().getY()*-1);
     }
 
     public boolean x_edge(Ball ball, Wall wall, Vector2D final_v) {

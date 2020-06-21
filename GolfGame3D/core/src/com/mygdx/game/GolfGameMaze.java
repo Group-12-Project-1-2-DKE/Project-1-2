@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import AI.MazeAI;
+import Course.Nodes.Variable;
 import Course.PuttingCourse;
 import Maze.MazeGenerator;
 import Maze.Solver;
@@ -69,6 +70,7 @@ public class GolfGameMaze implements Screen{
     public float myDelta = 0;
     public Vector2D myVector;
 
+
     private Wall wall;
    public static  boolean isCollision = false;
     /**
@@ -93,23 +95,22 @@ public class GolfGameMaze implements Screen{
 
         // If the user select euler solver, create eulerSolver object.
         if (Variables.euler) {
-            EulerSolver eulerSolver = new EulerSolver();
-            eulerSolver.set_step_size(0.01);
-            eulerSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            eulerSolver.set_grav_constant(9.81);
-            engine = eulerSolver;
+            engine = new EulerSolver();
+            engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
+
         } else if (Variables.rungeKutta) {  // If the user select rungeKutta solver, create RungeKuttaSolver object.
-            RungeKuttaSolver rungeKuttaSolver = new RungeKuttaSolver();
-            rungeKuttaSolver.set_step_size(0.01);
-            rungeKuttaSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            rungeKuttaSolver.set_grav_constant(9.81);
-            engine = rungeKuttaSolver;
+            engine= new RungeKuttaSolver();
+            engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
+
         } else if (Variables.verlet) {  // If the user select verlet solver, create VerletSolver object.
-            VerletSolver verletSolver = new VerletSolver();
-            verletSolver.set_step_size(0.01);
-            verletSolver.set_fric_coefficient(course.getFrictionCoefficient());
-            verletSolver.set_grav_constant(9.81);
-            engine = verletSolver;
+            engine = new VerletSolver();
+            engine.set_step_size(0.01);
+            engine.set_fric_coefficient(course.getFrictionCoefficient());
+            engine.set_grav_constant(9.81);
         }
 
         simulator = new PuttingSimulator(course, engine);
@@ -228,9 +229,7 @@ public class GolfGameMaze implements Screen{
                 }
                 isCollision = collision((float)course.getBall().getLocation().getX(),(float)course.getBall().getLocation().getY());
                        if(isCollision) {
-                           EulerSolver eulerSolver = new EulerSolver();
-                           eulerSolver.wall_collision(course.getBall());
-
+                           engine.wall_collision(course.getBall());
                            System.out.println("collision");
                            }
 
