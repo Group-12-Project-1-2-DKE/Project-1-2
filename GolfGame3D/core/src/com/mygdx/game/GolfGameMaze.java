@@ -488,7 +488,7 @@ public class GolfGameMaze implements Screen{
      */
     public static boolean collision(float x, float y) {
         for (ModelInstance instance : instances) {
-            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).z);
+            Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).y);
             if ((x < wallLocation.x + 1f && x + 0.5f > wallLocation.x ) && (y < wallLocation.y + 1f && y + 0.5f >  wallLocation.y)) {
                 return true;
             }

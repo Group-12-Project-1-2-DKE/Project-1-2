@@ -507,7 +507,7 @@ public class GolfGameNoMaze implements Screen {
     private void createWaterMesh(){
         Texture waterTex = new Texture(Gdx.files.internal("water.jpg"));
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY), new Vector2D(Variables.goalX, Variables.goalY));
-        int chunkSize = 1;
+        int chunkSize = 5;
         int numberX = (int) (coverVectors[1].getX() - coverVectors[0].getX()) / chunkSize;
         int numberY = (int) (coverVectors[1].getY() - coverVectors[0].getY()) / chunkSize;
         TerrainChunk chunk;
