@@ -457,11 +457,9 @@ public class GolfGameMaze implements Screen{
 
         for (int i=0; i< maze.getGrid().length; i++){
             for(int j=0; j<maze.getGrid()[i].length; j++){
-                float xPos = i;
-                float yPos = j*2;
+            
                 if (maze.getGrid()[i][j] == 1){
-
-                    ModelInstance[] wallInstances = wallGenerator.createModel(xPos,yPos);
+                    ModelInstance[] wallInstances = wallGenerator.createModel(i-1, (float) (j*2));
                     instances.add(wallInstances[0]);
                 }else if(maze.getGrid()[i][j] == 8){
                     Variables.startX = i-20 + 1;
@@ -475,8 +473,6 @@ public class GolfGameMaze implements Screen{
                     Variables.goalY = (float) ((j * 2) - 20);
                     //flag.transform.setTranslation(Variables.goalX , (float)course.evaluate(Variables.startX, Variables.startY) , Variables.startY);
                 }
-                wallPositionX[i] = xPos;
-                wallPositionY[j] = yPos;
             }
         }
         Solver solver = new Solver(maze.getCells());
