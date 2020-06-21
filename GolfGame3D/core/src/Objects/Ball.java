@@ -104,7 +104,6 @@ public class Ball {
      *
      */
     public void hit() {
-
         atRest = false;
         isHit = true;
     }

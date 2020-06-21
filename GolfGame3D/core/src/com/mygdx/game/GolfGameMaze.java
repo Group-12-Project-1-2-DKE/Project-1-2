@@ -440,7 +440,7 @@ public class GolfGameMaze implements Screen{
         for (int i=0; i< maze.getGrid().length; i++){
             for(int j=0; j<maze.getGrid()[i].length; j++){
                 if (maze.getGrid()[i][j] == 1){
-                    ModelInstance[] wallInstances = wallGenerator.createModel(i, (float) (j*2));
+                    ModelInstance[] wallInstances = wallGenerator.createModel(i-1, (float) (j*2));
                     instances.add(wallInstances[0]);
                 }else if(maze.getGrid()[i][j] == 8){
                     Variables.startX = i-20;
