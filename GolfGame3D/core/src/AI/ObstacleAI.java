@@ -14,7 +14,7 @@ public class ObstacleAI implements AI{
         PuttingCourse h = new PuttingCourse("2 + sin(x) - 0.5cos(y)", new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 3, (float)0.5), 0.05, 4, 4);
         PhysicsEngine e = new EulerSolver();
-        e.set_fric_coefficient(0.05);
+        e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
 
 
@@ -61,11 +61,12 @@ public class ObstacleAI implements AI{
 
         for (int i = 0; i < 2; i++) {
             tempHoleInOne = bestAngle(tempHoleInOne, angle, course);
+            System.out.println(tempHoleInOne);
             angle /= 10;
 //            System.out.println("------------------------------------");
         }
 
-        double initFactor = tempHoleInOne.length()/200;
+        double initFactor = 1;//tempHoleInOne.length()/4;//ff optimale factor berekenen
 
         tempHoleInOne = bestPower(tempHoleInOne, initFactor, course);
 
@@ -78,39 +79,50 @@ public class ObstacleAI implements AI{
     }
 
     private Vector2D bestPower(Vector2D initVector, double initFactor, PuttingCourse course){
+        Vector2D firstVector = initVector;
+        Vector2D faster;
+        Vector2D slower;
+        p.take_shot(initVector);
+        Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
+        course.getBall().setLocation(initLoc.clone());
+
         for (int i = 0; i < 5; i++) {
-            p.take_shot(initVector);
-            Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-            course.getBall().setLocation(initLoc.clone());
             if (initDistance.length() <= course.getTolerance()){
                 return initVector;
-            }
+            }//if other 2 ifs not removed, move this out of for loop
 
-            Vector2D faster = initVector.multiply(initFactor);
-            Vector2D slower = initVector.multiply(1 / initFactor);
+            faster = initVector.add(firstVector.multiply(initFactor));
+            slower = initVector.add(firstVector.multiply(-initFactor));
 
             p.take_shot(faster);
             Vector2D Fdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Fdistance.length() <= course.getTolerance()){
                 return faster;
-            }
+            }//maybe not necessary?
 
             p.take_shot(slower);
             Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Sdistance.length() <= course.getTolerance()){
                 return slower;
-            }
+            }//maybe not necessary?
+
+            System.out.println(initFactor);
+            System.out.println("s: " + slower + ", " + Sdistance.length());
+            System.out.println("i: " + initVector + ", " + initDistance.length());
+            System.out.println("f: " + faster + ", " + Fdistance.length());
 
             double closest = Math.min(initDistance.length(), Math.min(Fdistance.length(), Sdistance.length()));
 
             if (closest == Sdistance.length()) {
                 System.out.println("slower: " + Sdistance.length());
                 initVector = slower;
+                initDistance = Sdistance;
             } else if (closest == Fdistance.length()) {
                 System.out.println("faster: " + Fdistance.length());
                 initVector = faster;
+                initDistance = Fdistance;
             } else {
                 System.out.println("same: " + initDistance.length());
                 initFactor /= 2;
