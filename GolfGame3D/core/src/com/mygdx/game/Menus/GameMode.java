@@ -23,7 +23,6 @@ public class GameMode implements Screen {
     private TextButton button3;
     private TextButton button4;
     private TextButton button5;
-    private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont font;
     private BitmapFont font2;
     private Stage stage;
@@ -63,7 +62,7 @@ public class GameMode implements Screen {
         font2.setColor(Color.WHITE);
 
         // Create the style of the button.
-        textButtonStyle = new TextButton.TextButtonStyle();
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
 
         // BUTTON OF THE GAME MODE.

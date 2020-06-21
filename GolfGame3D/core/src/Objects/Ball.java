@@ -104,7 +104,6 @@ public class Ball {
      *
      */
     public void hit() {
-
         atRest = false;
         isHit = true;
     }
@@ -160,8 +159,7 @@ public class Ball {
     }
 
     public boolean isInWater(){
-        //add evaluate
-        if(GolfGameNoMaze.getCourse().evaluate(location) < 0){
+        if(GolfGameNoMaze.getCourse().evaluate(this.location) < 0){
             return true;
         }
         return false;

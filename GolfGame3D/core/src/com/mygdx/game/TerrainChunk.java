@@ -44,9 +44,9 @@ public class TerrainChunk {
     /**
      * TerrainChunk constructor to receive the determine height & width by user and other parameters
      */
-    public TerrainChunk(Vector2D position, int size, PuttingCourse course) {
+    public TerrainChunk(Vector2D position, int size, PuttingCourse course, boolean water) {
         this.course = course;
-
+        this.water = water;
         if ((size + 1) * (size + 1) > Short.MAX_VALUE) {
             throw new IllegalArgumentException(
                     "Chunk size too big, (width + 1)*(height+1) must be <= 32767");
@@ -71,7 +71,8 @@ public class TerrainChunk {
 
     }
 
-    public static void setFunction(String function){Variables.function = function;};
+
+   // public static void setFunction(String function){Variables.function = function;};
 
     /**
      * This builds the vertices which pretty much means the elevation on the map
@@ -89,9 +90,11 @@ public class TerrainChunk {
                 // POSITION
                 vertices[idx++] =  x;//x position
 
-
-                vertices[idx++] = (float) (course.evaluate(new Vector2D(positionX+x,positionY+y)));//height = y
-
+                 if(water){
+                     vertices[idx++] =0f;//height = y
+                 }else {
+                     vertices[idx++] = (float) (course.evaluate(new Vector2D(positionX + x, positionY + y)));//height = y
+                 }
 
                 vertices[idx++] = y ;//z position
 

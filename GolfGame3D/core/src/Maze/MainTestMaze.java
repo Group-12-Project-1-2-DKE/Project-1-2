@@ -17,6 +17,11 @@ public class MainTestMaze {
 //        for (int i=0; i<solver.solution.size(); i++){
 //            System.out.println(solver.solution.get(i));
 //        }
+
+        for (int i=0; i<solver.getLocations().size(); i++){
+            System.out.println(solver.getLocations().get(i));
+        }
+
 //        for(int i=0; i<maze.getCell(0,0).neighbors.size(); i++){
 //            System.out.print(maze.getCell(0,0).neighbors.get(i));
 //        }
