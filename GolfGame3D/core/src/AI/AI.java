@@ -11,4 +11,6 @@ public interface AI {
      * @return initial velocity vector
      */
     Vector2D calculate_turn(PuttingCourse course, int steps);
+    void setTreePositionX(float[] treePositionX);
+    void setTreePositionZ(float[] treePositionZ);
 }

@@ -70,4 +70,14 @@ public class StraighGreedy implements AI{
         }
         return gradients;
     }
+
+    @Override
+    public void setTreePositionX(float[] treePositionX) {
+        //can stay empty
+    }
+
+    @Override
+    public void setTreePositionZ(float[] treePositionZ) {
+        //can stay empty
+    }
 }

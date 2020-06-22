@@ -2,6 +2,7 @@ package AI;
 
 import Course.PuttingCourse;
 import Objects.Ball;
+import Objects.TreeObstacle;
 import Physics.EulerSolver;
 import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
@@ -10,6 +11,7 @@ import AI.StraighGreedy;
 import com.mygdx.game.Variables;
 
 public class ObstacleAI implements AI{
+
 
     public static void main(String[] args) {
         PuttingCourse h = new PuttingCourse("2 + sin(x) - 0.5cos(y)", new Vector2D(0,0), new Vector2D(10,10),
@@ -47,6 +49,9 @@ public class ObstacleAI implements AI{
     private int maxShots = 50;// maxshots need to be EVEN
     private double[] distanceArr = new double[maxShots + 1];
     private Vector2D[] velocityArr =  new Vector2D[maxShots + 1];
+    private float[] treePositionX;
+    private float[] treePositionZ;
+    private TreeObstacle obstacle = new TreeObstacle();
 
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps) {
@@ -198,6 +203,29 @@ public class ObstacleAI implements AI{
         e.set_fric_coefficient(course.getFrictionCoefficient());
         p = new PuttingSimulator(course, e);
         pAssigned = true;
+    }
+
+    public void setTreePositionX(float[] treePositionX) {
+        this.treePositionX = treePositionX;
+    }
+
+    public void setTreePositionZ(float[] treePositionZ) {
+        this.treePositionZ = treePositionZ;
+    }
+
+    public boolean collides(int i, PuttingCourse course) {
+        if (euclideanDistance((float) course.getBall().getLocation().getX(),
+                (float) course.getBall().getLocation().getY(), i) < 0.5) {
+            obstacle.setLocation(new Vector2D(treePositionX[i], treePositionZ[i]));
+            return true;
+        }
+        return false;
+    }
+
+    public float euclideanDistance(float posX, float posZ, int i) {
+        float treeX = treePositionX[i];
+        float treeZ = treePositionZ[i];
+        return (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
     }
 
     /*public boolean checkTree(PuttingCourse course, int steps){
