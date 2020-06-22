@@ -101,6 +101,9 @@ public class GolfGameNoMaze implements Screen {
         treePositionZ = new float[numTreeS];
         obstacle = new TreeObstacle();
 
+        ai.setTreePositionX(treePositionX);
+        ai.setTreePositionZ(treePositionZ);
+
         setTreeLocation();
 
         // If the user select euler solver, create eulerSolver object.

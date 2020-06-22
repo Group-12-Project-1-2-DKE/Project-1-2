@@ -14,21 +14,24 @@ public class ObstacleAI implements AI{
 
 
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("2 + sin(x) - 0.5cos(y)", new Vector2D(0,0), new Vector2D(10,10),
-                new Ball(new Vector2D(0,0), Variables.ballMass), 0.05, 4, 4);
+        PuttingCourse h = new PuttingCourse("0.01x - 0.02y^2 + 1"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
+                new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
 
 
         AI o = new ObstacleAI();
+        o.setTreePositionX(new float[]{5});
+        o.setTreePositionZ(new float[]{5});
+
         //o = new StraighGreedy();
         long startTime = System.currentTimeMillis();
         Vector2D shot = o.calculate_turn(h, 500);
         System.out.println(System.currentTimeMillis() - startTime);
 
         System.out.println(shot);
-        p.take_shot(shot);
+        ((ObstacleAI)o).takeShot(shot, h);
         System.out.println(h.getBall().getLocation().add(h.getFlag().multiply(-1)).length());
     }
 
@@ -51,7 +54,7 @@ public class ObstacleAI implements AI{
     private Vector2D[] velocityArr =  new Vector2D[maxShots + 1];
     private float[] treePositionX;
     private float[] treePositionZ;
-    private TreeObstacle obstacle = new TreeObstacle();
+    private final TreeObstacle obstacle = new TreeObstacle();
 
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps) {
@@ -88,7 +91,7 @@ public class ObstacleAI implements AI{
         Vector2D firstVector = initVector;
         Vector2D faster;
         Vector2D slower;
-        p.take_shot(initVector);
+        takeShot(initVector, course);
         Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
@@ -100,14 +103,14 @@ public class ObstacleAI implements AI{
             faster = initVector.add(firstVector.multiply(initFactor));
             slower = initVector.add(firstVector.multiply(-initFactor));
 
-            p.take_shot(faster);
+            takeShot(faster, course);
             Vector2D Fdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Fdistance.length() <= course.getTolerance()){
                 return faster;
             }//maybe not necessary?
 
-            p.take_shot(slower);
+            takeShot(slower, course);
             Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Sdistance.length() <= course.getTolerance()){
@@ -140,7 +143,7 @@ public class ObstacleAI implements AI{
     private Vector2D bestAngle(Vector2D initVector, double maxDegree, PuttingCourse course){
         shotcount = 0;
 
-        p.take_shot(initVector);
+        takeShot(initVector, course);
         Vector2D distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
@@ -171,7 +174,7 @@ public class ObstacleAI implements AI{
             }
 
 
-            p.take_shot(tempHoleInOne);
+            takeShot(tempHoleInOne, course);
             distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
 //            System.out.println("a: " + angleCount);
 //            System.out.println(distance.length());
@@ -211,6 +214,19 @@ public class ObstacleAI implements AI{
 
     public void setTreePositionZ(float[] treePositionZ) {
         this.treePositionZ = treePositionZ;
+    }
+
+    public void takeShot(Vector2D initialVelocity, PuttingCourse course){
+        course.getBall().hit();
+        Vector2D next = initialVelocity.clone();
+        while (next != null){
+            next = p.take_shotSlowly(next);
+            for (int i = 0; i < treePositionX.length; i++){
+                if (collides(i, course)){
+                    p.getEngine().tree_collision(course.getBall(), obstacle, next);
+                }
+            }
+        }
     }
 
     public boolean collides(int i, PuttingCourse course) {
