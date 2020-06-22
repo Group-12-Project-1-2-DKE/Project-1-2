@@ -84,7 +84,7 @@ public class MazeOption implements Screen {
         stage.addActor(mazeX);
 
         mazeY = new TextField(String.valueOf(5), customizedMenuSkin);
-        mazeY.setPosition(25,525);
+        mazeY.setPosition(25,550);
         mazeY.setSize(200, 30);
         mazeY.setColor(Color.WHITE);
         stage.addActor(mazeY);
@@ -152,11 +152,11 @@ public class MazeOption implements Screen {
 
         // Write on the screen the different elements.
         font.draw(game.batch,"Maze length x:", 25,750);
-        font.draw(game.batch,"Maze length y:", 25,600);
+        font.draw(game.batch,"Maze length y:", 25,625);
         font2.draw(game.batch,"Game Mode:", 25,475);
 
         // Size of the picture.
-        int MAZE_X = 375;
+        int MAZE_X = 450;
         int MAZE_WIDTH = 300;
         int MAZE_HEIGHT = 300;
         game.batch.draw(mazePicture, MAZE_X, 250 , MAZE_WIDTH, MAZE_HEIGHT);
