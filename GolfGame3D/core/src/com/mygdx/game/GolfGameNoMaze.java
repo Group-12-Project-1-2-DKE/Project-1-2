@@ -220,7 +220,7 @@ public class GolfGameNoMaze implements Screen {
             // If the ball is not int the hole, render the ball at the Ball object's position.
             ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                     (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
-                            course.getBall().getLocation().getY())) + 0.25f,
+                            course.getBall().getLocation().getY())) + 1f,
                     (float) course.getBall().getLocation().getY() + 1f);
         }
         // If the ball's y position is under0, it means that the ball is into the water
