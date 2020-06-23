@@ -520,7 +520,7 @@ public class GolfGameNoMaze implements Screen {
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
         Texture sandTex = new Texture("sandTexture.jpg");
-        Texture greenTex  = new Texture("h.jpg");
+       // Texture greenTex  = new Texture("h.jpg");
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY),
                 new Vector2D(Variables.goalX, Variables.goalY));
         int chunkSize = 1;
@@ -556,7 +556,7 @@ public class GolfGameNoMaze implements Screen {
                     material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
                     terrainInfo[x][y] = 2;
                 }  else if(course.evaluate(currentPos) <= yPos&& course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
-                    material = new Material(TextureAttribute.createDiffuse(greenTex));
+                    material = new Material(ColorAttribute.createDiffuse(Color.GREEN));
                     terrainInfo[x][y] = 3;
                 }  else if(course.evaluate(currentPos) ==zPos&&course.evaluate(currentPos) != yPos && course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
                     material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
