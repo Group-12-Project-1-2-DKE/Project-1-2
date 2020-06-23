@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import AI.AI;
+import AI.StraighGreedy;
 import AI.ObstacleAI;
 import Course.PuttingCourse;
 import Objects.Ball;
@@ -96,7 +97,7 @@ public class GolfGameNoMaze implements Screen {
         course = new PuttingCourse(Variables.function, new Vector2D(Variables.startX, Variables.startY),
                 new Vector2D(Variables.goalX, Variables.goalY), gameBall, Variables.coefficientOfFriction, 7,
                 Variables.tolerance);
-        ai = new ObstacleAI(); //StraighGreedy();
+        ai = new ObstacleAI();
 
         treePositionX = new float[numTreeS];
         treePositionZ = new float[numTreeS];
