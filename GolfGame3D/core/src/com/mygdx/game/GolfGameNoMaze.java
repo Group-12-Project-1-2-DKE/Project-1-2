@@ -190,6 +190,8 @@ public class GolfGameNoMaze implements Screen {
         createWaterMesh();
         createMesh();
 
+        engine.setTerrainInfo(terrainInfo);
+
 
         Variables.lowerBound = new Vector2D(-100, -100);    // Lower bound of the field
         Variables.upperBound = new Vector2D(100, 100);      // Upper bound of the field
@@ -564,6 +566,7 @@ public class GolfGameNoMaze implements Screen {
                                     course.getBall().getLocation().getY())) - 1f,
                             (float) course.getBall().getLocation().getY());
                 }
+
                     Model terrain = getModel(mesh, GL20.GL_TRIANGLES, material);
                     ModelInstance terrainInstance = new ModelInstance(terrain, 0, 0, 0);
 

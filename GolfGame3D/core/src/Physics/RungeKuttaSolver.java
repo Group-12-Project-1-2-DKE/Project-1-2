@@ -11,9 +11,12 @@ public class RungeKuttaSolver implements PhysicsEngine{
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = 9.81;
     private double max_error = 0.1;
+    private int[][] terrainInfo;
+    private double f;
 
     @Override
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course) {
+        findFrictionCoefficient(ball);
         Vector2D k1 = calculate_acc(course, initial_v, ball).multiply(step_size);
         Vector2D k2 = calculate_acc(course, initial_v.add(k1.multiply(0.5)), ball).multiply(step_size);
         Vector2D k3 = calculate_acc(course, initial_v.add(k2.multiply(0.5)), ball).multiply(step_size);
@@ -68,6 +71,7 @@ public class RungeKuttaSolver implements PhysicsEngine{
     @Override
     public void set_fric_coefficient(double f) {
         fric_coefficient = f;
+        this.f = f;
     }
 
     @Override
@@ -149,6 +153,17 @@ public class RungeKuttaSolver implements PhysicsEngine{
         } else {
             return false;
         }
+    }
+
+    public void setTerrainInfo(int[][] info){
+        this.terrainInfo = info;
+    }
+    public void findFrictionCoefficient(Ball ball){
+        int info =  terrainInfo[(int)ball.getLocation().getX()][(int)ball.getLocation().getY()];
+        fric_coefficient = f;
+        set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient)/4);
+
+
     }
 
 }

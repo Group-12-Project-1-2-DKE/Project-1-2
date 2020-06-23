@@ -10,12 +10,15 @@ public class VerletSolver implements PhysicsEngine{
     private double grav_constant = 9.81;
     private double max_error = 0.1;
     private Vector2D initial_acc = new Vector2D(0,0);
+    private int[][] terrainInfo;
+    private double f;
 
     public VerletSolver(){
 
     }
 
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course){
+        findFrictionCoefficient(ball);
         Vector2D acc = calculate_acc(course, initial_v, ball);
 
         ball.setLocation(ball.getLocation().add(initial_v.add(initial_acc.multiply(step_size).multiply(0.5)).multiply(step_size)));
@@ -46,6 +49,7 @@ public class VerletSolver implements PhysicsEngine{
 
     public void set_fric_coefficient(double f){
         fric_coefficient = f;
+        this.f = f;
     }
 
     public void set_grav_constant(double g){
@@ -125,6 +129,10 @@ public class VerletSolver implements PhysicsEngine{
         }
     }
 
+    public void setTerrainInfo(int[][] info){
+        this.terrainInfo = info;
+    }
+
     public boolean y_edge(Ball ball, Wall wall, Vector2D final_v) {
         float x = (float) (ball.getLocation().getX() - final_v.getX() * step_size);
         float y = (float) ball.getLocation().getY();
@@ -133,6 +141,13 @@ public class VerletSolver implements PhysicsEngine{
         } else {
             return false;
         }
+    }
+
+    public void findFrictionCoefficient(Ball ball){
+        int info =  terrainInfo[(int)ball.getLocation().getX()][(int)ball.getLocation().getY()];
+        fric_coefficient = f;
+        set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient)/4);
+
     }
 
 }

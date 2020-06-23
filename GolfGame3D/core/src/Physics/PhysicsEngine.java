@@ -10,4 +10,5 @@ public interface PhysicsEngine{
     void set_max_error(double e);
     void wall_collision(Ball ball);
     Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v);
+    void setTerrainInfo(int[][] info);
 }
