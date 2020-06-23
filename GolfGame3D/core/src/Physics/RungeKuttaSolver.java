@@ -159,7 +159,7 @@ public class RungeKuttaSolver implements PhysicsEngine{
         this.terrainInfo = info;
     }
     public void findFrictionCoefficient(Ball ball){
-        int info =  terrainInfo[(int)ball.getLocation().getX()][(int)ball.getLocation().getY()];
+        int info =  terrainInfo[ (int)((ball.getLocation().getX() - Variables.lowerBound.getX())*(terrainInfo.length / (Variables.upperBound.getX() - Variables.lowerBound.getX())))][(int)((ball.getLocation().getY() - Variables.lowerBound.getY()) * (terrainInfo.length /(Variables.upperBound.getY() - Variables.lowerBound.getY())))];
         fric_coefficient = f;
         set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient)/4);
 

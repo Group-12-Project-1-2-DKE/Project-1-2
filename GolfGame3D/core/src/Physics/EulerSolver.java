@@ -156,7 +156,7 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public void setTerrainInfo(int[][] t){
-        //this.terrainInfo = t;
+        this.terrainInfo = t;
     }
 
    public void findFrictionCoefficient(Ball ball){
