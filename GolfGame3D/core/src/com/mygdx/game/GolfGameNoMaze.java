@@ -547,23 +547,19 @@ public class GolfGameNoMaze implements Screen {
                 Random random = new Random();
                 int xPos = random.nextInt(15);
                 int yPos = random.nextInt(15);
-                int zPos = random.nextInt(15);
                 if (course.evaluate(currentPos) < 1) {
                     material = new Material(TextureAttribute.createDiffuse(sandTex));
-                    terrainInfo[x][y] = 1;
+                    terrainInfo[x][y] = 4;
                 } else if (course.evaluate(currentPos) <= xPos && course.evaluate(currentPos) > 0) {
                     material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
-                    terrainInfo[x][y] = 2;
-                }  else if(course.evaluate(currentPos) <= yPos&& course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
-                    material = new Material(ColorAttribute.createDiffuse(Color.GREEN));
                     terrainInfo[x][y] = 3;
-                }  else if(course.evaluate(currentPos) ==zPos&&course.evaluate(currentPos) != yPos && course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
-                    material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
-                    terrainInfo[x][y] = 4;
+                }   else if(course.evaluate(currentPos) ==yPos&&course.evaluate(currentPos) != xPos && course.evaluate(currentPos) >0){
+                    material = new Material(ColorAttribute.createDiffuse(Color.GREEN));
+                    terrainInfo[x][y] = 2;
                 }
                 else {
                     material = new Material(ColorAttribute.createDiffuse(Color.FOREST));
-                    terrainInfo[x][y] = 5;
+                    terrainInfo[x][y] = 1;
                     ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                             (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
                                     course.getBall().getLocation().getY())) - 1f,
@@ -579,6 +575,14 @@ public class GolfGameNoMaze implements Screen {
                     terrainInstance.transform.setTranslation((float) currentPos.getX(), 0, (float) currentPos.getY());
             }
         }
+        StringBuilder output = new StringBuilder();
+        for (int y = 0; y < terrainInfo[0].length; y++) {
+            for (int x = 0; x < terrainInfo.length; x++) {
+                output.append(terrainInfo[x][y]);
+            }
+            output.append("\n");
+        }
+        System.out.println(output.toString());
     }
 
     /**
@@ -689,7 +693,4 @@ public class GolfGameNoMaze implements Screen {
         }
     }
 
-    private void createArrow(){
-
-    }
 }
