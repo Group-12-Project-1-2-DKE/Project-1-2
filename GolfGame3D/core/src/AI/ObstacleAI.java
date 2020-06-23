@@ -17,6 +17,7 @@ public class ObstacleAI implements AI{
         PuttingCourse h = new PuttingCourse("0.01x + 0.002y^2"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
         PhysicsEngine e = new EulerSolver();
+        e.setTerrainInfo(new int[][]{{1}});
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
         //Miss nog dat als hij tenminste langs het ding komt dat het als hole in one telt. Met maxVelocity?
@@ -24,11 +25,11 @@ public class ObstacleAI implements AI{
         AI o = new ObstacleAI();
         o.setTreePositionX(new float[]{5});
         o.setTreePositionZ(new float[]{5});
-        o.setTerrainInfo(new int[][]{{}});
+        o.setTerrainInfo(new int[][]{{1}});
 
         //o = new StraighGreedy();
         long startTime = System.currentTimeMillis();
-        Vector2D shot = new Vector2D(1, 1);//o.calculate_turn(h, 500);
+        Vector2D shot = o.calculate_turn(h, 500);
         System.out.println(System.currentTimeMillis() - startTime);
 
         System.out.println(shot);
