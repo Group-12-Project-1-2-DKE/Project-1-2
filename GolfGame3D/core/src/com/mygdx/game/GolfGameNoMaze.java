@@ -101,6 +101,9 @@ public class GolfGameNoMaze implements Screen {
         treePositionZ = new float[numTreeS];
         obstacle = new TreeObstacle();
 
+        ai.setTreePositionX(treePositionX);
+        ai.setTreePositionZ(treePositionZ);
+
         setTreeLocation();
 
         // If the user select euler solver, create eulerSolver object.
@@ -219,7 +222,7 @@ public class GolfGameNoMaze implements Screen {
             // If the ball is not int the hole, render the ball at the Ball object's position.
             ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                     (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
-                            course.getBall().getLocation().getY())) + 0.25f,
+                            course.getBall().getLocation().getY())) + 1f,
                     (float) course.getBall().getLocation().getY() + 1f);
         }
         // If the ball's y position is under0, it means that the ball is into the water
@@ -257,7 +260,6 @@ public class GolfGameNoMaze implements Screen {
                 }
                 for (int i = 0; i < numTreeS; i++) {
                     if (collides(i)) {
-                        System.out.println("collision");
                         engine.tree_collision(course.getBall(), obstacle, course.getBall().getVelocity());
                     }
                 }

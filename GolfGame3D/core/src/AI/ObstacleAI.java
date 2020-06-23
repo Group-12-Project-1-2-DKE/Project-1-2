@@ -2,6 +2,7 @@ package AI;
 
 import Course.PuttingCourse;
 import Objects.Ball;
+import Objects.TreeObstacle;
 import Physics.EulerSolver;
 import Physics.PhysicsEngine;
 import Physics.PuttingSimulator;
@@ -11,22 +12,26 @@ import com.mygdx.game.Variables;
 
 public class ObstacleAI implements AI{
 
+
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("2 + sin(x) - 0.5cos(y)", new Vector2D(0,0), new Vector2D(10,10),
-                new Ball(new Vector2D(0,0), Variables.ballMass), 0.05, 4, 4);
+        PuttingCourse h = new PuttingCourse("0.01x - 0.02y^2 + 1"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
+                new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
 
 
         AI o = new ObstacleAI();
+        o.setTreePositionX(new float[]{5});
+        o.setTreePositionZ(new float[]{5});
+
         //o = new StraighGreedy();
         long startTime = System.currentTimeMillis();
         Vector2D shot = o.calculate_turn(h, 500);
         System.out.println(System.currentTimeMillis() - startTime);
 
         System.out.println(shot);
-        p.take_shot(shot);
+        ((ObstacleAI)o).takeShot(shot, h);
         System.out.println(h.getBall().getLocation().add(h.getFlag().multiply(-1)).length());
     }
 
@@ -47,6 +52,9 @@ public class ObstacleAI implements AI{
     private int maxShots = 50;// maxshots need to be EVEN
     private double[] distanceArr = new double[maxShots + 1];
     private Vector2D[] velocityArr =  new Vector2D[maxShots + 1];
+    private float[] treePositionX;
+    private float[] treePositionZ;
+    private final TreeObstacle obstacle = new TreeObstacle();
 
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps) {
@@ -83,7 +91,7 @@ public class ObstacleAI implements AI{
         Vector2D firstVector = initVector;
         Vector2D faster;
         Vector2D slower;
-        p.take_shot(initVector);
+        takeShot(initVector, course);
         Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
@@ -95,14 +103,14 @@ public class ObstacleAI implements AI{
             faster = initVector.add(firstVector.multiply(initFactor));
             slower = initVector.add(firstVector.multiply(-initFactor));
 
-            p.take_shot(faster);
+            takeShot(faster, course);
             Vector2D Fdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Fdistance.length() <= course.getTolerance()){
                 return faster;
             }//maybe not necessary?
 
-            p.take_shot(slower);
+            takeShot(slower, course);
             Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Sdistance.length() <= course.getTolerance()){
@@ -135,7 +143,7 @@ public class ObstacleAI implements AI{
     private Vector2D bestAngle(Vector2D initVector, double maxDegree, PuttingCourse course){
         shotcount = 0;
 
-        p.take_shot(initVector);
+        takeShot(initVector, course);
         Vector2D distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
@@ -166,7 +174,7 @@ public class ObstacleAI implements AI{
             }
 
 
-            p.take_shot(tempHoleInOne);
+            takeShot(tempHoleInOne, course);
             distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
 //            System.out.println("a: " + angleCount);
 //            System.out.println(distance.length());
@@ -198,6 +206,42 @@ public class ObstacleAI implements AI{
         e.set_fric_coefficient(course.getFrictionCoefficient());
         p = new PuttingSimulator(course, e);
         pAssigned = true;
+    }
+
+    public void setTreePositionX(float[] treePositionX) {
+        this.treePositionX = treePositionX;
+    }
+
+    public void setTreePositionZ(float[] treePositionZ) {
+        this.treePositionZ = treePositionZ;
+    }
+
+    public void takeShot(Vector2D initialVelocity, PuttingCourse course){
+        course.getBall().hit();
+        Vector2D next = initialVelocity.clone();
+        while (next != null){
+            next = p.take_shotSlowly(next);
+            for (int i = 0; i < treePositionX.length; i++){
+                if (collides(i, course)){
+                    p.getEngine().tree_collision(course.getBall(), obstacle, next);
+                }
+            }
+        }
+    }
+
+    public boolean collides(int i, PuttingCourse course) {
+        if (euclideanDistance((float) course.getBall().getLocation().getX(),
+                (float) course.getBall().getLocation().getY(), i) < 0.5) {
+            obstacle.setLocation(new Vector2D(treePositionX[i], treePositionZ[i]));
+            return true;
+        }
+        return false;
+    }
+
+    public float euclideanDistance(float posX, float posZ, int i) {
+        float treeX = treePositionX[i];
+        float treeZ = treePositionZ[i];
+        return (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
     }
 
     /*public boolean checkTree(PuttingCourse course, int steps){

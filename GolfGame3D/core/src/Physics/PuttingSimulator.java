@@ -7,7 +7,7 @@ public class PuttingSimulator{
     PhysicsEngine engine;
     int shot_counter = 0;
     int counter = 0;
-    int stepsPerRender = 5;
+    int stepsPerRender = 1;
 
     public PuttingSimulator(PuttingCourse course, PhysicsEngine engine){
         this.course = course;
@@ -20,6 +20,10 @@ public class PuttingSimulator{
 
     public Vector2D get_ball_position(){
         return course.getBall().getLocation();
+    }
+
+    public PhysicsEngine getEngine() {
+        return engine;
     }
 
     public void take_shot(Vector2D initial_ball_velocity){
