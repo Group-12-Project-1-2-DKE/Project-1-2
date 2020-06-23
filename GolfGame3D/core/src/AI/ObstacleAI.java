@@ -14,12 +14,12 @@ public class ObstacleAI implements AI{
 
 
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.01x - 0.02y^2 + 1"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
+        PuttingCourse h = new PuttingCourse("0.01x + 0.002y^2 + 1"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
-
+        //Miss nog dat als hij tenminste langs het ding komt dat het als hole in one telt. Met maxVelocity?
 
         AI o = new ObstacleAI();
         o.setTreePositionX(new float[]{5});
