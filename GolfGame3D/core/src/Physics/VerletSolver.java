@@ -81,12 +81,8 @@ public class VerletSolver implements PhysicsEngine{
         } else if (Math.tan(0.125 * Math.PI) < rc && rc <= Math.tan(0.375 * Math.PI)) {
             System.out.println("2/6");
             double temp = final_v.getX();
-            final_v.setX(final_v.getY());
-            final_v.setY(temp);
-            if ((final_v.getX() < 0 && final_v.getY() < 0) || (final_v.getX() > 0 && final_v.getY() > 0) || final_v.getX() == 0 || final_v.getY() == 0) {
-                final_v.setX(final_v.getX() * -1);
-                final_v.setY(final_v.getY() * -1);
-            }
+            final_v.setX(final_v.getY() * -1);
+            final_v.setY(temp * -1);
         } else if (Math.tan(0.875 * Math.PI) < rc && rc <= Math.tan(0.125 * Math.PI)) {
             System.out.println("3/7");
             final_v.setX(final_v.getX() * -1);
@@ -95,10 +91,6 @@ public class VerletSolver implements PhysicsEngine{
             double temp = final_v.getX();
             final_v.setX(final_v.getY());
             final_v.setY(temp);
-            if((final_v.getX() < 0 && final_v.getY() > 0) || (final_v.getX() > 0 && final_v.getY() < 0)) {
-                final_v.setX(final_v.getX() * -1);
-                final_v.setY(final_v.getY() * -1);
-            }
         }
         return final_v;
     }
