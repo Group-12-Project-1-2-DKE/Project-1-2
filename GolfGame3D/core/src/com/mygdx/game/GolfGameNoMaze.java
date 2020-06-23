@@ -109,7 +109,7 @@ public class GolfGameNoMaze implements Screen {
             engine.set_step_size(0.01);
             engine.set_fric_coefficient(course.getFrictionCoefficient());
             engine.set_grav_constant(9.81);
-            
+
         } else if (Variables.rungeKutta) {  // If the user select rungeKutta solver, create RungeKuttaSolver object.
             engine = new RungeKuttaSolver();
             engine.set_step_size(0.01);
@@ -120,7 +120,6 @@ public class GolfGameNoMaze implements Screen {
            engine.set_step_size(0.01);
             engine.set_fric_coefficient(course.getFrictionCoefficient());
             engine.set_grav_constant(9.81);
-
         }
 
         simulator = new PuttingSimulator(course, engine);
@@ -513,7 +512,7 @@ public class GolfGameNoMaze implements Screen {
     public void createMesh() {
         Texture fieldTex = new Texture("groundTexture.jpg");
         Texture sandTex = new Texture("sandTexture.jpg");
-        Texture darkTex = new Texture("darkgr.jpg");
+        Texture greenTex  = new Texture("h.jpg");
         Vector2D[] coverVectors = getBase(new Vector2D(Variables.startX, Variables.startY),
                 new Vector2D(Variables.goalX, Variables.goalY));
         int chunkSize = 1;
@@ -539,16 +538,25 @@ public class GolfGameNoMaze implements Screen {
                 mesh.setVertices(chunk.vertices);
                 mesh.setIndices(chunk.indices);
                 Random random = new Random();
-                int xPos = random.nextInt(8);
+                int xPos = random.nextInt(15);
+                int yPos = random.nextInt(15);
+                int zPos = random.nextInt(15);
                 if (course.evaluate(currentPos) < 1) {
                     material = new Material(TextureAttribute.createDiffuse(sandTex));
                     terrainInfo[x][y] = 1;
-                } else if (course.evaluate(currentPos) == xPos && course.evaluate(currentPos) > 0) {
-                    material = new Material(TextureAttribute.createDiffuse(darkTex));
+                } else if (course.evaluate(currentPos) <= xPos && course.evaluate(currentPos) > 0) {
+                    material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
                     terrainInfo[x][y] = 2;
-                } else {
-                    material = new Material(TextureAttribute.createDiffuse(fieldTex));
+                }  else if(course.evaluate(currentPos) <= yPos&& course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
+                    material = new Material(TextureAttribute.createDiffuse(greenTex));
                     terrainInfo[x][y] = 3;
+                }  else if(course.evaluate(currentPos) ==zPos&&course.evaluate(currentPos) != yPos && course.evaluate(currentPos) >0 && course.evaluate(currentPos)!= xPos){
+                    material = new Material(ColorAttribute.createDiffuse(Color.OLIVE));
+                    terrainInfo[x][y] = 4;
+                }
+                else {
+                    material = new Material(ColorAttribute.createDiffuse(Color.FOREST));
+                    terrainInfo[x][y] = 5;
                     ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                             (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
                                     course.getBall().getLocation().getY())) - 1f,
@@ -671,5 +679,9 @@ public class GolfGameNoMaze implements Screen {
             instances.add(treeinstances[0]);
             instances.add(treeinstances[1]);
         }
+    }
+
+    private void createArrow(){
+
     }
 }

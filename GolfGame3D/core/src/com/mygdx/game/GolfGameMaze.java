@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import AI.MazeAI;
-import Course.Nodes.Variable;
 import Course.PuttingCourse;
 import Maze.MazeGenerator;
 import Maze.Solver;
@@ -523,19 +522,13 @@ public class GolfGameMaze implements Screen{
      * @return true if the ball enter in collision with a wall.
      */
     public static boolean collision(float x, float y) {
-
         for (ModelInstance instance : redwallsinstances) {
             Vector2 wallLocation = new Vector2(instance.transform.getTranslation(new Vector3()).x, instance.transform.getTranslation(new Vector3()).z);
-
-
             if ( (x <= wallLocation.x +0.75f && x+0.75f  >= wallLocation.x) && (y<=wallLocation.y+0.25f && y+2.25f>=wallLocation.y) ) {
                 isCollision = true;
                 return true;
             }
-
-
         }
-
         return false;
     }
 }
