@@ -82,7 +82,6 @@ public class PuttingSimulator{
         //    return null;
         //}
         if (course.getBall().isAtRest()){
-            System.out.println(course.getBall().getLocation().add(course.getFlag().multiply(-1)));
             shot_counter++;
             return null;
         }
