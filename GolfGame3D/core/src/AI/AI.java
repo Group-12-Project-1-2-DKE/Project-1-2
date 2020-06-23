@@ -13,4 +13,5 @@ public interface AI {
     Vector2D calculate_turn(PuttingCourse course, int steps);
     void setTreePositionX(float[] treePositionX);
     void setTreePositionZ(float[] treePositionZ);
+    void setTerrainInfo(int[][] t);
 }

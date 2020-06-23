@@ -4,6 +4,7 @@ import Objects.*;
 import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.Variables;
 import java.lang.Math;
+import java.util.Arrays;
 
 public class EulerSolver implements PhysicsEngine{
     private double step_size = 0.1;
@@ -156,7 +157,7 @@ public class EulerSolver implements PhysicsEngine{
     }
 
     public void setTerrainInfo(int[][] t){
-        //this.terrainInfo = t;
+        this.terrainInfo = t;
     }
 
    public void findFrictionCoefficient(Ball ball){

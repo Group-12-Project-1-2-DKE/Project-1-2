@@ -80,4 +80,8 @@ public class StraighGreedy implements AI{
     public void setTreePositionZ(float[] treePositionZ) {
         //can stay empty
     }
+
+    public void setTerrainInfo(int[][] t){
+        //can stay empty
+    }
 }

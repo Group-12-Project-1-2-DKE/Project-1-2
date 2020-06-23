@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Menus.Congrat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -103,6 +104,7 @@ public class GolfGameNoMaze implements Screen {
 
         ai.setTreePositionX(treePositionX);
         ai.setTreePositionZ(treePositionZ);
+
 
         setTreeLocation();
 
@@ -191,6 +193,7 @@ public class GolfGameNoMaze implements Screen {
         createMesh();
 
         engine.setTerrainInfo(terrainInfo);
+        ai.setTerrainInfo(terrainInfo);
 
 
         Variables.lowerBound = new Vector2D(-100, -100);    // Lower bound of the field

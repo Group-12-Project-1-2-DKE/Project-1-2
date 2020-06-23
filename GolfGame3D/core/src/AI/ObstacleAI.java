@@ -14,7 +14,7 @@ public class ObstacleAI implements AI{
 
 
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.01x + 0.002y^2 + 1"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
+        PuttingCourse h = new PuttingCourse("0.01x + 0.002y^2"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
                 new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(h.getFrictionCoefficient());
@@ -24,10 +24,11 @@ public class ObstacleAI implements AI{
         AI o = new ObstacleAI();
         o.setTreePositionX(new float[]{5});
         o.setTreePositionZ(new float[]{5});
+        o.setTerrainInfo(new int[][]{{}});
 
         //o = new StraighGreedy();
         long startTime = System.currentTimeMillis();
-        Vector2D shot = o.calculate_turn(h, 500);
+        Vector2D shot = new Vector2D(1, 1);//o.calculate_turn(h, 500);
         System.out.println(System.currentTimeMillis() - startTime);
 
         System.out.println(shot);
@@ -55,6 +56,7 @@ public class ObstacleAI implements AI{
     private float[] treePositionX;
     private float[] treePositionZ;
     private final TreeObstacle obstacle = new TreeObstacle();
+    private int[][] terrainInfo;
 
     @Override
     public Vector2D calculate_turn(PuttingCourse course, int steps) {
@@ -204,6 +206,7 @@ public class ObstacleAI implements AI{
         }
         PhysicsEngine e = new EulerSolver();
         e.set_fric_coefficient(course.getFrictionCoefficient());
+        e.setTerrainInfo(terrainInfo);
         p = new PuttingSimulator(course, e);
         pAssigned = true;
     }
@@ -214,6 +217,10 @@ public class ObstacleAI implements AI{
 
     public void setTreePositionZ(float[] treePositionZ) {
         this.treePositionZ = treePositionZ;
+    }
+
+    public void setTerrainInfo(int[][] t){
+        this.terrainInfo = t;
     }
 
     public void takeShot(Vector2D initialVelocity, PuttingCourse course){
