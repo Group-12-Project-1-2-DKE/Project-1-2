@@ -10,11 +10,11 @@ public class EulerSolver implements PhysicsEngine{
     private double fric_coefficient = 0.1; //Typical 0.065<=mu<=0.196
     private double grav_constant = Variables.gravity;
     private double max_error = 0.1;
-    //private int[][] terrainInfo;
-    //double f;
+    private int[][] terrainInfo;
+    double f;
 
     public Vector2D calculateShot(Vector2D initial_v, Ball ball, Function2D course){
-        //findFrictionCoefficient(ball);
+        findFrictionCoefficient(ball);
         Vector2D acc = calculate_acc(course, initial_v, ball).multiply(step_size);
 
         Vector2D final_v = initial_v.add(acc);//acc * step_size);
@@ -45,7 +45,7 @@ public class EulerSolver implements PhysicsEngine{
 
     public void set_fric_coefficient(double f){
         fric_coefficient = f;
-        //this.f = f;
+        this.f = f;
     }
 
     public void set_grav_constant(double g){
@@ -159,11 +159,11 @@ public class EulerSolver implements PhysicsEngine{
         //this.terrainInfo = t;
     }
 
-   /* public void findFrictionCoefficient(Ball ball){
-       int info =  terrainInfo[ (int)((ball.getLocation().getX() +Variables.lowerBound.getX())*(terrainInfo.length / (Variables.upperBound.getX() - Variables.lowerBound.getX())))][(int)((ball.getLocation().getY() + (int)Variables.lowerBound.getY()) * (terrainInfo.length /(Variables.upperBound.getY() - Variables.lowerBound.getY())))];
+   public void findFrictionCoefficient(Ball ball){
+       int info =  terrainInfo[ (int)((ball.getLocation().getX() - Variables.lowerBound.getX())*(terrainInfo.length / (Variables.upperBound.getX() - Variables.lowerBound.getX())))][(int)((ball.getLocation().getY() - Variables.lowerBound.getY()) * (terrainInfo.length /(Variables.upperBound.getY() - Variables.lowerBound.getY())))];
        fric_coefficient = f;
        set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient)/4);
 
 
-    }*/
+    }
 }
