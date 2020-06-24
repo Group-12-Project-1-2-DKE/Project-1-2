@@ -86,23 +86,23 @@ public class EulerSolver implements PhysicsEngine{
 
     public  Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
-            System.out.println("1/5");
+            //System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         }
         double rc = (ball.getLocation().getY() - tree.getLocation().getY())/(ball.getLocation().getX() - tree.getLocation().getX());
         if (rc > Math.tan(0.375 * Math.PI) || rc <= Math.tan(0.625 * Math.PI)) {
-            System.out.println("1/5");
+            //System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         } else if (Math.tan(0.125 * Math.PI) < rc && rc <= Math.tan(0.375 * Math.PI)) {
-            System.out.println("2/6");
+            //System.out.println("2/6");
             double temp = final_v.getX();
             final_v.setX(final_v.getY() * -1);
             final_v.setY(temp * -1);
         } else if (Math.tan(0.875 * Math.PI) < rc && rc <= Math.tan(0.125 * Math.PI)) {
-            System.out.println("3/7");
+            //System.out.println("3/7");
             final_v.setX(final_v.getX() * -1);
         } else if (Math.tan(0.625 * Math.PI) < rc && rc <= Math.tan(0.875 * Math.PI)) {
-            System.out.println("4/8");
+            //System.out.println("4/8");
             double temp = final_v.getX();
             final_v.setX(final_v.getY());
             final_v.setY(temp);
@@ -152,19 +152,31 @@ public class EulerSolver implements PhysicsEngine{
     }
 
    public void findFrictionCoefficient(Ball ball) {
-       int info = terrainInfo[(int) ((ball.getLocation().getX() - Variables.lowerBound.getX()) * (terrainInfo.length /(Variables.upperBound.getX() - Variables.lowerBound.getX())))][(int) ((ball.getLocation().getY() - Variables.lowerBound.getY()) * (terrainInfo.length / (Variables.upperBound.getY() - Variables.lowerBound.getY())))];
-      if(Variables.maze == true){
-          set_fric_coefficient(this.fric_coefficient);
-      }
-      else if (info == 4) {
-           set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
-       } else if (info == 3) {
-           set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
-       } else if (info == 2) {
-           set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
-       } else if (info == 1) {
-           set_fric_coefficient(fric_coefficient);
+        if (ball.getLocation().getX() < Variables.lowerBound.getX()){
+            ball.getLocation().setX(Variables.lowerBound.getX());
+        }
+       if (ball.getLocation().getY() < Variables.lowerBound.getY()){
+           ball.getLocation().setY(Variables.lowerBound.getY());
        }
+       if (ball.getLocation().getX() > Variables.upperBound.getX()){
+           ball.getLocation().setX(Variables.upperBound.getX());
+       }
+       if (ball.getLocation().getY() < Variables.upperBound.getY()){
+           ball.getLocation().setY(Variables.upperBound.getY());
+       }
+       int i1 = (int) ((ball.getLocation().getX() - Variables.lowerBound.getX()) * ((terrainInfo.length-1) /(Variables.upperBound.getX() - Variables.lowerBound.getX())));
+       int i2 = (int) ((ball.getLocation().getY() - Variables.lowerBound.getY()) * ((terrainInfo[i1].length-1) / (Variables.upperBound.getY() - Variables.lowerBound.getY())));
+       if (i1 >= terrainInfo.length){
+           i1 = terrainInfo.length-1;
+       }
+       if (i2 >= terrainInfo[i1].length){
+           i2 = terrainInfo[i1].length-1;
+       }
+       int info = terrainInfo[i1][i2];
+       if(Variables.maze == true){
+           return;
+       }
+       fric_coefficient  = f + (info-1) * (0.2 - fric_coefficient) / 4;
    }
 
 
