@@ -80,16 +80,16 @@ public class ObstacleAI implements AI{
         makePuttingSim(course);
 
         Vector2D tempHoleInOne = sG.calculate_turn(course, steps);
-        //System.out.println(tempHoleInOne);
+
 
 
         double angle = 45;
 
         for (int i = 0; i < 2; i++) {
             tempHoleInOne = bestAngle(tempHoleInOne, angle, course);
-            //System.out.println(tempHoleInOne);
+
             angle /= 10;
-//            System.out.println("------------------------------------");
+
         }
 
         double initFactor = 1;//tempHoleInOne.length()/4;//ff optimale factor berekenen
@@ -99,10 +99,7 @@ public class ObstacleAI implements AI{
         System.out.println(tempHoleInOne);
         return tempHoleInOne;
 
-        /*if(checkTree(course, steps)){
 
-
-        }*/
     }
 
     private Vector2D bestPower(Vector2D initVector, double initFactor, PuttingCourse course){
@@ -126,32 +123,29 @@ public class ObstacleAI implements AI{
             course.getBall().setLocation(initLoc.clone());
             if (Fdistance.length() <= course.getTolerance()){
                 return faster;
-            }//maybe not necessary?
+            }
 
             takeShot(slower, course);
             Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Sdistance.length() <= course.getTolerance()){
                 return slower;
-            }//maybe not necessary?
+            }
 
-            /*System.out.println(initFactor);
-            System.out.println("s: " + slower + ", " + Sdistance.length());
-            System.out.println("i: " + initVector + ", " + initDistance.length());
-            System.out.println("f: " + faster + ", " + Fdistance.length());*/
+
 
             double closest = Math.min(initDistance.length(), Math.min(Fdistance.length(), Sdistance.length()));
 
             if (closest == Sdistance.length()) {
-                //System.out.println("slower: " + Sdistance.length());
+
                 initVector = slower;
                 initDistance = Sdistance;
             } else if (closest == Fdistance.length()) {
-                //System.out.println("faster: " + Fdistance.length());
+
                 initVector = faster;
                 initDistance = Fdistance;
             } else {
-                //System.out.println("same: " + initDistance.length());
+
                 initFactor /= 2;
             }
         }
@@ -177,15 +171,11 @@ public class ObstacleAI implements AI{
         Vector2D tempHoleInOne = initVector.turn(maxDegree);
         double angleCount = maxDegree;
 
-        //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen - nu nog niet
-        //Hoe gaan we te hard/te zacht handelen - nu nog niet.
-        //eerst 45 graden links en rechts.
+
         while (distance.length() > course.getTolerance() && shotcount <= maxShots){
             if (shotcount == maxShots/2){
                 tempHoleInOne = tempHoleInOne.turn(-angle);
-//                System.out.println("a: " + angleCount);
-//                System.out.println(distanceArr[shotcount]);
-//                System.out.println(velocityArr[shotcount]);
+
                 angleCount -= angle;
                 shotcount++;
                 continue;
@@ -194,9 +184,7 @@ public class ObstacleAI implements AI{
 
             takeShot(tempHoleInOne, course);
             distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-//            System.out.println("a: " + angleCount);
-//            System.out.println(distance.length());
-//            System.out.println(tempHoleInOne);
+
 
             course.getBall().setLocation(initLoc.clone());
             if (distance.length() <= course.getTolerance()){
@@ -267,10 +255,4 @@ public class ObstacleAI implements AI{
         return (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
     }
 
-    /*public boolean checkTree(PuttingCourse course, int steps){
-
-        Vector2D holeInOne = sG.calculate_turn(course, steps);
-
-        return false;
-    }*/
 }
