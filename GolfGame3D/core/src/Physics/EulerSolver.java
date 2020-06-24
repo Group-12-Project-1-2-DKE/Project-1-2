@@ -86,23 +86,18 @@ public class EulerSolver implements PhysicsEngine{
 
     public  Vector2D tree_collision(Ball ball, TreeObstacle tree, Vector2D final_v) {
         if (ball.getLocation().getX() - tree.getLocation().getX() == 0) {
-            System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         }
         double rc = (ball.getLocation().getY() - tree.getLocation().getY())/(ball.getLocation().getX() - tree.getLocation().getX());
         if (rc > Math.tan(0.375 * Math.PI) || rc <= Math.tan(0.625 * Math.PI)) {
-            System.out.println("1/5");
             final_v.setY(final_v.getY() * -1);
         } else if (Math.tan(0.125 * Math.PI) < rc && rc <= Math.tan(0.375 * Math.PI)) {
-            System.out.println("2/6");
             double temp = final_v.getX();
             final_v.setX(final_v.getY() * -1);
             final_v.setY(temp * -1);
         } else if (Math.tan(0.875 * Math.PI) < rc && rc <= Math.tan(0.125 * Math.PI)) {
-            System.out.println("3/7");
             final_v.setX(final_v.getX() * -1);
         } else if (Math.tan(0.625 * Math.PI) < rc && rc <= Math.tan(0.875 * Math.PI)) {
-            System.out.println("4/8");
             double temp = final_v.getX();
             final_v.setX(final_v.getY());
             final_v.setY(temp);
@@ -168,5 +163,4 @@ public class EulerSolver implements PhysicsEngine{
    }
 
 
-
-    }
+}
