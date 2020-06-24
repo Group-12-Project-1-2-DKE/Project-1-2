@@ -68,6 +68,7 @@ public class GolfGameMaze implements Screen{
 
     public float myDelta = 0;
     public Vector2D myVector;
+    private int[][] terrainInfo;
 
 
     private Wall wall;
@@ -172,6 +173,7 @@ public class GolfGameMaze implements Screen{
         instances.add(flag);
 
         createMesh();
+        engine.setTerrainInfo(terrainInfo);
 
         Variables.lowerBound = new Vector2D(-100, -100);    // Lower bound of the field
         Variables.upperBound = new Vector2D(100, 100);      // Upper bound of the field.
@@ -433,6 +435,7 @@ public class GolfGameMaze implements Screen{
         TerrainChunk chunk;
         Vector2D currentPos;
         Material material;
+        terrainInfo = new int[numberX][numberY];
 
         for (int x = 0; x < numberX; x++) {
             for (int y = 0; y < numberY; y++) {
@@ -450,6 +453,7 @@ public class GolfGameMaze implements Screen{
 
 
                 material = new Material(TextureAttribute.createDiffuse(fieldTex));
+                terrainInfo[x][y] = 1;
                 ball.transform.setTranslation((float) course.getBall().getLocation().getX(),
                         (float) course.evaluate(new Vector2D(course.getBall().getLocation().getX(),
                         course.getBall().getLocation().getY())) - 1f, (float) course.getBall().getLocation().getY());

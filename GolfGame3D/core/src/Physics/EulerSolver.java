@@ -153,14 +153,17 @@ public class EulerSolver implements PhysicsEngine{
 
    public void findFrictionCoefficient(Ball ball) {
        int info = terrainInfo[(int) ((ball.getLocation().getX() - Variables.lowerBound.getX()) * (terrainInfo.length /(Variables.upperBound.getX() - Variables.lowerBound.getX())))][(int) ((ball.getLocation().getY() - Variables.lowerBound.getY()) * (terrainInfo.length / (Variables.upperBound.getY() - Variables.lowerBound.getY())))];
-       if (info == 4) {
+      if(Variables.maze == true){
+          set_fric_coefficient(this.fric_coefficient);
+      }
+      else if (info == 4) {
            set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
        } else if (info == 3) {
            set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
        } else if (info == 2) {
            set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
        } else if (info == 1) {
-           set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
+           set_fric_coefficient(fric_coefficient);
        }
    }
 

@@ -4,6 +4,7 @@ import Objects.*;
 import com.mygdx.game.GolfGameMaze;
 import com.mygdx.game.Variables;
 
+
 public class VerletSolver implements PhysicsEngine{
     private double step_size = 0.1;
     private double fric_coefficient = 0.1; //Typically 0.065<=mu<=0.196
@@ -144,7 +145,7 @@ public class VerletSolver implements PhysicsEngine{
         } else if (info == 2) {
             set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
         } else if (info == 1) {
-            set_fric_coefficient(fric_coefficient + (5 - info) * (0.2 - fric_coefficient) / 4);
+            set_fric_coefficient(fric_coefficient);
         }
     }
 
