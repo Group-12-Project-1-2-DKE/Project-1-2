@@ -14,9 +14,7 @@ public class PuttingSimulator{
         this.engine = engine;
     }
 
-//    public void setBallPosition(Vector2D vector){
-//        course.getBall().setLocation(vector);
-//    }
+
 
     public Vector2D get_ball_position(){
         return course.getBall().getLocation();
@@ -52,14 +50,7 @@ public class PuttingSimulator{
         if (initial_ball_velocity.length() == 0){
             initial_ball_velocity = new Vector2D(0.00000001, 0.00000001);
         }
-        //if (course.getBall().isHit() && counter <= fifty){
-        //counter++;
-            /*if (counter <= 10){
-                System.out.println(counter);
-                System.out.println(course.getBall().getLocation());
-                System.out.println(next_velocity);
-                System.out.println("-----------");
-            }*/
+
 
         Vector2D next_velocity = initial_ball_velocity;
         for (int i = 0; i < stepsPerRender; i++) {
@@ -73,19 +64,12 @@ public class PuttingSimulator{
             }
         }
 
-        //}
 
-        //if (counter==fifty+1 || !course.getBall().isHit() ) {
-        //    shot_counter++;
-        //    System.out.println("Final ball location: " + course.getBall().getLocation());
-        //    counter=0;
-        //    return null;
-        //}
         if (course.getBall().isAtRest()){
             shot_counter++;
             return null;
         }
-        // course.getBall().setLocation(next_velocity);
+
         return next_velocity;
     }
 }

@@ -583,7 +583,7 @@ public class GolfGameNoMaze implements Screen {
             }
             output.append("\n");
         }
-        System.out.println(output.toString());
+        //System.out.println(output.toString());
     }
 
     /**

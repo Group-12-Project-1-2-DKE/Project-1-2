@@ -14,18 +14,18 @@ public class ObstacleAI implements AI{
 
 
     public static void main(String[] args) {
-        PuttingCourse h = new PuttingCourse("0.01x + 0.002y^2"/*"2 + sin(x) - 0.5cos(y)"*/, new Vector2D(0,0), new Vector2D(10,10),
-                new Ball(new Vector2D(0,0), 3), 0.05, 4, 0.71);
+        Vector2D begin = new Vector2D(-10, -10);
+        PuttingCourse h = new PuttingCourse("1"/*"2 + sin(x) - 0.5cos(y)"*/, begin.clone(), new Vector2D(10,10),
+                new Ball(begin.clone(), 3), 0.05, 4, 0.1);
         PhysicsEngine e = new EulerSolver();
-        e.setTerrainInfo(new int[][]{{1}});
         e.set_fric_coefficient(h.getFrictionCoefficient());
         PuttingSimulator p = new PuttingSimulator(h, e);
         //Miss nog dat als hij tenminste langs het ding komt dat het als hole in one telt. Met maxVelocity?
 
+        AI s = new StraighGreedy();
         AI o = new ObstacleAI();
-        o.setTreePositionX(new float[]{5});
-        o.setTreePositionZ(new float[]{5});
-        o.setTerrainInfo(new int[][]{{1}});
+        o.setTreePositionX(new float[]{0, 1, 1.2f, -0.5f, 3, 6.7f, 2.5f, -2.5f, -1.4f, 0});
+        o.setTreePositionZ(new float[]{-5.5f, 0, -2.6f, -1.2f, -2, 0.6f, 2.5f, 3.6f, 4.8f, 0});
 
         //o = new StraighGreedy();
         long startTime = System.currentTimeMillis();
@@ -34,7 +34,21 @@ public class ObstacleAI implements AI{
 
         System.out.println(shot);
         ((ObstacleAI)o).takeShot(shot, h);
+        System.out.println(h.getBall().getLocation());
         System.out.println(h.getBall().getLocation().add(h.getFlag().multiply(-1)).length());
+
+        h.getBall().setLocation(begin.clone());
+
+        startTime = System.currentTimeMillis();
+        shot = s.calculate_turn(h, 500);
+        System.out.println(System.currentTimeMillis() - startTime);
+
+        System.out.println(shot);
+        ((ObstacleAI)o).takeShot(shot, h);
+        System.out.println(h.getBall().getLocation());
+        System.out.println(h.getBall().getLocation().add(h.getFlag().multiply(-1)).length());
+
+
     }
 
     /**
@@ -51,7 +65,7 @@ public class ObstacleAI implements AI{
     private boolean pAssigned = false;
     private Vector2D initLoc;
     private int shotcount = 0;
-    private int maxShots = 50;// maxshots need to be EVEN
+    private int maxShots = 100;// maxshots need to be EVEN
     private double[] distanceArr = new double[maxShots + 1];
     private Vector2D[] velocityArr =  new Vector2D[maxShots + 1];
     private float[] treePositionX;
@@ -66,28 +80,26 @@ public class ObstacleAI implements AI{
         makePuttingSim(course);
 
         Vector2D tempHoleInOne = sG.calculate_turn(course, steps);
-        //System.out.println(tempHoleInOne);
+
 
 
         double angle = 45;
 
         for (int i = 0; i < 2; i++) {
             tempHoleInOne = bestAngle(tempHoleInOne, angle, course);
-            System.out.println(tempHoleInOne);
+
             angle /= 10;
-//            System.out.println("------------------------------------");
+
         }
 
         double initFactor = 1;//tempHoleInOne.length()/4;//ff optimale factor berekenen
 
         tempHoleInOne = bestPower(tempHoleInOne, initFactor, course);
 
+        System.out.println(tempHoleInOne);
         return tempHoleInOne;
 
-        /*if(checkTree(course, steps)){
 
-
-        }*/
     }
 
     private Vector2D bestPower(Vector2D initVector, double initFactor, PuttingCourse course){
@@ -98,7 +110,7 @@ public class ObstacleAI implements AI{
         Vector2D initDistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
         course.getBall().setLocation(initLoc.clone());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             if (initDistance.length() <= course.getTolerance()){
                 return initVector;
             }//if other 2 ifs not removed, move this out of for loop
@@ -111,32 +123,29 @@ public class ObstacleAI implements AI{
             course.getBall().setLocation(initLoc.clone());
             if (Fdistance.length() <= course.getTolerance()){
                 return faster;
-            }//maybe not necessary?
+            }
 
             takeShot(slower, course);
             Vector2D Sdistance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
             course.getBall().setLocation(initLoc.clone());
             if (Sdistance.length() <= course.getTolerance()){
                 return slower;
-            }//maybe not necessary?
+            }
 
-            System.out.println(initFactor);
-            System.out.println("s: " + slower + ", " + Sdistance.length());
-            System.out.println("i: " + initVector + ", " + initDistance.length());
-            System.out.println("f: " + faster + ", " + Fdistance.length());
+
 
             double closest = Math.min(initDistance.length(), Math.min(Fdistance.length(), Sdistance.length()));
 
             if (closest == Sdistance.length()) {
-                System.out.println("slower: " + Sdistance.length());
+
                 initVector = slower;
                 initDistance = Sdistance;
             } else if (closest == Fdistance.length()) {
-                System.out.println("faster: " + Fdistance.length());
+
                 initVector = faster;
                 initDistance = Fdistance;
             } else {
-                System.out.println("same: " + initDistance.length());
+
                 initFactor /= 2;
             }
         }
@@ -162,15 +171,11 @@ public class ObstacleAI implements AI{
         Vector2D tempHoleInOne = initVector.turn(maxDegree);
         double angleCount = maxDegree;
 
-        //miss kunnen we links en rechts gewoon berekenen en dan bij de beste inzoomen - nu nog niet
-        //Hoe gaan we te hard/te zacht handelen - nu nog niet.
-        //eerst 45 graden links en rechts.
+
         while (distance.length() > course.getTolerance() && shotcount <= maxShots){
             if (shotcount == maxShots/2){
                 tempHoleInOne = tempHoleInOne.turn(-angle);
-//                System.out.println("a: " + angleCount);
-//                System.out.println(distanceArr[shotcount]);
-//                System.out.println(velocityArr[shotcount]);
+
                 angleCount -= angle;
                 shotcount++;
                 continue;
@@ -179,9 +184,7 @@ public class ObstacleAI implements AI{
 
             takeShot(tempHoleInOne, course);
             distance = course.getBall().getLocation().add(course.getFlag().multiply(-1));
-//            System.out.println("a: " + angleCount);
-//            System.out.println(distance.length());
-//            System.out.println(tempHoleInOne);
+
 
             course.getBall().setLocation(initLoc.clone());
             if (distance.length() <= course.getTolerance()){
@@ -228,12 +231,12 @@ public class ObstacleAI implements AI{
         course.getBall().hit();
         Vector2D next = initialVelocity.clone();
         while (next != null){
-            next = p.take_shotSlowly(next);
             for (int i = 0; i < treePositionX.length; i++){
                 if (collides(i, course)){
                     p.getEngine().tree_collision(course.getBall(), obstacle, next);
                 }
             }
+            next = p.take_shotSlowly(next);
         }
     }
 
@@ -252,10 +255,4 @@ public class ObstacleAI implements AI{
         return (float) Math.sqrt(Math.pow((posX - treeX), 2) + Math.pow((posZ - treeZ), 2));
     }
 
-    /*public boolean checkTree(PuttingCourse course, int steps){
-
-        Vector2D holeInOne = sG.calculate_turn(course, steps);
-
-        return false;
-    }*/
 }
